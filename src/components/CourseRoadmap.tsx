@@ -11,7 +11,7 @@ const PYTHON_ROADMAP = {
       topics: [
         'Python fundamentals, OOP, data structures & algorithms',
         'Django / Flask: models, views, templates, auth, REST APIs',
-        'Database: PostgreSQL/MySQL, ORM, migrations',
+        'Database: PostgreSQL/MySQL, schema design, raw SQL queries, ORM, migrations',
         'Frontend: HTML/CSS/JS, templates, state management',
         'Version control: Git, branching, collaboration',
         'Linux basics, command line, deployment concepts',

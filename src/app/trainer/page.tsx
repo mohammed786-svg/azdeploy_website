@@ -18,7 +18,7 @@ export default function TrainerPage() {
             [MEET_THE_TRAINER]
           </h1>
 
-          <div className="hud-panel p-8 md:p-12 space-y-6">
+          <div className="hud-panel p-8 md:p-12 space-y-8">
             <div className="flex flex-wrap gap-2">
               {["8+_YEARS", "500+_PRODUCTS", "ALL_STACKS"].map((badge) => (
                 <span key={badge} className="px-3 py-1 border border-[#00d4ff]/50 text-[#00d4ff] text-xs font-mono">
@@ -26,6 +26,7 @@ export default function TrainerPage() {
                 </span>
               ))}
             </div>
+
             <p className="text-white/80 leading-relaxed">
               Our lead trainer has <strong className="text-[#00d4ff]">8+ years</strong> of experience in the IT industry
               and has worked on <strong className="text-[#00d4ff]">500+ products</strong> in real-time. Expertise spans
@@ -41,6 +42,44 @@ export default function TrainerPage() {
               to boost productivity. Students leave not just with certificates, but with the ability to crack
               interviews and build real careers.
             </p>
+
+            {/* Expertise & tech stack */}
+            <div className="border border-[#00d4ff]/20 rounded p-5 bg-black/30">
+              <h2 className="text-sm font-mono font-semibold text-[#00d4ff] mb-3">[EXPERTISE_&_TECH_STACK]</h2>
+              <ul className="grid sm:grid-cols-2 gap-2 text-sm text-white/80">
+                <li><span className="text-[#00d4ff]/80">·</span> Python, Django, Flask, REST APIs</li>
+                <li><span className="text-[#00d4ff]/80">·</span> Android (Kotlin, Java), Jetpack Compose</li>
+                <li><span className="text-[#00d4ff]/80">·</span> PostgreSQL, MySQL, ORM, migrations</li>
+                <li><span className="text-[#00d4ff]/80">·</span> Nginx, Gunicorn, VPS deployment</li>
+                <li><span className="text-[#00d4ff]/80">·</span> Ubuntu, Linux, Kali Linux</li>
+                <li><span className="text-[#00d4ff]/80">·</span> Cyber security, hardening, best practices</li>
+                <li><span className="text-[#00d4ff]/80">·</span> Git, CI/CD, local & server setup</li>
+              </ul>
+            </div>
+
+            {/* Teaching approach */}
+            <div>
+              <h2 className="text-sm font-mono font-semibold text-[#00d4ff] mb-3">[TEACHING_APPROACH]</h2>
+              <ul className="space-y-2 text-white/80 text-sm leading-relaxed">
+                <li><strong className="text-white/90">Hands-on first:</strong> Every concept is tied to real code and real projects, not slides.</li>
+                <li><strong className="text-white/90">Think first, AI second:</strong> You learn to reason and debug; then use AI to speed up, not replace, your skills.</li>
+                <li><strong className="text-white/90">Production mindset:</strong> Deployment, debugging, and maintenance are part of the curriculum from day one.</li>
+                <li><strong className="text-white/90">One-on-one:</strong> Doubt clearing, code reviews, and career guidance are included—not extra paid add-ons.</li>
+              </ul>
+            </div>
+
+            {/* What you get */}
+            <div>
+              <h2 className="text-sm font-mono font-semibold text-[#00d4ff] mb-3">[WHAT_YOU_GET]</h2>
+              <ul className="space-y-2 text-white/80 text-sm">
+                <li>Direct access to the trainer for doubts and code reviews</li>
+                <li>Real project builds with feedback on your code and architecture</li>
+                <li>Mock technical and HR interviews with detailed feedback</li>
+                <li>Resume, LinkedIn, and portfolio guidance</li>
+                <li>Placement prep: company patterns, negotiation, and interview readiness</li>
+              </ul>
+            </div>
+
             <div className="pt-6 border-t border-[#00d4ff]/20">
               <p className="text-white/70 mb-4 text-sm">Ready to learn from someone who has been there?</p>
               <a

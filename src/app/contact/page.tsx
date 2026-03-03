@@ -5,16 +5,21 @@ import FloatingActions from "@/components/FloatingActions";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact AZDeploy Academy. Office: Plot 516, Ramteerth Nagar, Belagavi. VFF GROUP Building, First Floor. WhatsApp +91 82965 65587.",
+    "Contact AZDeploy Academy. Office: Plot 516, Ramteerth Nagar, Belagavi. WhatsApp & call: +91 82965 65587, +91 89712 44513, +91 73383 60607.",
 };
 
 const OFFICE = {
   addressLine1: "Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590017",
   addressLine2: "VFF GROUP - First Floor",
-  whatsapp: "+91 82965 65587",
   mapLat: 15.891116051838667,
   mapLng: 74.54251765767174,
 };
+
+const CONTACT_NUMBERS = [
+  { display: "+91 82965 65587", raw: "918296565587" },
+  { display: "+91 89712 44513", raw: "918971244513" },
+  { display: "+91 73383 60607", raw: "917338360607" },
+];
 
 export default function ContactPage() {
   return (
@@ -61,17 +66,33 @@ export default function ContactPage() {
               />
             </div>
 
-            {/* WhatsApp */}
-            <div className="text-center">
-              <p className="text-white/50 text-xs font-mono uppercase tracking-wider mb-2">WHATSAPP</p>
-              <a
-                href={`https://wa.me/${OFFICE.whatsapp.replace(/[\s+]/g, '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-2xl font-bold text-[#00d4ff] text-glow-teal hover:text-[#00e5cc] transition-colors font-mono"
-              >
-                {OFFICE.whatsapp}
-              </a>
+            {/* Contact numbers — WhatsApp & Call */}
+            <div>
+              <p className="text-white/50 text-xs font-mono uppercase tracking-wider mb-4">CONTACT_NUMBERS</p>
+              <p className="text-white/60 text-xs mb-4">Reach us on WhatsApp or call. All numbers available on both.</p>
+              <ul className="space-y-4">
+                {CONTACT_NUMBERS.map((num) => (
+                  <li key={num.raw} className="border border-[#00d4ff]/20 rounded p-4 bg-black/30">
+                    <p className="text-white/90 font-mono font-semibold mb-3">{num.display}</p>
+                    <div className="flex flex-wrap gap-2">
+                      <a
+                        href={`https://wa.me/${num.raw}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-[#00d4ff]/50 text-[#00d4ff] text-xs font-mono hover:bg-[#00d4ff]/20 transition-colors"
+                      >
+                        WhatsApp
+                      </a>
+                      <a
+                        href={`tel:${num.raw}`}
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-[#00d4ff]/50 text-[#00d4ff] text-xs font-mono hover:bg-[#00d4ff]/20 transition-colors"
+                      >
+                        Call
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div className="pt-6 border-t border-[#00d4ff]/20 text-center">
@@ -79,7 +100,7 @@ export default function ContactPage() {
                 LIMITED_SEATS: 3_BATCHES | 25_PER_BATCH | FIRST_10_GET_30%_OFF
               </p>
               <a
-                href={`https://wa.me/${OFFICE.whatsapp.replace(/[\s+]/g, '')}`}
+                href={`https://wa.me/${CONTACT_NUMBERS[0].raw}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-8 py-3 border border-[#00d4ff] text-[#00d4ff] text-sm font-mono hover:bg-[#00d4ff]/20 transition-colors"
@@ -92,7 +113,7 @@ export default function ContactPage() {
       </main>
       <FloatingActions />
       <footer className="fixed bottom-0 left-0 right-0 hud-bg border-t border-[#00d4ff]/20 py-1 px-4 z-30">
-        <p className="text-[10px] font-mono text-white/40">/// UPDATES: CONTACT_OPEN — {OFFICE.whatsapp}</p>
+        <p className="text-[10px] font-mono text-white/40">/// UPDATES: CONTACT_OPEN — WhatsApp & Call</p>
       </footer>
     </div>
   );
