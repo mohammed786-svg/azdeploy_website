@@ -58,7 +58,7 @@ export default function HomePage() {
               <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white/90 mt-2 sm:mt-3 text-glow-teal">
                 2026
               </p>
-              <p className="text-xs sm:text-sm md:text-base text-[#00d4ff] mt-6 sm:mt-8 font-mono tracking-widest max-w-lg mx-auto leading-relaxed">
+              <p className="text-[10px] sm:text-xs md:text-sm lg:text-base text-[#00d4ff] mt-6 sm:mt-8 font-mono tracking-wide sm:tracking-widest max-w-lg mx-auto leading-relaxed break-all px-1 w-full min-w-0">
                 {TAGLINES[0]}
               </p>
               <p className="text-[10px] sm:text-xs text-[#00d4ff]/70 mt-2 font-mono">
