@@ -61,6 +61,49 @@ body {
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
 }
 
+/* L-shaped detached corner border (Acumen / second image style) – transparent, glowing cyan, offset corners */
+.hud-corner-border {
+  position: relative;
+  background: transparent;
+  padding: 18px 20px;
+  --c: rgba(0, 212, 255, 0.88);
+  --off: 10px;
+  --len: 24px;
+  --w: 2px;
+}
+
+.hud-corner-border {
+  background-image:
+    linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c)),
+    linear-gradient(var(--c), var(--c));
+  background-repeat: no-repeat;
+  background-size:
+    var(--len) var(--w),
+    var(--w) var(--len),
+    var(--len) var(--w),
+    var(--w) var(--len),
+    var(--len) var(--w),
+    var(--w) var(--len),
+    var(--len) var(--w),
+    var(--w) var(--len);
+  background-position:
+    var(--off) var(--off),
+    var(--off) var(--off),
+    calc(100% - var(--off) - var(--len)) var(--off),
+    calc(100% - var(--off)) var(--off),
+    calc(100% - var(--off)) calc(100% - var(--off)),
+    calc(100% - var(--off)) calc(100% - var(--off) - var(--len)),
+    var(--off) calc(100% - var(--off)),
+    var(--off) calc(100% - var(--off) - var(--len));
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.25);
+}
+
 /* Corner brackets (HUD frame) */
 .hud-frame {
   position: relative;
@@ -252,6 +295,147 @@ body {
   animation: float-slow 8s ease-in-out infinite;
 }
 
+/* Courses page: floating stack icons (float + smooth rotation) */
+.courses-float-icon {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.courses-float-rotate {
+  animation-name: courses-float-rotate;
+}
+
+.courses-float-rotate-rev {
+  animation-name: courses-float-rotate-rev;
+}
+
+@keyframes courses-float-rotate {
+  0%, 100% {
+    transform: translate(-50%, -50%) translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(8px, -12px) rotate(90deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(-6px, 8px) rotate(180deg);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(10px, 6px) rotate(270deg);
+  }
+}
+
+@keyframes courses-float-rotate-rev {
+  0%, 100% {
+    transform: translate(-50%, -50%) translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(-8px, 10px) rotate(-90deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(6px, -8px) rotate(-180deg);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(-10px, -6px) rotate(-270deg);
+  }
+}
+
+/* Courses page: content entrance */
+.courses-fade-in {
+  opacity: 0;
+  animation: courses-fade-in 0.6s ease-out forwards;
+}
+
+.courses-fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.courses-fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.courses-fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+.courses-fade-in-delay-4 { animation-delay: 0.4s; opacity: 0; }
+
+@keyframes courses-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* About page: staggered entrance */
+.about-enter {
+  opacity: 0;
+  animation: about-enter 0.6s ease-out forwards;
+}
+.about-enter-delay-1 { animation-delay: 0.1s; }
+.about-enter-delay-2 { animation-delay: 0.2s; }
+.about-enter-delay-3 { animation-delay: 0.3s; }
+.about-enter-delay-4 { animation-delay: 0.4s; }
+.about-enter-delay-5 { animation-delay: 0.5s; }
+.about-enter-delay-6 { animation-delay: 0.6s; }
+.about-enter-delay-7 { animation-delay: 0.7s; }
+@keyframes about-enter {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Course roadmap – animated flowchart */
+.course-roadmap-line {
+  opacity: 0.3;
+}
+
+.course-roadmap-line-fill {
+  height: 0;
+  animation: roadmap-line-fill 1.2s ease-out forwards;
+  transform-origin: top;
+}
+
+.course-roadmap-dot {
+  opacity: 0;
+  animation: roadmap-node-in 0.5s ease-out forwards;
+  transform: scale(0.5);
+}
+
+.course-roadmap-dot-inner {
+  opacity: 0;
+  animation: roadmap-node-in 0.4s ease-out forwards;
+  transform: scale(0);
+}
+
+.course-roadmap-card {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: roadmap-card-in 0.5s ease-out forwards;
+}
+
+.course-roadmap-bullet {
+  opacity: 0;
+  transform: translateX(-8px);
+  animation: roadmap-bullet-in 0.4s ease-out forwards;
+}
+
+.course-roadmap-end {
+  opacity: 0;
+  animation: roadmap-node-in 0.5s ease-out forwards;
+}
+
+@keyframes roadmap-line-fill {
+  from { height: 0; opacity: 0.6; }
+  to { height: 100%; opacity: 0.8; }
+}
+
+@keyframes roadmap-node-in {
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes roadmap-card-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes roadmap-bullet-in {
+  to { opacity: 1; transform: translateX(0); }
+}
+
 /* Spline flow animation - smooth curve movement */
 @keyframes spline-flow {
   0%, 100% {
@@ -304,4 +488,147 @@ body {
   100% {
     transform: translateX(-50%);
   }
+}
+
+/* Brochure - Open book layout */
+.brochure-wrapper {
+  perspective: 2000px;
+  transform-style: preserve-3d;
+}
+
+.book-open-frame {
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 212, 255, 0.2),
+    inset 0 0 20px rgba(0, 0, 0, 0.3);
+  border-radius: 0 8px 8px 0;
+  overflow: hidden;
+  background: #0a0a0c;
+}
+
+.book-open-inner {
+  min-height: 280px;
+}
+
+@media (min-width: 640px) {
+  .book-open-inner {
+    min-height: 360px;
+  }
+}
+
+@media (min-width: 768px) {
+  .book-open-inner {
+    min-height: 420px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .book-open-inner {
+    min-height: 480px;
+  }
+}
+
+/* Left page (decorative - book texture) */
+.book-page-left {
+  width: 40%;
+  min-width: 120px;
+  max-width: 200px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 20, 30, 0.6) 100%);
+  border-right: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 4px 0 0 4px;
+}
+
+/* Center spine */
+.book-spine {
+  width: 10px;
+  min-width: 10px;
+  flex-shrink: 0;
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.08));
+}
+
+@media (min-width: 640px) {
+  .book-spine {
+    width: 12px;
+    min-width: 12px;
+  }
+}
+
+/* Right page (content area) */
+.book-page-right {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page content - fill book and scroll when needed */
+.brochure-page-content {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 4px;
+  margin: 6px;
+  margin-left: 4px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 640px) {
+  .brochure-page-content {
+    margin: 8px;
+    margin-left: 6px;
+  }
+}
+
+@media (min-width: 768px) {
+  .brochure-page-content {
+    margin: 10px;
+    margin-left: 8px;
+  }
+}
+
+/* Page turn - hinge left for next */
+.brochure-page-turn-next {
+  transform-origin: left center;
+  backface-visibility: hidden;
+  box-shadow: 8px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.brochure-page-turn-next.turning {
+  animation: book-turn-next 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Page turn - hinge right for prev */
+.brochure-page-turn-prev {
+  transform-origin: right center;
+  backface-visibility: hidden;
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.brochure-page-turn-prev.turning {
+  animation: book-turn-prev 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.brochure-page-under {
+  backface-visibility: hidden;
+}
+
+@keyframes book-turn-next {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(-180deg); }
+}
+
+@keyframes book-turn-prev {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(180deg); }
+}
+
+/* Book controls - directly below book */
+.book-controls {
+  padding: 0 1rem;
 }

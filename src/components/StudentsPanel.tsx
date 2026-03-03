@@ -2,7 +2,7 @@
 
 export default function StudentsPanel() {
   return (
-    <div className="hud-panel p-4 w-full max-w-[280px] flex flex-col min-w-0">
+    <div className="hud-corner-border p-4 w-full max-w-[280px] flex flex-col min-w-0">
       <div className="flex items-center gap-2 mb-4">
         <span className="hud-label text-white">[STUDENTS]</span>
         <span className="live-dot" />

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const TAGLINES = [
   "★ THINK_FIRST_AI_SECOND_REAL_KNOWLEDGE_FOREVER ★",
-  "★ FROM_FAKE_TEACHERS_TO_REAL_DEPLOYMENTS ★",
+  "★ WE_ARE_HERE_TO_HELP_YOU_BECOME_JOB_READY ★",
   "★ 500+_PRODUCTS_WORTH_OF_EXPERIENCE_IN_YOUR_CORNER ★",
 ];
 
@@ -30,6 +30,8 @@ const WHY_ITEMS = [
   "Master fundamentals before AI — understand what happens under the hood",
   "Interview-ready curriculum — crack placements with actual concepts",
   "Limited batches for focused learning — quality over quantity",
+  "Structured 6-month program — time to build real skills, not rush",
+  "One-on-one mentorship for every student — no crowded batches",
 ];
 
 export default function HomePage() {
@@ -46,7 +48,7 @@ export default function HomePage() {
           </aside>
 
           {/* Center - Hero content */}
-          <section className="flex-1 flex flex-col items-center justify-center pt-4 sm:pt-6 pb-8 sm:py-12 relative min-h-[60vh]">
+          <section className="hud-corner-border flex-1 flex flex-col items-center justify-center pt-4 sm:pt-6 pb-8 sm:py-12 relative min-h-[60vh]">
             <HeroSplineBackground />
 
             <div className="relative z-10 text-center max-w-2xl w-full mx-auto px-2 sm:px-4">
@@ -77,7 +79,7 @@ export default function HomePage() {
               </div>
 
               {/* Prize / Offer box */}
-              <div className="mt-8 sm:mt-10 px-4 sm:px-6 py-4 border border-[#00d4ff]/50 bg-black/40 w-full max-w-md mx-auto">
+              <div className="hud-corner-border mt-8 sm:mt-10 px-4 sm:px-6 py-4 w-full max-w-md mx-auto">
                 <div className="flex items-center justify-center gap-2 sm:gap-3">
                   <span className="text-xl sm:text-2xl">🏆</span>
                   <div>
@@ -96,13 +98,13 @@ export default function HomePage() {
               </div>
 
               {/* Motto / Live box */}
-              <div className="mt-5 sm:mt-6 px-4 sm:px-6 py-3 border border-[#00d4ff]/30 bg-black/30 w-full max-w-md mx-auto">
+              <div className="hud-corner-border mt-5 sm:mt-6 px-4 sm:px-6 py-3 w-full max-w-md mx-auto">
                 <p className="text-[10px] font-mono text-[#22c55e] flex items-center justify-center gap-2 mb-2">
                   <span className="live-dot" />
                   NOW_LIVE
                 </p>
                 <p className="text-[10px] sm:text-xs md:text-base text-white/90 font-mono break-words">
-                  AVERAGE_MINDS_COMPETE_ELITE_MINDS_CONQUER
+                  THINK_ELITE_BUILD_REAL_CONQUER_PLACEMENTS
                 </p>
               </div>
             </div>
@@ -111,7 +113,7 @@ export default function HomePage() {
           {/* Right - Students + Why AZDeploy */}
           <aside className="hidden lg:flex flex-col w-[280px] shrink-0 gap-6">
             <StudentsPanel />
-            <div className="hud-panel p-4 flex-1">
+            <div className="hud-corner-border p-4 flex-1">
               <h2 className="text-sm font-bold text-[#00d4ff] font-mono mb-3 hud-label">
                 [WHY_AZDEPLOY]
               </h2>
@@ -145,7 +147,7 @@ export default function HomePage() {
               <StudentsPanel />
             </div>
           </div>
-          <div className="hud-panel p-4 sm:p-6">
+          <div className="hud-corner-border p-4 sm:p-6">
             <h2 className="text-sm font-bold text-[#00d4ff] font-mono mb-3 hud-label">
               [WHY_AZDEPLOY]
             </h2>

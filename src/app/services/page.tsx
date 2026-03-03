@@ -9,12 +9,33 @@ export const metadata: Metadata = {
     "AZDeploy Academy services: Job-ready IT training, Python Full Stack, Android Development, real industry mentorship. Limited seats, 30% off for early enrollments.",
 };
 
+const OFFICE_ADDRESS = {
+  addressLine1: "Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590017",
+  addressLine2: "VFF GROUP - First Floor",
+};
+
 export default function ServicesPage() {
   const services = [
-    { title: "JOB_READY_TRAINING", desc: "Our courses are designed to make you interview-ready. Real projects, real stacks, real deployments." },
-    { title: "INDUSTRY_MENTORSHIP", desc: "Learn from trainers with 8+ years experience and 500+ products deployed. No theory-only—actual hands-on knowledge." },
-    { title: "FUNDAMENTALS_FIRST", desc: "Master concepts before relying on AI. Understand what happens under the hood. Use your brain, then boost with AI." },
-    { title: "LIMITED_BATCHES", desc: "Only 3 batches per course, 25 seats per batch. First 10 students get 30% off. Focus on quality, not quantity." },
+    {
+      title: "JOB_READY_TRAINING",
+      desc: "Our courses are designed to make you interview-ready. Real projects, real stacks, real deployments. We focus on what companies actually need—not just certificates.",
+      points: ["Placement-oriented curriculum", "Live projects", "Resume & interview prep"],
+    },
+    {
+      title: "INDUSTRY_MENTORSHIP",
+      desc: "Learn from trainers with 8+ years experience and 500+ products deployed. No theory-only—actual hands-on knowledge from someone who has built and shipped software.",
+      points: ["One-on-one doubt clearing", "Code reviews", "Career guidance"],
+    },
+    {
+      title: "FUNDAMENTALS_FIRST",
+      desc: "Master concepts before relying on AI. Understand what happens under the hood. Use your brain, then boost with AI. We help you think—not just copy-paste.",
+      points: ["Strong basics", "Debugging skills", "Problem-solving focus"],
+    },
+    {
+      title: "LIMITED_BATCHES",
+      desc: "Only 3 batches per course, 25 seats per batch. First 10 students get 30% off. Focus on quality, not quantity. Small batches mean more attention to each student.",
+      points: ["3 batches per course", "25 seats per batch", "30% off for first 10"],
+    },
   ];
 
   return (
@@ -33,15 +54,27 @@ export default function ServicesPage() {
             {services.map((s) => (
               <div key={s.title} className="hud-panel p-8">
                 <h2 className="text-lg font-bold text-[#00d4ff] mb-3 font-mono">{s.title}</h2>
-                <p className="text-white/70 text-sm">{s.desc}</p>
+                <p className="text-white/70 text-sm mb-4">{s.desc}</p>
+                <ul className="text-xs text-[#00d4ff]/80 font-mono space-y-1">
+                  {s.points.map((pt) => (
+                    <li key={pt}>▸ {pt}</li>
+                  ))}
+                </ul>
               </div>
             ))}
+          </div>
+
+          {/* Office location */}
+          <div className="hud-panel p-6 max-w-2xl mx-auto mb-12 text-left sm:text-center">
+            <h3 className="text-[#00d4ff] text-sm font-mono uppercase tracking-wider mb-3">OFFICE_LOCATION</h3>
+            <p className="text-white/80 text-sm">{OFFICE_ADDRESS.addressLine1}</p>
+            <p className="text-white/80 text-sm font-semibold text-[#00d4ff]/90 mt-1">{OFFICE_ADDRESS.addressLine2}</p>
           </div>
 
           <div className="text-center hud-panel p-8 max-w-2xl mx-auto">
             <h2 className="text-xl font-bold text-white mb-4 hud-label">READY_TO_START</h2>
             <p className="text-white/70 mb-6 text-sm">
-              Contact us on WhatsApp for course details, batch schedules, and enrollment.
+              Visit us at the office or contact on WhatsApp for course details, batch schedules, and enrollment.
             </p>
             <Link
               href="/courses"
