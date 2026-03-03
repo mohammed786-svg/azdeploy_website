@@ -18,6 +18,11 @@ const TAGLINES = [
   "★ 500+_PRODUCTS_WORTH_OF_EXPERIENCE_IN_YOUR_CORNER ★",
 ];
 
+/** Insert zero-width space after underscores so wrapping happens at segments, not mid-word (e.g. keeps "FOREVER ★" together) */
+function wrapAtUnderscores(s: string) {
+  return s.replace(/_/g, "_\u200B");
+}
+
 const STATS = [
   { value: "8+", label: "YEARS_EXPERIENCE" },
   { value: "500+", label: "PRODUCTS_DEPLOYED" },
@@ -58,8 +63,8 @@ export default function HomePage() {
               <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white/90 mt-2 sm:mt-3 text-glow-teal">
                 2026
               </p>
-              <p className="text-[10px] sm:text-xs md:text-sm lg:text-base text-[#00d4ff] mt-6 sm:mt-8 font-mono tracking-wide sm:tracking-widest max-w-lg mx-auto leading-relaxed break-all px-1 w-full min-w-0">
-                {TAGLINES[0]}
+              <p className="text-[10px] sm:text-xs md:text-sm lg:text-base text-[#00d4ff] mt-6 sm:mt-8 font-mono tracking-wide sm:tracking-widest max-w-lg mx-auto leading-relaxed break-words px-1 w-full min-w-0">
+                {wrapAtUnderscores(TAGLINES[0])}
               </p>
               <p className="text-[10px] sm:text-xs text-[#00d4ff]/70 mt-2 font-mono">
                 {TAGLINES[1]}

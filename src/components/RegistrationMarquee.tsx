@@ -1,7 +1,7 @@
 'use client';
 
 export default function RegistrationMarquee() {
-  const text = " /// UPDATES: REGISTRATION OPEN ! | STAGE SET | SECURE YOUR SPOT | PYTHON_FULL_STACK | ANDROID_DEV | LIMITED SEATS — 25 PER BATCH | FIRST 20 GET 30% OFF | CONTACT: +91 82965 65587 | ENROLL NOW ";
+  const text = " /// UPDATES: REGISTRATION OPEN ! | STAGE SET | SECURE YOUR SPOT | PYTHON_FULL_STACK | ANDROID_DEV | LIMITED SEATS — 25 PER BATCH | FIRST 20 GET 30% OFF | CONTACT: +91 82965 65587 | +91 89712 44513 | +91 73383 60607 | ENROLL NOW ";
 
   return (
     <div className="w-full overflow-hidden border-t border-[#00d4ff]/20 hud-bg">
