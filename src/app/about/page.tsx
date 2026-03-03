@@ -28,7 +28,7 @@ const WHY_DIFFERENT = [
 const VALUES = [
   { title: "Real over fake", desc: "We call out fake teachers. Our trainers have years in the industry and real deployments to show." },
   { title: "Basics first", desc: "Strong fundamentals, debugging, and problem-solving before AI. You understand what happens under the hood." },
-  { title: "Quality over quantity", desc: "Small batches, first 10 get 30% off. We care about outcomes, not headcount." },
+  { title: "Quality over quantity", desc: "Small batches, first 20 get 30% off. We care about outcomes, not headcount." },
   { title: "Placement ready", desc: "Resume reviews, mock interviews, and the kind of knowledge that actually helps you crack placements." },
 ];
 
@@ -140,7 +140,7 @@ export default function AboutPage() {
               Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590017.
             </p>
             <p className="text-[#00d4ff] font-mono font-semibold text-sm mt-2">VFF GROUP — First Floor</p>
-            <p className="text-white/60 text-xs mt-3">Limited seats per batch. First 10 students get 30% off.</p>
+            <p className="text-white/60 text-xs mt-3">Limited seats per batch. First 20 students get 30% off.</p>
           </div>
         </section>
 

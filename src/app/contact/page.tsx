@@ -97,7 +97,7 @@ export default function ContactPage() {
 
             <div className="pt-6 border-t border-[#00d4ff]/20 text-center">
               <p className="text-white/60 text-xs mb-4 font-mono">
-                LIMITED_SEATS: 3_BATCHES | 25_PER_BATCH | FIRST_10_GET_30%_OFF
+                LIMITED_SEATS: 3_BATCHES | 25_PER_BATCH | FIRST_20_GET_30%_OFF
               </p>
               <a
                 href={`https://wa.me/${CONTACT_NUMBERS[0].raw}`}

@@ -33,8 +33,8 @@ export default function ServicesPage() {
     },
     {
       title: "LIMITED_BATCHES",
-      desc: "Only 3 batches per course, 25 seats per batch. First 10 students get 30% off. Focus on quality, not quantity. Small batches mean more attention to each student.",
-      points: ["3 batches per course", "25 seats per batch", "30% off for first 10"],
+      desc: "Only 3 batches per course, 25 seats per batch. First 20 students get 30% off. Focus on quality, not quantity. Small batches mean more attention to each student.",
+      points: ["3 batches per course", "25 seats per batch", "30% off for first 20"],
     },
   ];
 

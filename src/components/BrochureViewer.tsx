@@ -27,8 +27,8 @@ const SERVICES_DETAIL = [
   },
   {
     title: "LIMITED_BATCHES",
-    desc: "Only 3 batches per course, 25 seats per batch. First 10 students get 30% off. Quality over quantity.",
-    points: ["3 batches per course only", "25 seats per batch max", "First 10: 30% discount", "Personal attention guaranteed"],
+    desc: "Only 3 batches per course, 25 seats per batch. First 20 students get 30% off. Quality over quantity.",
+    points: ["3 batches per course only", "25 seats per batch max", "First 20: 30% discount", "Personal attention guaranteed"],
   },
 ];
 
@@ -37,7 +37,7 @@ const PYTHON_COURSE = {
   tag: "Primary Course",
   fullDesc: "Without Python, students can't build their career. Our comprehensive program covers everything from fundamentals to production deployment—Django/Flask, React/Vue, PostgreSQL/MySQL, REST APIs, Docker, and CI/CD. Build real projects that go live.",
   topics: ["Backend: Django, Flask, FastAPI", "Frontend: HTML/CSS/JS, React", "Database: PostgreSQL, MySQL", "APIs: REST, authentication", "Deployment: Docker, AWS/GCP"],
-  bullets: ["3 batches only", "25 seats per batch", "First 10: 30% off", "Projects included", "Interview prep & placement support"],
+  bullets: ["3 batches only", "25 seats per batch", "First 20: 30% off", "Projects included", "Interview prep & placement support"],
 };
 
 const ANDROID_COURSE = {
@@ -45,7 +45,7 @@ const ANDROID_COURSE = {
   tag: "Primary Course",
   fullDesc: "Master Android development with Kotlin, Android Studio, Jetpack Compose, and Material Design. Build and publish real apps on Play Store. Understand architecture patterns (MVVM), Room DB, Retrofit, and modern Android practices.",
   topics: ["Kotlin & Java fundamentals", "Android Studio & Gradle", "Jetpack Compose, Material UI", "Room, Retrofit, WorkManager", "Play Store publishing"],
-  bullets: ["3 batches only", "25 seats per batch", "First 10: 30% off", "App portfolio included", "Industry-ready skills"],
+  bullets: ["3 batches only", "25 seats per batch", "First 20: 30% off", "App portfolio included", "Industry-ready skills"],
 };
 
 const WHY_AZDEPLOY = [
@@ -170,7 +170,7 @@ function PageContact() {
       >
         {OFFICE.whatsapp}
       </a>
-      <p className="text-[10px] text-white/50 mt-2 sm:mt-4">Limited seats • First 10 get 30% off</p>
+      <p className="text-[10px] text-white/50 mt-2 sm:mt-4">Limited seats • First 20 get 30% off</p>
     </div>
   );
 }
@@ -180,7 +180,7 @@ function PageBack() {
     <div className="brochure-page-content p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center min-h-full text-center box-border">
       <p className="text-[#00d4ff] text-xs sm:text-sm font-mono mb-2 sm:mb-4">ENROLL_NOW</p>
       <p className="text-white/80 text-[10px] sm:text-xs md:text-sm mb-2 sm:mb-4 max-w-full px-1">
-        Limited seats. 3 batches per course, 25 per batch. First 10 students get 30% off. Contact on WhatsApp to secure your spot.
+        Limited seats. 3 batches per course, 25 per batch. First 20 students get 30% off. Contact on WhatsApp to secure your spot.
       </p>
       <a
         href={`https://wa.me/${OFFICE.whatsapp.replace(/[\s+]/g, '')}`}

@@ -90,7 +90,7 @@ export default function HomePage() {
                       30% OFF
                     </p>
                     <p className="text-[10px] text-white/50 font-mono">
-                      First 10 students per batch
+                      First 20 students per batch
                     </p>
                   </div>
                   <span className="text-xl sm:text-2xl">🏆</span>

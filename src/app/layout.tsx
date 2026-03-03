@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | AZDeploy Academy",
   },
   description:
-    "AZDeploy Academy - Software training company making students job-ready. Learn Python Full Stack & Android Development from industry experts with 8+ years experience, 500+ products deployed. Limited batches, 30% off for first 10.",
+    "AZDeploy Academy - Software training company making students job-ready. Learn Python Full Stack & Android Development from industry experts with 8+ years experience, 500+ products deployed. Limited batches, 30% off for first 20.",
   keywords: [
     "AZDeploy",
     "IT training",

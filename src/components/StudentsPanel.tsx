@@ -22,7 +22,7 @@ export default function StudentsPanel() {
       <p className="text-[10px] text-white/50 font-mono">LOADING_ENROLLMENTS...</p>
 
       <div className="mt-4 pt-4 border-t border-[#00d4ff]/20 flex justify-between text-[10px] text-white/40 font-mono">
-        <span>SEATS_LEFT: 76</span>
+        <span>SEATS_LEFT: 56</span>
         <span>LATENCY: 12ms</span>
       </div>
     </div>

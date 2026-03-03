@@ -7,7 +7,7 @@ import { PythonRoadmap, AndroidRoadmap } from "@/components/CourseRoadmap";
 export const metadata: Metadata = {
   title: "Courses",
   description:
-    "AZDeploy Academy courses: Python Full Stack and Android Development. Limited batches, 25 seats per batch. First 10 students get 30% off. Enroll now.",
+    "AZDeploy Academy courses: Python Full Stack and Android Development. Limited batches, 25 seats per batch. First 20 students get 30% off. Enroll now.",
 };
 
 const PYTHON_DESC = `Without Python, students can't build their career. Our Python Full Stack program covers everything from fundamentals to deployment—real projects, real stacks.`;
@@ -88,7 +88,7 @@ export default function CoursesPage() {
                 <p>• 6 months program · one-on-one mentorship</p>
                 <p>• 3 batches only</p>
                 <p>• 25 seats per batch</p>
-                <p>• First 10 students: 30% off</p>
+                <p>• First 20 students: 30% off</p>
               </div>
               <a
                 href="https://wa.me/918296565587?text=Hi,%20I%20am%20interested%20in%20Python%20Full%20Stack%20course"
@@ -114,7 +114,7 @@ export default function CoursesPage() {
                 <p>• 5 months program · one-on-one mentorship</p>
                 <p>• 3 batches only</p>
                 <p>• 25 seats per batch</p>
-                <p>• First 10 students: 30% off</p>
+                <p>• First 20 students: 30% off</p>
               </div>
               <a
                 href="https://wa.me/918296565587?text=Hi,%20I%20am%20interested%20in%20Android%20Developer%20course"
