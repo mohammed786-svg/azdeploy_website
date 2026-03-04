@@ -95,7 +95,7 @@ export default function DynamicSlideView({ slide }: { slide: DynamicSlideType })
             </button>
           </div>
           <div className="doc-detail-scroll doc-dynamic-scene-wrap">
-            <DynamicScene sceneId={visualSceneId} />
+            <DynamicScene sceneId={visualSceneId!} />
           </div>
         </section>
         )}

@@ -49,28 +49,34 @@ export default function DocCurriculumIndex({
 
         <div className="doc-index-grid doc-anim-fade doc-delay-2">
           <div className="doc-index-column">
-            {leftSections.map((section, i) => (
+            {leftSections.map((section, i) => {
+              const slideIndex = sectionSlideIndices?.[i];
+              return (
               <IndexAccordion
                 key={i}
                 section={section}
                 isOpen={openIndex === i}
                 onToggle={() => handleToggle(i)}
-                onGoToSlide={sectionSlideIndices?.[i] != null ? () => handleGoToSlide(sectionSlideIndices![i]) : undefined}
+                onGoToSlide={slideIndex != null ? () => handleGoToSlide(slideIndex) : undefined}
                 accent={ACCENT}
               />
-            ))}
+              );
+            })}
           </div>
           <div className="doc-index-column">
-            {rightSections.map((section, i) => (
+            {rightSections.map((section, i) => {
+              const slideIndex = sectionSlideIndices?.[mid + i];
+              return (
               <IndexAccordion
                 key={i}
                 section={section}
                 isOpen={openIndex === mid + i}
                 onToggle={() => handleToggle(mid + i)}
-                onGoToSlide={sectionSlideIndices?.[mid + i] != null ? () => handleGoToSlide(sectionSlideIndices![mid + i]) : undefined}
+                onGoToSlide={slideIndex != null ? () => handleGoToSlide(slideIndex) : undefined}
                 accent={ACCENT}
               />
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
