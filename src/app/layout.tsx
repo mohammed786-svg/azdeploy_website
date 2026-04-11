@@ -18,29 +18,31 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "AZDeploy Academy | Job-Ready IT Training | Python Full Stack & Android",
+    default: "AZDeploy Academy | Become a Real Software Engineer in 6 Months",
     template: "%s | AZDeploy Academy",
   },
   description:
-    "AZDeploy Academy - Software training company making students job-ready. Learn Python Full Stack & Android Development from industry experts with 8+ years experience, 500+ products deployed. Limited batches, 30% off for first 10.",
+    "AZDeploy Academy - Become a real software engineer in 6 months. Learn Full Stack, AI, Data Engineering & DevOps with real-world projects, deployment experience, and production-level systems. Limited batches, 30% off for first 10 students.",
   keywords: [
     "AZDeploy",
-    "IT training",
-    "Python Full Stack",
-    "Android Development",
-    "Job ready",
-    "Cyber security",
+    "Software Engineer Training",
+    "Full Stack Developer",
+    "AI Engineer",
+    "Data Engineer",
+    "DevOps Engineer",
+    "Backend Developer",
+    "Frontend Developer",
     "Linux",
-    "Ubuntu",
-    "Kali Linux",
     "Nginx",
-    "Blog",
-    "DevOps training",
+    "Docker",
+    "CI/CD",
+    "Belagavi IT Training",
   ],
   authors: [{ name: "AZDeploy Academy" }],
   openGraph: {
-    title: "AZDeploy Academy | Job-Ready IT Training",
-    description: "Building student lives with real IT knowledge. Python Full Stack & Android Development.",
+    title: "AZDeploy Academy | Become a Real Software Engineer",
+    description:
+      "Full Stack + AI + DevOps — All-in-One program with real production experience. Learn, Build, Deploy, Scale, Get Hired.",
     type: "website",
     url: getSiteUrl(),
     siteName: "AZ Deploy Academy",
@@ -48,8 +50,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AZDeploy Academy | Job-Ready IT Training",
-    description: "Python Full Stack & Android Development from industry experts.",
+    title: "AZDeploy Academy | Become a Real Software Engineer",
+    description:
+      "Learn Full Stack, AI, Data & DevOps with real-world systems and live projects.",
   },
   robots: {
     index: true,
