@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HQ_SESSION_COOKIE, HQ_SESSION_MAX_AGE_SEC } from "@/lib/hq-auth";
 
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
