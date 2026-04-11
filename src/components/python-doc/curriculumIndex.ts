@@ -32,7 +32,7 @@ export const TEACHING_FORMAT_SECTION: IndexSection = {
 export const PROJECTS_SECTION: IndexSection = {
   title: "Projects we will build",
   days: "Month 4–6",
-  linkToTitle: "Projects we will build",
+  linkToTitle: "Month 4–6: Training & projects",
   items: [
     "Project 1: Dev Diary — Blog with Django + PostgreSQL (posts, comments, auth, admin)",
     "Project 2: Task API — REST API for a task app (CRUD, filters, auth token, Postman)",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import HudHeader from "@/components/HudHeader";
 import FloatingActions from "@/components/FloatingActions";
+import { ACADEMY_CONTACT_NUMBERS, ACADEMY_OFFICE, academyGoogleMapsUrl } from "@/lib/contact-info";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -8,18 +9,8 @@ export const metadata: Metadata = {
     "Contact AZDeploy Academy. Office: Plot 516, Ramteerth Nagar, Belagavi. WhatsApp & call: +91 82965 65587, +91 89712 44513, +91 73383 60607.",
 };
 
-const OFFICE = {
-  addressLine1: "Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590017",
-  addressLine2: "VFF GROUP - First Floor",
-  mapLat: 15.891116051838667,
-  mapLng: 74.54251765767174,
-};
-
-const CONTACT_NUMBERS = [
-  { display: "+91 82965 65587", raw: "918296565587" },
-  { display: "+91 89712 44513", raw: "918971244513" },
-  { display: "+91 73383 60607", raw: "917338360607" },
-];
+const OFFICE = ACADEMY_OFFICE;
+const CONTACT_NUMBERS = ACADEMY_CONTACT_NUMBERS;
 
 export default function ContactPage() {
   return (
@@ -48,7 +39,7 @@ export default function ContactPage() {
               <div className="flex items-center justify-between flex-wrap gap-2 p-3 pb-0">
                 <p className="text-[#00d4ff] text-xs font-mono uppercase tracking-wider">MAP</p>
                 <a
-                  href={`https://www.google.com/maps?q=${OFFICE.mapLat},${OFFICE.mapLng}`}
+                  href={academyGoogleMapsUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#00d4ff]/80 text-xs font-mono hover:text-[#00d4ff]"
@@ -97,7 +88,7 @@ export default function ContactPage() {
 
             <div className="pt-6 border-t border-[#00d4ff]/20 text-center">
               <p className="text-white/60 text-xs mb-4 font-mono">
-                LIMITED_SEATS: 3_BATCHES | 25_PER_BATCH | FIRST_20_GET_30%_OFF
+                LIMITED_SEATS: 3_BATCHES | 30_PER_BATCH | FIRST_10_GET_30%_OFF
               </p>
               <a
                 href={`https://wa.me/${CONTACT_NUMBERS[0].raw}`}

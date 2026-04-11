@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import HudHeader from "@/components/HudHeader";
 import CourseRadar from "@/components/CourseRadar";
 import StudentsPanel from "@/components/StudentsPanel";
 import FloatingActions from "@/components/FloatingActions";
-import HeroSplineBackground from "@/components/HeroSplineBackground";
+import OrbitStarsField from "@/components/OrbitStarsField";
 import RegistrationMarquee from "@/components/RegistrationMarquee";
+import { WhyAzDeploy } from "@/components/WhyAzDeploy";
+import AzcrashCourseMark from "@/components/AzcrashCourseMark";
 
 export const metadata: Metadata = {
   title: "Home",
   description:
-    "AZDeploy Academy - Building student lives with real IT knowledge. Job-ready training in Python Full Stack and Android Development from industry experts.",
+    "AZ Deploy Academy Belagavi — AZCrash 1.0 flagship program: Full-Stack + AI + DevOps (6 months). React, Django, PostgreSQL, Linux, Nginx, Docker, CI/CD, AWS. Choose your focus within the same track.",
 };
 
 const TAGLINES = [
@@ -26,17 +29,8 @@ function wrapAtUnderscores(s: string) {
 const STATS = [
   { value: "8+", label: "YEARS_EXPERIENCE" },
   { value: "500+", label: "PRODUCTS_DEPLOYED" },
-  { value: "25", label: "SEATS_PER_BATCH" },
+  { value: "30", label: "SEATS_PER_BATCH" },
   { value: "3", label: "BATCHES_PER_COURSE" },
-];
-
-const WHY_ITEMS = [
-  "Trainers with real industry experience — not theory-only instructors",
-  "Master fundamentals before AI — understand what happens under the hood",
-  "Interview-ready curriculum — crack placements with actual concepts",
-  "Limited batches for focused learning — quality over quantity",
-  "Structured 6-month program — time to build real skills, not rush",
-  "One-on-one mentorship for every student — no crowded batches",
 ];
 
 export default function HomePage() {
@@ -53,16 +47,47 @@ export default function HomePage() {
           </aside>
 
           {/* Center - Hero content */}
-          <section className="hud-corner-border flex-1 flex flex-col items-center justify-center pt-4 sm:pt-6 pb-8 sm:py-12 relative min-h-[60vh]">
-            <HeroSplineBackground />
+          <section className="hud-corner-border flex-1 flex flex-col items-center justify-center pt-4 sm:pt-6 pb-8 sm:py-12 relative min-h-[60vh] overflow-hidden">
+            {/* Antigravity-style orbit + stars (replaces old SVG spline rotation) */}
+            <OrbitStarsField intensity={0.95} />
+            <div
+              className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_75%_at_50%_38%,transparent_0%,rgba(10,10,14,0.25)_50%,rgba(7,8,13,0.72)_100%)]"
+              aria-hidden
+            />
 
             <div className="relative z-10 text-center max-w-2xl w-full mx-auto px-2 sm:px-4">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white text-glow-teal">
-                AZDeploy
-              </h1>
-              <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white/90 mt-2 sm:mt-3 text-glow-teal">
+              <div className="hero-logo-backlight mx-auto w-full max-w-[min(92vw,520px)] text-center">
+                <div className="hero-logo-stack relative w-full mx-auto flex flex-col items-center">
+                  {/* Blur only this layer — front image stays unfiltered for crisp edges */}
+                  <div
+                    className="hero-logo-aura pointer-events-none absolute inset-x-0 top-[8%] bottom-0 z-0 flex justify-center"
+                    aria-hidden
+                  >
+                    <Image
+                      src="/logo_gold.png"
+                      alt=""
+                      width={520}
+                      height={200}
+                      className="w-full max-w-full h-auto scale-[1.12] blur-[28px]"
+                      quality={75}
+                    />
+                  </div>
+                  <Image
+                    src="/logo_gold.png"
+                    alt="AZ Deploy Academy"
+                    width={520}
+                    height={200}
+                    className="hero-logo-main relative z-10 block w-full max-w-full h-auto mx-auto object-contain object-center"
+                    priority
+                    quality={100}
+                    sizes="(max-width: 640px) 92vw, 520px"
+                  />
+                </div>
+              </div>
+              <p className="hero-year-outline text-xl sm:text-2xl md:text-3xl font-bold font-mono mt-2 sm:mt-3 tracking-widest">
                 2026
               </p>
+              <AzcrashCourseMark href="/courses" orbitBackground={false} />
               <p className="text-[10px] sm:text-xs md:text-sm lg:text-base text-[#00d4ff] mt-6 sm:mt-8 font-mono tracking-wide sm:tracking-widest max-w-lg mx-auto leading-relaxed break-words px-1 w-full min-w-0">
                 {wrapAtUnderscores(TAGLINES[0])}
               </p>
@@ -95,7 +120,10 @@ export default function HomePage() {
                       30% OFF
                     </p>
                     <p className="text-[10px] text-white/50 font-mono">
-                      First 20 students per batch
+                      First 10 students
+                    </p>
+                    <p className="text-[10px] text-[#ffd700]/90 font-mono mt-1">
+                      Top performer: MacBook Pro
                     </p>
                   </div>
                   <span className="text-xl sm:text-2xl">🏆</span>
@@ -104,9 +132,9 @@ export default function HomePage() {
 
               {/* Motto / Live box */}
               <div className="hud-corner-border mt-5 sm:mt-6 px-4 sm:px-6 py-3 w-full max-w-md mx-auto">
-                <p className="text-[10px] font-mono text-[#22c55e] flex items-center justify-center gap-2 mb-2">
-                  <span className="live-dot" />
-                  NOW_LIVE
+                <p className="text-[10px] font-mono text-[#94a3b8] flex items-center justify-center gap-2 mb-2">
+                  <span className="live-dot opacity-50" />
+                  ONE_PROGRAM · FIND_YOUR_PATH
                 </p>
                 <p className="text-[10px] sm:text-xs md:text-base text-white/90 font-mono break-words">
                   THINK_ELITE_BUILD_REAL_CONQUER_PLACEMENTS
@@ -119,25 +147,7 @@ export default function HomePage() {
           <aside className="hidden lg:flex flex-col w-[280px] shrink-0 gap-6">
             <StudentsPanel />
             <div className="hud-corner-border p-4 flex-1">
-              <h2 className="text-sm font-bold text-[#00d4ff] font-mono mb-3 hud-label">
-                [WHY_AZDEPLOY]
-              </h2>
-              <ul className="space-y-2 text-xs text-white/70">
-                {WHY_ITEMS.map((item) => (
-                  <li key={item} className="flex items-start gap-2">
-                    <span className="text-[#00d4ff] mt-0.5 shrink-0">▸</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="https://wa.me/918296565587"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-4 px-4 py-2 border border-[#00d4ff] text-[#00d4ff] text-xs font-mono hover:bg-[#00d4ff]/15 transition-colors"
-              >
-                ENROLL_NOW →
-              </a>
+              <WhyAzDeploy variant="compact" />
             </div>
           </aside>
         </div>
@@ -153,27 +163,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="hud-corner-border p-4 sm:p-6">
-            <h2 className="text-sm font-bold text-[#00d4ff] font-mono mb-3 hud-label">
-              [WHY_AZDEPLOY]
-            </h2>
-            <ul className="space-y-2 text-sm text-white/70">
-              {WHY_ITEMS.map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <span className="text-[#00d4ff] mt-0.5 shrink-0">▸</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-4 text-center">
-              <a
-                href="https://wa.me/918296565587"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#00d4ff] text-[#00d4ff] text-xs font-mono hover:bg-[#00d4ff]/15 transition-colors"
-              >
-                ENROLL_NOW →
-              </a>
-            </div>
+            <WhyAzDeploy variant="compact" />
           </div>
         </div>
       </main>

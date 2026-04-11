@@ -1,7 +1,7 @@
 'use client';
 
 export default function RegistrationMarquee() {
-  const text = " /// UPDATES: REGISTRATION OPEN ! | STAGE SET | SECURE YOUR SPOT | PYTHON_FULL_STACK | ANDROID_DEV | LIMITED SEATS — 25 PER BATCH | FIRST 20 GET 30% OFF | CONTACT: +91 82965 65587 | +91 89712 44513 | +91 73383 60607 | ENROLL NOW ";
+  const text = " /// ONE_ONGOING_PROGRAM · FULL-STACK + AI + DEVOPS · BELAGAVI · BATCHES: 9AM-11AM | 3PM-5PM | 6PM-8PM · CHOOSE_YOUR_FOCUS · FIRST 10: 30% OFF · TOP PERFORMER: MACBOOK PRO · +91 82965 65587 · +91 89712 44513 · +91 73383 60607 · WWW.AZDEPLOY.COM ";
 
   return (
     <div className="w-full overflow-hidden border-t border-[#00d4ff]/20 hud-bg">

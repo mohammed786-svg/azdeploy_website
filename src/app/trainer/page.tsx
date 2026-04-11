@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import HudHeader from "@/components/HudHeader";
 import FloatingActions from "@/components/FloatingActions";
+import IndustryCurriculum from "@/components/IndustryCurriculum";
 
 export const metadata: Metadata = {
   title: "Trainer",
   description:
-    "AZDeploy Academy trainer: 8+ years industry experience, 500+ products deployed. Real knowledge in Python, Android, cyber security, Linux, nginx. No fake teachers.",
+    "AZ Deploy Academy trainer — 8+ years industry, 500+ products shipped. Same industry-ready track as our courses: Python, Django, React, PostgreSQL, DevOps, AWS, AI & Gen AI. Real deployment experience, not slide-only teaching.",
 };
 
 export default function TrainerPage() {
   return (
-    <div className="min-h-screen hud-bg hud-grid">
+    <div className="min-h-screen hud-bg hud-grid relative">
       <HudHeader />
-      <main className="pt-16 pb-24 sm:pb-20">
+      <main className="relative z-10 pt-16 pb-24 sm:pb-20">
         <section className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white text-glow-teal text-center mb-8 hud-label">
             [MEET_THE_TRAINER]
@@ -44,17 +45,80 @@ export default function TrainerPage() {
             </p>
 
             {/* Expertise & tech stack */}
-            <div className="border border-[#00d4ff]/20 rounded p-5 bg-black/30">
-              <h2 className="text-sm font-mono font-semibold text-[#00d4ff] mb-3">[EXPERTISE_&_TECH_STACK]</h2>
-              <ul className="grid sm:grid-cols-2 gap-2 text-sm text-white/80">
-                <li><span className="text-[#00d4ff]/80">·</span> Python, Django, Flask, REST APIs</li>
-                <li><span className="text-[#00d4ff]/80">·</span> Android (Kotlin, Java), Jetpack Compose</li>
-                <li><span className="text-[#00d4ff]/80">·</span> PostgreSQL, MySQL, ORM, migrations</li>
-                <li><span className="text-[#00d4ff]/80">·</span> Nginx, Gunicorn, VPS deployment</li>
-                <li><span className="text-[#00d4ff]/80">·</span> Ubuntu, Linux, Kali Linux</li>
-                <li><span className="text-[#00d4ff]/80">·</span> Cyber security, hardening, best practices</li>
-                <li><span className="text-[#00d4ff]/80">·</span> Git, CI/CD, local & server setup</li>
-              </ul>
+            <div className="border border-[#00d4ff]/20 rounded p-5 sm:p-6 bg-black/30 space-y-6">
+              <h2 className="text-sm font-mono font-semibold text-[#00d4ff]">[EXPERTISE_&_TECH_STACK]</h2>
+              <p className="text-xs text-[#94a3b8] leading-relaxed -mt-2">
+                Production-style stacks — what ships on servers and in app stores, not hello-world snippets only.
+              </p>
+
+              <div className="space-y-5">
+                <div>
+                  <h3 className="text-[10px] font-mono text-[#64748b] uppercase tracking-[0.2em] mb-2.5">Backend & APIs</h3>
+                  <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-white/80">
+                    <li><span className="text-[#00d4ff]/80">·</span> Python — structure, OOP, async where it pays off, packaging & tooling</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Django — MVT, admin, auth, ORM, migrations, signals (when appropriate)</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Django REST-style APIs — serializers, permissions, pagination, throttling</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Flask & lightweight services — blueprints, JSON APIs, smaller surface area</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> REST design — HTTP semantics, errors, versioning, OpenAPI-style documentation</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Background tasks & integrations — emails, uploads, webhooks, idempotent handlers</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-[10px] font-mono text-[#64748b] uppercase tracking-[0.2em] mb-2.5">Frontend & mobile</h3>
+                  <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-white/80">
+                    <li><span className="text-[#00d4ff]/80">·</span> React — hooks, composition, client routing, forms & validation</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Redux (or equivalent) — predictable state, async data, DevTools mindset</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Vite / modern build — env splits, fast dev feedback, production bundles</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Android — Kotlin & Java, Jetpack Compose, Material patterns, Gradle basics</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Mobile integration — REST clients, auth storage, offline & error UX</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-[10px] font-mono text-[#64748b] uppercase tracking-[0.2em] mb-2.5">Data & persistence</h3>
+                  <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-white/80">
+                    <li><span className="text-[#00d4ff]/80">·</span> PostgreSQL — modeling, constraints, indexes, EXPLAIN, query tuning</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> MySQL / MariaDB where teams still standardize on them</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> ORMs, migrations, avoiding N+1, sane schema evolution in teams</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Pandas-style analysis & small ETL — CSV/JSON in/out, transforms, merges</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-[10px] font-mono text-[#64748b] uppercase tracking-[0.2em] mb-2.5">DevOps, cloud & delivery</h3>
+                  <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-white/80">
+                    <li><span className="text-[#00d4ff]/80">·</span> Ubuntu & Linux servers — SSH, users, permissions, systemd, logs, disk & CPU</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Nginx — reverse proxy, static files, gzip, TLS termination concepts</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Gunicorn / app servers — workers, timeouts, binding behind Nginx</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> VPS & cloud deploys — domains, HTTPS, updates, backups, rollback thinking</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Docker & Compose — images, layers, local parity with production</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Kubernetes orientation — pods, services, ingress, ConfigMaps at practitioner level</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Terraform / IaC — modules, state, plan/apply discipline</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> AWS — EC2, S3, RDS/VPC intuition; cost & security guardrails</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Git, branching, PR reviews; CI/CD (GitHub Actions, Jenkins-style pipelines)</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-[10px] font-mono text-[#64748b] uppercase tracking-[0.2em] mb-2.5">Security & platform</h3>
+                  <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-white/80">
+                    <li><span className="text-[#00d4ff]/80">·</span> Kali Linux & offensive awareness — to defend better, not to teach misuse</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Hardening — firewalls, SSH keys, least privilege, patching cadence</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> App security — OWASP-style thinking, secrets handling, dependency hygiene</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-[10px] font-mono text-[#64748b] uppercase tracking-[0.2em] mb-2.5">AI, data platforms & automation</h3>
+                  <ul className="grid sm:grid-cols-2 gap-x-4 gap-y-2 text-sm text-white/80">
+                    <li><span className="text-[#00d4ff]/80">·</span> LLM APIs & prompt patterns — cost, latency, guardrails in real apps</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> RAG & embeddings — chunking, vector search concepts, wiring into backends</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Spark / big-data intuition — when batch & scale tooling beats a single DB</li>
+                    <li><span className="text-[#00d4ff]/80">·</span> Scripting & automation — Bash/Python for ops glue and repeatable tasks</li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             {/* Teaching approach */}
@@ -92,6 +156,13 @@ export default function TrainerPage() {
               </a>
             </div>
           </div>
+        </section>
+
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-8 sm:pb-12">
+          <p className="text-center text-[10px] sm:text-xs font-mono text-[#94a3b8] tracking-[0.2em] uppercase mb-6">
+            Same program · what you learn with this trainer
+          </p>
+          <IndustryCurriculum />
         </section>
       </main>
       <FloatingActions />

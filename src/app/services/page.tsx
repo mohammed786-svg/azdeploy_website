@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const OFFICE_ADDRESS = {
-  addressLine1: "Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590017",
+  addressLine1: "Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590016",
   addressLine2: "VFF GROUP - First Floor",
 };
 
@@ -33,8 +33,8 @@ export default function ServicesPage() {
     },
     {
       title: "LIMITED_BATCHES",
-      desc: "Only 3 batches per course, 25 seats per batch. First 20 students get 30% off. Focus on quality, not quantity. Small batches mean more attention to each student.",
-      points: ["3 batches per course", "25 seats per batch", "30% off for first 20"],
+      desc: "Only 3 batches per course, 30 students per batch. First 10 students get 30% off. Focus on quality, not quantity. Small batches mean more attention to each student.",
+      points: ["3 batches per course", "30 students per batch", "30% off for first 10"],
     },
   ];
 

@@ -49,6 +49,104 @@ body {
   text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
+/* Hero gold logo — soft backlight + outlined neon rim (stroke) + outer glow */
+.hero-logo-backlight {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.5rem 1rem;
+}
+
+.hero-logo-backlight::before {
+  content: "";
+  position: absolute;
+  inset: -18% -12% 2%;
+  background: radial-gradient(
+    ellipse 58% 48% at 50% 38%,
+    rgba(255, 215, 0, 0.1) 0%,
+    rgba(0, 212, 255, 0.06) 42%,
+    transparent 68%
+  );
+  filter: blur(20px);
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.hero-logo-backlight::after {
+  content: "";
+  position: absolute;
+  inset: -6% -4% -2%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 35%,
+    rgba(0, 212, 255, 0.06) 0%,
+    transparent 50%
+  );
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.hero-logo-backlight:hover::before {
+  background: radial-gradient(
+    ellipse 58% 48% at 50% 38%,
+    rgba(255, 215, 0, 0.16) 0%,
+    rgba(0, 212, 255, 0.1) 42%,
+    transparent 70%
+  );
+  filter: blur(24px);
+}
+
+.hero-logo-backlight:hover::after {
+  background: radial-gradient(
+    circle at 50% 35%,
+    rgba(0, 212, 255, 0.14) 0%,
+    transparent 52%
+  );
+}
+
+/*
+  Foreground PNG has no filter — avoids browser softening the whole bitmap.
+  Glow comes only from .hero-logo-aura (blurred duplicate) + ::before.
+*/
+.hero-logo-backlight img.hero-logo-main {
+  position: relative;
+  z-index: 1;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  transition: transform 0.4s ease;
+}
+
+.hero-logo-backlight:hover img.hero-logo-main {
+  transform: translateZ(0) scale(1.02);
+}
+
+.hero-logo-backlight .hero-logo-aura {
+  opacity: 0.36;
+  transition: opacity 0.4s ease;
+}
+
+.hero-logo-backlight:hover .hero-logo-aura {
+  opacity: 0.46;
+}
+
+/* Year line — outlined neon text (matches HUD) */
+.hero-year-outline {
+  color: rgba(248, 250, 252, 0.92);
+  -webkit-text-stroke: 1px rgba(0, 212, 255, 0.55);
+  paint-order: stroke fill;
+  text-shadow: 0 0 12px rgba(0, 212, 255, 0.55), 0 0 28px rgba(0, 212, 255, 0.28),
+    0 0 1px rgba(255, 255, 255, 0.4);
+  transition: text-shadow 0.35s ease, -webkit-text-stroke 0.35s ease;
+}
+
+.hero-logo-backlight:hover ~ .hero-year-outline,
+.hero-year-outline:hover {
+  -webkit-text-stroke: 1px rgba(0, 245, 212, 0.75);
+  text-shadow: 0 0 16px rgba(0, 212, 255, 0.65), 0 0 36px rgba(0, 212, 255, 0.35),
+    0 0 2px rgba(255, 255, 255, 0.5);
+}
+
 .border-glow {
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
 }
@@ -1208,3 +1306,51 @@ body {
 .doc-framer-scene[data-fullscreen="true"] .doc-framer-flowchart { margin-top: 1rem; padding-top: 1rem; }
 .doc-framer-scene[data-fullscreen="true"] .doc-framer-flowchart-wrap { margin-top: 1rem; padding-top: 1rem; height: 360px; max-height: 360px; }
 .doc-framer-scene[data-fullscreen="true"] .doc-framer-flowchart-3d { height: 320px; min-height: 320px; max-height: 320px; }
+
+/* ─── AZCrash 1.0 program mark (courses + home) ─── */
+@keyframes azcrash-bloom-pulse {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+}
+
+.azcrash-mark__bloom {
+  z-index: 0;
+  background: radial-gradient(ellipse 55% 45% at 50% 45%, rgba(0, 212, 255, 0.35) 0%, rgba(255, 215, 0, 0.12) 42%, transparent 70%);
+  filter: blur(18px);
+  animation: azcrash-bloom-pulse 2.8s ease-in-out infinite;
+}
+
+.azcrash-mark:hover .azcrash-mark__bloom {
+  animation: none;
+  opacity: 1 !important;
+  transform: scale(1.08);
+  filter: blur(22px);
+  background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(0, 245, 212, 0.45) 0%, rgba(255, 215, 0, 0.22) 38%, transparent 72%);
+}
+
+.azcrash-mark {
+  transform: translateZ(0);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s ease;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45));
+}
+
+.azcrash-mark:hover {
+  transform: scale(1.035) translateY(-2px);
+  filter: drop-shadow(0 0 28px rgba(0, 212, 255, 0.55)) drop-shadow(0 0 48px rgba(255, 215, 0, 0.2)) drop-shadow(0 12px 32px rgba(0, 0, 0, 0.5));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .azcrash-mark__bloom {
+    animation: none;
+  }
+  .azcrash-mark:hover {
+    transform: none;
+  }
+}

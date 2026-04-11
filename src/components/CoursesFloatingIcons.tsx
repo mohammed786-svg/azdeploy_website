@@ -1,23 +1,19 @@
 'use client';
 
 const FLOATING_ICONS = [
-  /* Left side of cards */
-  { name: 'Python', delay: 0, duration: 20, reverse: false, x: '2%', y: '18%' },
+  { name: 'React', delay: 0, duration: 20, reverse: false, x: '2%', y: '18%' },
   { name: 'Django', delay: 3.5, duration: 25, reverse: false, x: '2%', y: '38%' },
   { name: 'Postgres', delay: 1.2, duration: 21, reverse: true, x: '2%', y: '58%' },
-  { name: 'Node', delay: 0.8, duration: 20, reverse: true, x: '2%', y: '78%' },
-  /* Right side of cards */
+  { name: 'AWS', delay: 0.8, duration: 20, reverse: true, x: '2%', y: '78%' },
   { name: 'React', delay: 2, duration: 24, reverse: true, x: '98%', y: '18%' },
-  { name: 'Android', delay: 0.5, duration: 21, reverse: true, x: '98%', y: '38%' },
-  { name: 'Kotlin', delay: 1, duration: 19, reverse: true, x: '98%', y: '58%' },
-  { name: 'Java', delay: 1, duration: 22, reverse: false, x: '98%', y: '78%' },
-  /* Top row */
+  { name: 'Docker', delay: 0.5, duration: 21, reverse: true, x: '98%', y: '38%' },
+  { name: 'CI/CD', delay: 1, duration: 19, reverse: true, x: '98%', y: '58%' },
+  { name: 'AI', delay: 1, duration: 22, reverse: false, x: '98%', y: '78%' },
   { name: 'Docker', delay: 2.5, duration: 23, reverse: false, x: '18%', y: '2%' },
   { name: 'Nginx', delay: 2, duration: 22, reverse: false, x: '50%', y: '2%' },
   { name: 'Linux', delay: 3, duration: 18, reverse: true, x: '82%', y: '2%' },
-  /* Bottom row (around coming soon) */
-  { name: 'Ubuntu', delay: 1.5, duration: 26, reverse: false, x: '25%', y: '98%' },
-  { name: 'Nginx', delay: 1, duration: 22, reverse: true, x: '75%', y: '98%' },
+  { name: 'VPS', delay: 1.5, duration: 26, reverse: false, x: '25%', y: '98%' },
+  { name: 'Data', delay: 1, duration: 22, reverse: true, x: '75%', y: '98%' },
 ];
 
 function IconPython({ className }: { className?: string }) {
@@ -129,6 +125,11 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Node: IconNode,
   Nginx: IconNginx,
   Postgres: IconPostgres,
+  AWS: IconNode,
+  "CI/CD": IconDocker,
+  AI: IconPython,
+  VPS: IconLinux,
+  Data: IconPostgres,
 };
 
 export default function CoursesFloatingIcons() {

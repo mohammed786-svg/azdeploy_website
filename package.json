@@ -11,12 +11,21 @@
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
+    "apexcharts": "^5.10.6",
+    "firebase": "^11.10.0",
+    "firebase-admin": "^13.8.0",
     "framer-motion": "^12.34.5",
     "next": "16.1.6",
     "react": "19.2.3",
+    "react-apexcharts": "^2.1.0",
     "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
     "react-player": "^3.4.0",
-    "three": "^0.183.2"
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "server-only": "^0.0.1",
+    "three": "^0.183.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

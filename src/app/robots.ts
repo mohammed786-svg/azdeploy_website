@@ -1,12 +1,14 @@
-import type { MetadataRoute } from 'next';
+import type { MetadataRoute } from "next";
+import { getSiteUrl } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
+  const base = getSiteUrl();
   return {
     rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/api/'],
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/api/", "/hq"],
     },
-    sitemap: 'https://azdeploy.academy/sitemap.xml', // Update with your domain
+    sitemap: `${base}/sitemap.xml`,
   };
 }

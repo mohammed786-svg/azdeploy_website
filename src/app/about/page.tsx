@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const STATS = [
   { value: "8+", label: "YEARS_EXPERIENCE" },
   { value: "500+", label: "PRODUCTS_DEPLOYED" },
-  { value: "25", label: "SEATS_PER_BATCH" },
+  { value: "30", label: "SEATS_PER_BATCH" },
   { value: "3", label: "BATCHES_PER_COURSE" },
 ];
 
@@ -20,7 +20,7 @@ const WHY_DIFFERENT = [
   "Trainers who have actually shipped 500+ products—not theory-only instructors",
   "Curriculum built around real stacks: Python, Django, React, Android, Kotlin, Linux, DevOps",
   "Think first, AI second—we strengthen fundamentals before you lean on tools",
-  "Limited batches (3 per course, 25 seats) so every student gets real attention",
+  "Limited batches (3 per course, 30 students each) so every student gets real attention",
   "Interview and placement focus with mock interviews, resume prep, and industry insights",
   "Live projects from day one; no certificate mills—only job-ready skills",
 ];
@@ -28,7 +28,7 @@ const WHY_DIFFERENT = [
 const VALUES = [
   { title: "Real over fake", desc: "We call out fake teachers. Our trainers have years in the industry and real deployments to show." },
   { title: "Basics first", desc: "Strong fundamentals, debugging, and problem-solving before AI. You understand what happens under the hood." },
-  { title: "Quality over quantity", desc: "Small batches, first 20 get 30% off. We care about outcomes, not headcount." },
+  { title: "Quality over quantity", desc: "Small batches, first 10 get 30% off. We care about outcomes, not headcount." },
   { title: "Placement ready", desc: "Resume reviews, mock interviews, and the kind of knowledge that actually helps you crack placements." },
 ];
 
@@ -137,10 +137,10 @@ export default function AboutPage() {
               [WHERE_WE_ARE]
             </h2>
             <p className="text-white/80 text-sm">
-              Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590017.
+              Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590016.
             </p>
             <p className="text-[#00d4ff] font-mono font-semibold text-sm mt-2">VFF GROUP — First Floor</p>
-            <p className="text-white/60 text-xs mt-3">Limited seats per batch. First 20 students get 30% off.</p>
+            <p className="text-white/60 text-xs mt-3">Limited seats per batch. First 10 students get 30% off.</p>
           </div>
         </section>
 

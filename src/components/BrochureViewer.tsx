@@ -2,12 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
-
-const OFFICE = {
-  addressLine1: "Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590017",
-  addressLine2: "VFF GROUP - First Floor",
-  whatsapp: "+91 82965 65587",
-};
+import { ACADEMY_CONTACT_NUMBERS, ACADEMY_OFFICE, academyGoogleMapsUrl } from '@/lib/contact-info';
 
 const SERVICES_DETAIL = [
   {
@@ -27,25 +22,26 @@ const SERVICES_DETAIL = [
   },
   {
     title: "LIMITED_BATCHES",
-    desc: "Only 3 batches per course, 25 seats per batch. First 20 students get 30% off. Quality over quantity.",
-    points: ["3 batches per course only", "25 seats per batch max", "First 20: 30% discount", "Personal attention guaranteed"],
+    desc: "Morning 9AM–11AM, Afternoon 3PM–5PM, Evening 6PM–8PM. Up to 30 students per batch. First 10 students get 30% off. Top performer wins MacBook Pro.",
+    points: ["30 students per batch", "Batch timings: morning / afternoon / evening", "30% off for first 10 students", "MacBook Pro for top performer", "Quality over quantity"],
   },
 ];
 
-const PYTHON_COURSE = {
-  name: "Python Full Stack",
-  tag: "Primary Course",
-  fullDesc: "Without Python, students can't build their career. Our comprehensive program covers everything from fundamentals to production deployment—Django/Flask, React/Vue, PostgreSQL/MySQL, REST APIs, Docker, and CI/CD. Build real projects that go live.",
-  topics: ["Backend: Django, Flask, FastAPI", "Frontend: HTML/CSS/JS, React", "Database: PostgreSQL, MySQL", "APIs: REST, authentication", "Deployment: Docker, AWS/GCP"],
-  bullets: ["3 batches only", "25 seats per batch", "First 20: 30% off", "Projects included", "Interview prep & placement support"],
-};
-
-const ANDROID_COURSE = {
-  name: "Android Developer",
-  tag: "Primary Course",
-  fullDesc: "Master Android development with Kotlin, Android Studio, Jetpack Compose, and Material Design. Build and publish real apps on Play Store. Understand architecture patterns (MVVM), Room DB, Retrofit, and modern Android practices.",
-  topics: ["Kotlin & Java fundamentals", "Android Studio & Gradle", "Jetpack Compose, Material UI", "Room, Retrofit, WorkManager", "Play Store publishing"],
-  bullets: ["3 batches only", "25 seats per batch", "First 20: 30% off", "App portfolio included", "Industry-ready skills"],
+const PROGRAM_COURSE = {
+  name: "Full-Stack + AI + DevOps — All-in-One",
+  tag: "6 months · One program · Pick your focus",
+  fullDesc:
+    "Not just another course. Become a real software engineer: build production-level systems, work on live startup projects, learn complete system architecture, hands-on deployment, train like real software engineers — not Todo apps.",
+  topics: [
+    "Development: React / Modern UI · Django / APIs / System Design · PostgreSQL / Optimization",
+    "DevOps & Systems: Linux (server level) · Nginx · Docker & CI/CD · Deployment VPS (AWS)",
+    "AI & Data: AI+ real use cases · Data engineering fundamentals",
+  ],
+  bullets: [
+    "Learn. Build. Deploy. Scale. Get hired.",
+    "30% off for first 10 students · MacBook Pro for top performer",
+    "First time in Belagavi · www.azdeploy.com",
+  ],
 };
 
 const WHY_AZDEPLOY = [
@@ -62,13 +58,18 @@ const TOTAL_PAGES = 6;
 function PageCover() {
   return (
     <div className="brochure-page-content p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center min-h-full text-center box-border">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white text-glow-teal mb-1 sm:mb-2">AZDeploy</h1>
-      <p className="text-lg sm:text-xl md:text-2xl text-[#00d4ff] font-mono mb-2 sm:mb-4">ACADEMY_2026</p>
-      <p className="text-xs sm:text-sm md:text-base text-white/70 max-w-full mb-2 sm:mb-4 px-1">
-        Building student lives with real IT knowledge. Think first, AI second. From fake teachers to real deployments.
+      <p className="text-xs sm:text-sm md:text-base font-mono font-bold tracking-[0.2em] text-[#00d4ff] mb-3 sm:mb-4">AZCRASH 1.0</p>
+      <p className="text-[10px] sm:text-xs text-[#94a3b8] font-mono uppercase tracking-widest mb-2">Not just another course</p>
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white text-glow-teal mb-2 px-1 leading-tight">
+        Become a Real Software Engineer in 6 Months
+      </h1>
+      <p className="text-lg sm:text-xl md:text-2xl text-[#00d4ff] font-mono mb-1">AZ DEPLOY ACADEMY</p>
+      <p className="text-xs sm:text-sm text-[#ffd700] font-mono mb-3">First time in Belagavi</p>
+      <p className="text-xs sm:text-sm text-white/70 max-w-full mb-2 px-1">
+        Full-Stack + AI + DevOps — all-in-one. Learn. Build. Deploy. Scale. Get hired.
       </p>
       <p className="text-[10px] sm:text-xs text-[#00d4ff]/80 font-mono">— BROCHURE —</p>
-      <p className="text-[10px] text-white/50 mt-2 sm:mt-4">Python Full Stack | Android Development | Belagavi</p>
+      <p className="text-[10px] text-white/50 mt-2 sm:mt-4">One ongoing program · Belagavi</p>
     </div>
   );
 }
@@ -100,33 +101,17 @@ function PageCourses() {
       <h2 className="text-[#00d4ff] text-sm sm:text-base md:text-lg font-mono border-b border-[#00d4ff]/30 pb-1.5 sm:pb-2 mb-3 sm:mb-4">[COURSES]</h2>
       <div className="space-y-4 sm:space-y-5">
         <div>
-          <span className="text-[#00e5cc] text-[10px] font-mono">{PYTHON_COURSE.tag}</span>
-          <h3 className="text-white font-semibold text-sm sm:text-base">{PYTHON_COURSE.name}</h3>
-          <p className="text-white/70 text-[10px] sm:text-xs mt-0.5 sm:mt-1 mb-1 sm:mb-2">{PYTHON_COURSE.fullDesc}</p>
-          <p className="text-[10px] text-[#00d4ff]/80 font-mono mb-0.5 sm:mb-1">Topics:</p>
+          <span className="text-[#00e5cc] text-[10px] font-mono">{PROGRAM_COURSE.tag}</span>
+          <h3 className="text-white font-semibold text-sm sm:text-base">{PROGRAM_COURSE.name}</h3>
+          <p className="text-white/70 text-[10px] sm:text-xs mt-0.5 sm:mt-1 mb-1 sm:mb-2">{PROGRAM_COURSE.fullDesc}</p>
+          <p className="text-[10px] text-[#00d4ff]/80 font-mono mb-0.5 sm:mb-1">What you will master:</p>
           <ul className="text-[10px] text-white/60 space-y-0.5 mb-1 sm:mb-2">
-            {PYTHON_COURSE.topics.map((t) => (
+            {PROGRAM_COURSE.topics.map((t) => (
               <li key={t}>• {t}</li>
             ))}
           </ul>
           <ul className="text-[10px] text-[#00d4ff]/90 font-mono">
-            {PYTHON_COURSE.bullets.map((b) => (
-              <li key={b}>▸ {b}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <span className="text-[#00e5cc] text-[10px] font-mono">{ANDROID_COURSE.tag}</span>
-          <h3 className="text-white font-semibold text-sm sm:text-base">{ANDROID_COURSE.name}</h3>
-          <p className="text-white/70 text-[10px] sm:text-xs mt-0.5 sm:mt-1 mb-1 sm:mb-2">{ANDROID_COURSE.fullDesc}</p>
-          <p className="text-[10px] text-[#00d4ff]/80 font-mono mb-0.5 sm:mb-1">Topics:</p>
-          <ul className="text-[10px] text-white/60 space-y-0.5 mb-1 sm:mb-2">
-            {ANDROID_COURSE.topics.map((t) => (
-              <li key={t}>• {t}</li>
-            ))}
-          </ul>
-          <ul className="text-[10px] text-[#00d4ff]/90 font-mono">
-            {ANDROID_COURSE.bullets.map((b) => (
+            {PROGRAM_COURSE.bullets.map((b) => (
               <li key={b}>▸ {b}</li>
             ))}
           </ul>
@@ -157,20 +142,51 @@ function PageWhy() {
 
 function PageContact() {
   return (
-    <div className="brochure-page-content p-3 sm:p-4 md:p-6 min-h-full flex flex-col box-border">
-      <h2 className="text-[#00d4ff] text-sm sm:text-base md:text-lg font-mono border-b border-[#00d4ff]/30 pb-1.5 sm:pb-2 mb-3 sm:mb-4">[CONTACT_&_OFFICE]</h2>
-      <p className="text-white/80 text-[10px] sm:text-xs md:text-sm">{OFFICE.addressLine1}</p>
-      <p className="text-white/80 text-[10px] sm:text-xs md:text-sm font-semibold text-[#00d4ff]/90 mt-1">{OFFICE.addressLine2}</p>
-      <p className="text-white/70 text-[10px] sm:text-xs mt-auto">WhatsApp</p>
-      <a
-        href={`https://wa.me/${OFFICE.whatsapp.replace(/[\s+]/g, '')}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-[#00d4ff] font-mono text-sm sm:text-lg hover:text-[#00e5cc]"
-      >
-        {OFFICE.whatsapp}
-      </a>
-      <p className="text-[10px] text-white/50 mt-2 sm:mt-4">Limited seats • First 20 get 30% off</p>
+    <div className="brochure-page-content p-3 sm:p-4 md:p-6 min-h-full flex flex-col box-border gap-3 sm:gap-4">
+      <h2 className="text-[#00d4ff] text-sm sm:text-base md:text-lg font-mono border-b border-[#00d4ff]/30 pb-1.5 sm:pb-2 shrink-0">
+        [CONTACT_&_OFFICE]
+      </h2>
+      <div className="space-y-1">
+        <p className="text-white/80 text-[10px] sm:text-xs md:text-sm leading-snug">{ACADEMY_OFFICE.addressLine1}</p>
+        <p className="text-white/80 text-[10px] sm:text-xs md:text-sm font-semibold text-[#00d4ff]/90">{ACADEMY_OFFICE.addressLine2}</p>
+        <a
+          href={academyGoogleMapsUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block text-[10px] sm:text-xs text-[#00d4ff]/85 font-mono hover:text-[#00e5cc] mt-1"
+        >
+          Open in Google Maps →
+        </a>
+      </div>
+      <div>
+        <p className="text-white/50 text-[9px] sm:text-[10px] font-mono uppercase tracking-wider mb-2">WhatsApp &amp; Call</p>
+        <ul className="space-y-2.5">
+          {ACADEMY_CONTACT_NUMBERS.map((num) => (
+            <li key={num.raw} className="border border-[#00d4ff]/15 rounded-lg px-2.5 py-2 bg-black/25">
+              <p className="text-white/95 font-mono text-[11px] sm:text-xs font-semibold mb-1.5">{num.display}</p>
+              <div className="flex flex-wrap gap-1.5">
+                <a
+                  href={`https://wa.me/${num.raw}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-2 py-1 border border-[#00d4ff]/40 text-[#00d4ff] text-[9px] sm:text-[10px] font-mono hover:bg-[#00d4ff]/15"
+                >
+                  WhatsApp
+                </a>
+                <a
+                  href={`tel:${num.raw}`}
+                  className="inline-flex items-center px-2 py-1 border border-[#00d4ff]/40 text-[#00d4ff] text-[9px] sm:text-[10px] font-mono hover:bg-[#00d4ff]/15"
+                >
+                  Call
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p className="text-[9px] sm:text-[10px] text-white/45 mt-auto pt-1 leading-snug">
+        30% off first 10 students · Top performer: MacBook Pro
+      </p>
     </div>
   );
 }
@@ -178,18 +194,32 @@ function PageContact() {
 function PageBack() {
   return (
     <div className="brochure-page-content p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center min-h-full text-center box-border">
-      <p className="text-[#00d4ff] text-xs sm:text-sm font-mono mb-2 sm:mb-4">ENROLL_NOW</p>
+      <p className="text-[#ffd700] text-xs sm:text-sm font-mono mb-2 sm:mb-4">ONE_PROGRAM · ENQUIRE</p>
       <p className="text-white/80 text-[10px] sm:text-xs md:text-sm mb-2 sm:mb-4 max-w-full px-1">
-        Limited seats. 3 batches per course, 25 per batch. First 20 students get 30% off. Contact on WhatsApp to secure your spot.
+        One ongoing 6-month track — choose your focus within it. Enquiry on WhatsApp — Morning 9–11 · Afternoon 3–5 · Evening 6–8. First 10 students: 30% off. Top performer wins MacBook Pro.
       </p>
       <a
-        href={`https://wa.me/${OFFICE.whatsapp.replace(/[\s+]/g, '')}`}
+        href={`https://wa.me/${ACADEMY_CONTACT_NUMBERS[0].raw}`}
         target="_blank"
         rel="noopener noreferrer"
         className="px-4 sm:px-6 py-2 sm:py-3 border border-[#00d4ff] text-[#00d4ff] text-xs sm:text-sm font-mono hover:bg-[#00d4ff]/20 transition-all duration-300"
       >
-        WHATSAPP {OFFICE.whatsapp}
+        WHATSAPP {ACADEMY_CONTACT_NUMBERS[0].display}
       </a>
+      <div className="mt-3 flex flex-col gap-1.5 text-[9px] sm:text-[10px] font-mono text-white/55">
+        <span className="text-white/40 uppercase tracking-wider">Also on WhatsApp</span>
+        {ACADEMY_CONTACT_NUMBERS.slice(1).map((num) => (
+          <a
+            key={num.raw}
+            href={`https://wa.me/${num.raw}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#00d4ff]/90 hover:text-[#00e5cc]"
+          >
+            {num.display}
+          </a>
+        ))}
+      </div>
       <Link href="/" className="mt-4 sm:mt-6 text-white/50 text-[10px] sm:text-xs font-mono hover:text-[#00d4ff] transition-colors">
         ← Back to site
       </Link>
