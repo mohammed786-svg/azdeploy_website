@@ -12,8 +12,20 @@ function resolveServiceAccountPath(raw: string): string {
 }
 
 function loadServiceAccount(): Record<string, unknown> {
-  const inline = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
-  if (inline?.trim()) {
+  /** Vercel/serverless: paste full JSON or use base64 to avoid path / quoting issues. */
+  const b64 = process.env.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64?.trim();
+  if (b64) {
+    try {
+      const decoded = Buffer.from(b64, "base64").toString("utf8");
+      return JSON.parse(decoded) as Record<string, unknown>;
+    } catch {
+      throw new Error(
+        "FIREBASE_SERVICE_ACCOUNT_JSON_BASE64 is invalid (must be base64 of the service account JSON file)."
+      );
+    }
+  }
+  const inline = process.env.FIREBASE_SERVICE_ACCOUNT_JSON?.trim();
+  if (inline) {
     return JSON.parse(inline) as Record<string, unknown>;
   }
   const fileEnv = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
@@ -28,13 +40,14 @@ function loadServiceAccount(): Record<string, unknown> {
     return JSON.parse(raw) as Record<string, unknown>;
   }
   throw new Error(
-    "Firebase Admin not configured. Set FIREBASE_SERVICE_ACCOUNT_PATH (JSON file) or FIREBASE_SERVICE_ACCOUNT_JSON."
+    "Firebase Admin not configured. Set FIREBASE_SERVICE_ACCOUNT_JSON, FIREBASE_SERVICE_ACCOUNT_JSON_BASE64, or FIREBASE_SERVICE_ACCOUNT_PATH (local file only)."
   );
 }
 
 export function isFirebaseAdminConfigured(): boolean {
   const dbUrl = process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL;
   if (!dbUrl) return false;
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON_BASE64?.trim()) return true;
   if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON?.trim()) return true;
   const p = process.env.FIREBASE_SERVICE_ACCOUNT_PATH?.trim();
   if (!p) return false;
