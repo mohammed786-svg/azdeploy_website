@@ -24,6 +24,20 @@ function parseLoginError(data: unknown, fallback: string): string {
   return fallback;
 }
 
+/** Avoid dumping Django/HTML error pages into the UI. */
+function humanizeLoginFailure(status: number, text: string, data: unknown): string {
+  const t = text.trim();
+  if (t.startsWith("<!DOCTYPE") || t.startsWith("<html") || t.includes("<title>Page not found")) {
+    if (status === 404) {
+      return "HQ login proxy is not reachable. Nginx must send /api/hq/django-auth (and related paths) to Next.js on :3000, not to Django. Copy the latest deployment/vps/nginx/azdeploy.conf and reload nginx.";
+    }
+    return "The server returned an HTML error page instead of JSON. Check Nginx routing for Next.js API routes.";
+  }
+  const fromJson = parseLoginError(data, "");
+  if (fromJson) return fromJson;
+  return t.length > 280 ? `${t.slice(0, 280)}…` : t || `Login failed (${status})`;
+}
+
 /** Login via Next proxy: sets Next httpOnly cookie + returns Django body (incl. apiSession Bearer). */
 async function loginThroughDjangoProxy(email: string, password: string): Promise<void> {
   const r = await fetch("/api/hq/django-auth", {
@@ -44,7 +58,7 @@ async function loginThroughDjangoProxy(email: string, password: string): Promise
     data = null;
   }
   if (!r.ok) {
-    throw new Error(parseLoginError(data, text || "Login failed"));
+    throw new Error(humanizeLoginFailure(r.status, text, data));
   }
   const wrapped = data as { success?: boolean; data?: { ok?: boolean; apiSession?: string }; message?: string };
   if (wrapped && "success" in wrapped && wrapped.success === false) {

@@ -60,7 +60,7 @@ export default function HqShell({ children }: { children: React.ReactNode }) {
       window.localStorage.removeItem("hq_login_at");
       window.sessionStorage.removeItem(HQ_API_SESSION_STORAGE_KEY);
     }
-    await fetch("/api/hq/logout", { method: "POST", credentials: "include" });
+    await fetch("/api/hq/next-cookie/logout", { method: "POST", credentials: "include" });
     window.location.href = "/hq/login";
   }
 
