@@ -41,6 +41,9 @@ export default function HqLoginPage() {
       });
       if (typeof window !== "undefined") {
         window.localStorage.setItem("hq_login_at", String(Date.now()));
+        // Full navigation so middleware sees the new hq_session cookie (must match HQ_COOKIE_SECRET in Next env).
+        window.location.assign("/hq");
+        return;
       }
       router.replace("/hq");
       router.refresh();

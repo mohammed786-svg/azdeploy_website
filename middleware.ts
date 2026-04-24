@@ -14,6 +14,7 @@ export function middleware(request: NextRequest) {
     if (pathname === "/hq/login") {
       return NextResponse.next();
     }
+    // Same value as Django HQ_COOKIE_SECRET (Set-Cookie on POST /api/v1/hq/auth). If unset, every /hq visit redirects to login.
     const secret = process.env.HQ_COOKIE_SECRET;
     const cookie = request.cookies.get(HQ_COOKIE)?.value;
     if (!secret || cookie !== secret) {
