@@ -38,11 +38,19 @@ function apiUrl(path: string, options?: HqClientOptions): string {
   return `${base.replace(/\/$/, "")}${normalizedPath.startsWith("/") ? "" : "/"}${normalizedPath}`;
 }
 
+function isHqAuthPath(path: string, apiVersion: ApiVersion): boolean {
+  const n = normalizeApiPath(path, apiVersion);
+  return /\/hq\/(auth|logout)(?:\?|$)/.test(n);
+}
+
 /** Client-side fetch for HQ API routes (session cookie). */
 export async function hqFetch<T>(path: string, init?: RequestInit, options?: HqClientOptions): Promise<T> {
   const dbName = resolveApiDbName();
+  const apiVersion = options?.apiVersion ?? "v1";
   const method = (init?.method || "GET").toUpperCase();
   const isWrite = method !== "GET" && method !== "HEAD";
+  const skipWriteSuccessToast =
+    Boolean(options?.suppressSuccessToast) || isHqAuthPath(path, apiVersion);
   const isFormData = typeof FormData !== "undefined" && init?.body instanceof FormData;
   const mergedHeaders: HeadersInit = {
     "X-Database-Name": dbName,
@@ -93,12 +101,12 @@ export async function hqFetch<T>(path: string, init?: RequestInit, options?: HqC
       if (typeof window !== "undefined") showToast(wrapped.message || "Request failed", "error");
       throw new Error(wrapped.message || "Request failed");
     }
-    if (isWrite && !options?.suppressSuccessToast && typeof window !== "undefined") {
+    if (isWrite && !skipWriteSuccessToast && typeof window !== "undefined") {
       showToast(options?.successMessage || "Saved successfully.", "success");
     }
     return (wrapped.data ?? {}) as T;
   }
-  if (isWrite && !options?.suppressSuccessToast && typeof window !== "undefined") {
+  if (isWrite && !skipWriteSuccessToast && typeof window !== "undefined") {
     showToast(options?.successMessage || "Saved successfully.", "success");
   }
   return data as T;
