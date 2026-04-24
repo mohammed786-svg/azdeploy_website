@@ -5,23 +5,12 @@ const DOC_ROUTES = [
   { path: "/android-doc", cookie: "doc_android_access", secretEnv: "DOC_COOKIE_SECRET_ANDROID" },
 ] as const;
 
-const HQ_COOKIE = "hq_session";
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/hq")) {
-    if (pathname === "/hq/login") {
-      return NextResponse.next();
-    }
-    // Same value as Django HQ_COOKIE_SECRET (Set-Cookie on POST /api/v1/hq/auth). If unset, every /hq visit redirects to login.
-    const secret = process.env.HQ_COOKIE_SECRET;
-    const cookie = request.cookies.get(HQ_COOKIE)?.value;
-    if (!secret || cookie !== secret) {
-      return NextResponse.redirect(new URL("/hq/login", request.url));
-    }
-    return NextResponse.next();
-  }
+  // HQ /hq/* auth is enforced in Server Component layouts (see requireHqSession) so HQ_COOKIE_SECRET
+  // is read at request time on the Node server. Edge middleware would inline env at `next build` and
+  // often miss secrets that only exist in .env.production on the VPS.
 
   for (const { path, cookie, secretEnv } of DOC_ROUTES) {
     if (pathname === `${path}/auth` || pathname.startsWith(`${path}/api`)) {
@@ -41,5 +30,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/hq", "/hq/:path*", "/python-doc", "/python-doc/:path*", "/android-doc", "/android-doc/:path*"],
+  matcher: ["/python-doc", "/python-doc/:path*", "/android-doc", "/android-doc/:path*"],
 };
