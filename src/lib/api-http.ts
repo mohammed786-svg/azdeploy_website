@@ -1,3 +1,15 @@
+/** Django base URL for Route Handlers (no `window`; uses env only). */
+export function resolveApiOriginForServer(): string {
+  const explicit = process.env.NEXT_PUBLIC_DJANGO_API_ORIGIN?.trim();
+  if (explicit) return explicit.replace(/\/$/, "");
+
+  const devMode = Number(process.env.NEXT_PUBLIC_API_DEV_MODE ?? "1");
+  if (devMode === 1) {
+    return (process.env.NEXT_PUBLIC_DJANGO_API_ORIGIN_DEV?.trim() || "http://127.0.0.1:8000").replace(/\/$/, "");
+  }
+  return (process.env.NEXT_PUBLIC_DJANGO_API_ORIGIN_PROD?.trim() || "https://azdeploy.com").replace(/\/$/, "");
+}
+
 export function resolveApiOrigin(): string {
   const explicit = process.env.NEXT_PUBLIC_DJANGO_API_ORIGIN?.trim();
   if (explicit) return explicit;

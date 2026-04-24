@@ -3,7 +3,58 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { resolveApiDbName } from "@/lib/api-http";
 import { hqFetch } from "@/lib/hq-client";
+import { HQ_API_SESSION_STORAGE_KEY } from "@/lib/hq-session-keys";
+
+async function ensureHqApiSessionInStorage() {
+  if (typeof window === "undefined") return;
+  if (window.sessionStorage.getItem(HQ_API_SESSION_STORAGE_KEY)) return;
+  const r = await fetch("/api/hq/refresh-api-token", { credentials: "include" });
+  if (!r.ok) return;
+  const j = (await r.json()) as { apiSession?: string };
+  if (j.apiSession) window.sessionStorage.setItem(HQ_API_SESSION_STORAGE_KEY, j.apiSession);
+}
+
+function parseLoginError(data: unknown, fallback: string): string {
+  if (data && typeof data === "object") {
+    const o = data as { message?: string; error?: string; data?: { message?: string } };
+    return o.message || o.error || o.data?.message || fallback;
+  }
+  return fallback;
+}
+
+/** Login via Next proxy: sets Next httpOnly cookie + returns Django body (incl. apiSession Bearer). */
+async function loginThroughDjangoProxy(email: string, password: string): Promise<void> {
+  const r = await fetch("/api/hq/django-auth", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "X-Database-Name": resolveApiDbName(),
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  const text = await r.text();
+  let data: unknown = null;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = null;
+  }
+  if (!r.ok) {
+    throw new Error(parseLoginError(data, text || "Login failed"));
+  }
+  const wrapped = data as { success?: boolean; data?: { ok?: boolean; apiSession?: string }; message?: string };
+  if (wrapped && "success" in wrapped && wrapped.success === false) {
+    throw new Error(wrapped.message || "Login failed");
+  }
+  const inner = wrapped?.data;
+  if (inner?.apiSession && typeof window !== "undefined") {
+    window.sessionStorage.setItem(HQ_API_SESSION_STORAGE_KEY, inner.apiSession);
+  }
+}
 
 export default function HqLoginPage() {
   const router = useRouter();
@@ -18,17 +69,15 @@ export default function HqLoginPage() {
     const stopSpinner = () => {
       if (alive) setChecking(false);
     };
-    // Never leave the user on "Checking session…" forever (slow API, Strict Mode, or redirect races).
     const timeoutId = window.setTimeout(stopSpinner, 12_000);
     (async () => {
       try {
+        await ensureHqApiSessionInStorage();
         await hqFetch<{ enquiries?: number }>("/api/hq/stats", undefined, { suppressSuccessToast: true });
         if (!alive) return;
         window.clearTimeout(timeoutId);
-        // Full page load so /hq Server Component layout sees the same cookies as this document.
         window.location.assign("/hq");
       } catch {
-        /* not logged in — show form */
         window.clearTimeout(timeoutId);
         stopSpinner();
       }
@@ -44,10 +93,7 @@ export default function HqLoginPage() {
     setErr("");
     setLoading(true);
     try {
-      await hqFetch<{ ok?: boolean }>("/api/hq/auth", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
+      await loginThroughDjangoProxy(email, password);
       if (typeof window !== "undefined") {
         window.localStorage.setItem("hq_login_at", String(Date.now()));
         window.location.assign("/hq");

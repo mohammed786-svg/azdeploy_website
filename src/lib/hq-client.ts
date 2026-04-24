@@ -1,5 +1,6 @@
 import { showToast } from "@/lib/toast";
 import { normalizeHttpError, resolveApiDbName, resolveApiOrigin } from "@/lib/api-http";
+import { HQ_API_SESSION_STORAGE_KEY } from "@/lib/hq-session-keys";
 
 type ApiVersion = "v1" | "v2";
 
@@ -58,6 +59,11 @@ export async function hqFetch<T>(path: string, init?: RequestInit, options?: HqC
   };
   if (!isFormData) {
     (mergedHeaders as Record<string, string>)["Content-Type"] = "application/json";
+  }
+  const bearer =
+    typeof window !== "undefined" ? window.sessionStorage.getItem(HQ_API_SESSION_STORAGE_KEY) : null;
+  if (bearer) {
+    (mergedHeaders as Record<string, string>)["Authorization"] = `Bearer ${bearer}`;
   }
   const res = await fetch(apiUrl(path, options), {
     ...init,
@@ -119,10 +125,13 @@ export async function hqDownloadBlob(
   options?: HqClientOptions
 ): Promise<void> {
   const dbName = resolveApiDbName();
+  const bearer =
+    typeof window !== "undefined" ? window.sessionStorage.getItem(HQ_API_SESSION_STORAGE_KEY) : null;
   const res = await fetch(apiUrl(path, options), {
     credentials: "include",
     headers: {
       "X-Database-Name": dbName,
+      ...(bearer ? { Authorization: `Bearer ${bearer}` } : {}),
     },
   });
   if (!res.ok) {
