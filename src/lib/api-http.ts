@@ -21,7 +21,7 @@ export function resolveApiOrigin(): string {
     }
     return configured;
   }
-  return process.env.NEXT_PUBLIC_DJANGO_API_ORIGIN_PROD?.trim() || "https://www.azdeploy.com";
+  return process.env.NEXT_PUBLIC_DJANGO_API_ORIGIN_PROD?.trim() || "https://azdeploy.com";
 }
 
 export function resolveApiDbName(): string {

@@ -47,14 +47,19 @@ export default function WebsiteChatWidget({ embedded = false, launcherClassName 
       } catch {
         /* ignore */
       }
+      const devMode = Number(process.env.NEXT_PUBLIC_API_DEV_MODE ?? "1");
       const browserHost =
         typeof window !== "undefined" ? window.location.hostname : "127.0.0.1";
       const candidates = Array.from(
-        new Set([
-          chatWsBase(),
-          `ws://${browserHost}:8001`,
-          `ws://${browserHost}:8000`,
-        ])
+        new Set(
+          devMode === 1
+            ? [
+                chatWsBase(),
+                `ws://${browserHost}:8001`,
+                `ws://${browserHost}:8000`,
+              ]
+            : [chatWsBase()]
+        )
       );
       let idx = 0;
       const connect = () => {
