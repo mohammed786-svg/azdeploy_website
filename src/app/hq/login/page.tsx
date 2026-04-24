@@ -14,21 +14,30 @@ export default function HqLoginPage() {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
+    let alive = true;
+    const stopSpinner = () => {
+      if (alive) setChecking(false);
+    };
+    // Never leave the user on "Checking session…" forever (slow API, Strict Mode, or redirect races).
+    const timeoutId = window.setTimeout(stopSpinner, 12_000);
     (async () => {
       try {
-        await hqFetch<{ enquiries?: number }>("/api/hq/stats");
-        if (!cancelled) router.replace("/hq");
+        await hqFetch<{ enquiries?: number }>("/api/hq/stats", undefined, { suppressSuccessToast: true });
+        if (!alive) return;
+        window.clearTimeout(timeoutId);
+        // Full page load so /hq Server Component layout sees the same cookies as this document.
+        window.location.assign("/hq");
       } catch {
-        /* not logged in */
-      } finally {
-        if (!cancelled) setChecking(false);
+        /* not logged in — show form */
+        window.clearTimeout(timeoutId);
+        stopSpinner();
       }
     })();
     return () => {
-      cancelled = true;
+      alive = false;
+      window.clearTimeout(timeoutId);
     };
-  }, [router]);
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -41,7 +50,6 @@ export default function HqLoginPage() {
       });
       if (typeof window !== "undefined") {
         window.localStorage.setItem("hq_login_at", String(Date.now()));
-        // Full navigation so middleware sees the new hq_session cookie (must match HQ_COOKIE_SECRET in Next env).
         window.location.assign("/hq");
         return;
       }
