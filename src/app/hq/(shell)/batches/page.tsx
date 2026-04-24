@@ -17,6 +17,16 @@ type Batch = {
   notes?: string;
   updatedAt?: number;
 };
+type BatchTiming = {
+  id: string;
+  batchId: string;
+  batchCode: string;
+  batchName: string;
+  label: string;
+  startTime: string;
+  endTime: string;
+  active: boolean;
+};
 
 type PageData = {
   items: Batch[];
@@ -59,6 +69,12 @@ export default function HqBatchesPage() {
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
+  const [timings, setTimings] = useState<BatchTiming[]>([]);
+  const [tBatchId, setTBatchId] = useState("");
+  const [tLabel, setTLabel] = useState("");
+  const [tStart, setTStart] = useState("");
+  const [tEnd, setTEnd] = useState("");
+  const [tSaving, setTSaving] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 400);
@@ -86,9 +102,18 @@ export default function HqBatchesPage() {
     }
   }, [page, pageSize, debouncedSearch, sort, dateFrom, dateTo]);
 
+  const loadTimings = useCallback(async () => {
+    const res = await hqFetch<{ items: BatchTiming[] }>(hqListUrl("/api/hq/batch-timings", { page: 1, pageSize: 1000, sort: "label_asc" }));
+    setTimings(res.items ?? []);
+  }, []);
+
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    void loadTimings();
+  }, [loadTimings]);
 
   async function onCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -172,6 +197,30 @@ export default function HqBatchesPage() {
     });
     setDeleteId(null);
     await load();
+  }
+
+  async function onCreateTiming(e: React.FormEvent) {
+    e.preventDefault();
+    if (!tBatchId || !tLabel || !tStart || !tEnd) {
+      setErr("Batch timing requires batch, label, start time and end time.");
+      return;
+    }
+    setTSaving(true);
+    setErr("");
+    try {
+      await hqFetch("/api/hq/batch-timings", {
+        method: "POST",
+        body: JSON.stringify({ batchId: tBatchId, label: tLabel, startTime: tStart, endTime: tEnd, active: true }),
+      });
+      setTLabel("");
+      setTStart("");
+      setTEnd("");
+      await loadTimings();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Failed to save timing");
+    } finally {
+      setTSaving(false);
+    }
   }
 
   const items = data?.items ?? [];
@@ -465,6 +514,60 @@ export default function HqBatchesPage() {
         onClose={() => setDeleteId(null)}
         onConfirm={submitDelete}
       />
+
+      <section className="rounded-2xl border border-white/[0.06] bg-[#07070c]/70 p-5 space-y-4">
+        <div>
+          <p className="text-[10px] font-mono text-[#64748b] tracking-[0.35em] uppercase">Attendance setup</p>
+          <h2 className="mt-1 text-lg font-semibold text-white">Batch timings</h2>
+          <p className="mt-1 text-sm text-[#94a3b8]">Create timings against existing batches (for onboarding, student mapping, and attendance).</p>
+        </div>
+        <form onSubmit={onCreateTiming} className="grid sm:grid-cols-4 gap-3">
+          <select value={tBatchId} onChange={(e) => setTBatchId(e.target.value)} className="rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm">
+            <option value="">Select batch</option>
+            {items.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.code} — {b.name}
+              </option>
+            ))}
+          </select>
+          <input value={tLabel} onChange={(e) => setTLabel(e.target.value)} placeholder="Timing label (e.g. Morning)" className="rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm" />
+          <input value={tStart} onChange={(e) => setTStart(e.target.value)} placeholder="Start time (e.g. 09:00)" className="rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm" />
+          <div className="flex gap-2">
+            <input value={tEnd} onChange={(e) => setTEnd(e.target.value)} placeholder="End time (e.g. 11:00)" className="flex-1 rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm" />
+            <button type="submit" disabled={tSaving} className="rounded-xl bg-[#00d4ff]/20 border border-[#00d4ff]/50 px-4 py-2 text-xs font-mono uppercase text-[#7dd3fc] disabled:opacity-50">
+              {tSaving ? "Saving…" : "Add"}
+            </button>
+          </div>
+        </form>
+        <div className="rounded-xl border border-white/[0.06] overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-[10px] font-mono uppercase text-[#64748b] border-b border-white/[0.06]">
+                <th className="px-4 py-2 text-left">Batch</th>
+                <th className="px-4 py-2 text-left">Label</th>
+                <th className="px-4 py-2 text-left">Start</th>
+                <th className="px-4 py-2 text-left">End</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/[0.04]">
+              {timings.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-4 py-6 text-[#64748b] font-mono text-sm">No timings configured yet.</td>
+                </tr>
+              ) : (
+                timings.map((t) => (
+                  <tr key={t.id}>
+                    <td className="px-4 py-2 text-white">{t.batchCode} — {t.batchName}</td>
+                    <td className="px-4 py-2 text-[#cbd5e1]">{t.label}</td>
+                    <td className="px-4 py-2 text-[#94a3b8]">{t.startTime}</td>
+                    <td className="px-4 py-2 text-[#94a3b8]">{t.endTime}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }

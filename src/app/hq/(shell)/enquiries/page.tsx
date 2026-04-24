@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { hqFetch } from "@/lib/hq-client";
 import { hqListUrl } from "@/lib/hq-list-url";
 import HqListToolbar from "@/components/hq/HqListToolbar";
+import HqModal from "@/components/hq/HqModal";
 import { formatEnquiryDegreeLabel } from "@/lib/enquiry-degree";
 
 type Row = {
@@ -38,6 +39,8 @@ export default function HqEnquiriesPage() {
   const [sort, setSort] = useState("createdAt_desc");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [viewOpen, setViewOpen] = useState(false);
+  const [viewRow, setViewRow] = useState<Row | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 400);
@@ -70,6 +73,13 @@ export default function HqEnquiriesPage() {
   }, [load]);
 
   const items = data?.items ?? [];
+
+  function fmtCreatedAt(raw: unknown): string {
+    if (raw == null) return "—";
+    const d = new Date(raw as string | number | Date);
+    if (Number.isNaN(d.getTime())) return String(raw);
+    return d.toLocaleString("en-IN");
+  }
 
   return (
     <div className="space-y-6">
@@ -147,7 +157,18 @@ export default function HqEnquiriesPage() {
                 ) : (
                   items.map((r) => (
                     <tr key={r.id} className="hover:bg-white/[0.02]">
-                      <td className="px-4 py-3 text-white font-medium">{r.fullName ?? "—"}</td>
+                      <td className="px-4 py-3 text-white font-medium">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setViewRow(r);
+                            setViewOpen(true);
+                          }}
+                          className="hover:underline text-left"
+                        >
+                          {r.fullName ?? "—"}
+                        </button>
+                      </td>
                       <td className="px-4 py-3 text-[#94a3b8]">{r.email ?? "—"}</td>
                       <td className="px-4 py-3 text-[#94a3b8] whitespace-nowrap">{r.phone ?? "—"}</td>
                       <td className="px-4 py-3 text-[#94a3b8] max-w-[220px]">
@@ -165,6 +186,23 @@ export default function HqEnquiriesPage() {
           </div>
         </div>
       )}
+
+      <HqModal open={viewOpen} onClose={() => setViewOpen(false)} title="Enquiry details" size="lg">
+        {!viewRow ? (
+          <p className="text-sm text-[#64748b] font-mono">No record selected.</p>
+        ) : (
+          <div className="grid sm:grid-cols-2 gap-3 text-sm">
+            <p><span className="text-[#64748b]">Name:</span> {viewRow.fullName || "—"}</p>
+            <p><span className="text-[#64748b]">Email:</span> {viewRow.email || "—"}</p>
+            <p><span className="text-[#64748b]">Phone:</span> {viewRow.phone || "—"}</p>
+            <p><span className="text-[#64748b]">Pass-out:</span> {viewRow.passoutYear || "—"}</p>
+            <p className="sm:col-span-2"><span className="text-[#64748b]">Degree:</span> {formatEnquiryDegreeLabel(viewRow.degree ?? "", viewRow.degreeOther)}</p>
+            <p className="sm:col-span-2"><span className="text-[#64748b]">College:</span> {viewRow.college || "—"}</p>
+            <p className="sm:col-span-2"><span className="text-[#64748b]">City/Address:</span> {viewRow.city || "—"}</p>
+            <p className="sm:col-span-2"><span className="text-[#64748b]">Created at:</span> {fmtCreatedAt(viewRow.createdAt)}</p>
+          </div>
+        )}
+      </HqModal>
     </div>
   );
 }

@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const COOKIE = "hq_session";
 
-/** Browser cookie max-age for HQ login (8 hours). */
-export const HQ_SESSION_MAX_AGE_SEC = 60 * 60 * 8;
+/** Browser cookie max-age for HQ login (12 hours). */
+export const HQ_SESSION_MAX_AGE_SEC = 60 * 60 * 12;
 
 export function isHqSessionValid(request: NextRequest): boolean {
   const secret = process.env.HQ_COOKIE_SECRET;

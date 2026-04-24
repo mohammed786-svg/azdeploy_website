@@ -7,7 +7,7 @@ export default function A4PrintShell({ children }: { children: React.ReactNode }
       <style
         dangerouslySetInnerHTML={{
           __html: `
-          @page { size: A4; margin: 10mm; }
+          @page { size: A4; margin: 6mm; }
           @media print {
             html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
             .hq-a4-screen { background: #fff !important; padding: 0 !important; }
@@ -22,12 +22,12 @@ export default function A4PrintShell({ children }: { children: React.ReactNode }
         `,
         }}
       />
-      <div className="hq-a4-screen min-h-screen bg-neutral-200 print:bg-white flex justify-center py-6 print:py-0">
+      <div className="hq-a4-screen min-h-screen bg-neutral-200 print:bg-white flex justify-center py-4 print:py-0">
         <div
           className="hq-a4-sheet w-[210mm] max-w-[calc(100vw-2rem)] min-h-[297mm] bg-white text-neutral-900 shadow-xl print:shadow-none box-border"
           style={{ fontFamily: 'system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif' }}
         >
-          <div className="px-[12mm] py-[10mm] text-[11pt] leading-relaxed text-black">{children}</div>
+          <div className="px-[9mm] py-[7mm] print:px-[7mm] print:py-[5mm] text-[10pt] leading-snug text-black">{children}</div>
         </div>
       </div>
     </>

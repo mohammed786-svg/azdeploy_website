@@ -39,6 +39,9 @@ export default function HqLoginPage() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("hq_login_at", String(Date.now()));
+      }
       router.replace("/hq");
       router.refresh();
     } catch (ex) {

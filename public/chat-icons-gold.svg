@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 280 280">
+  <rect width="280" height="280" fill="none"/>
+  <g fill="none" stroke="#d4a017" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.45">
+    <path d="M22 28h22l6 8-6 8H22l-6-8z"/>
+    <path d="M78 24h18v18H78z"/>
+    <path d="M130 28l12 8-12 8-12-8z"/>
+    <path d="M178 22c10 0 18 8 18 18s-8 18-18 18-18-8-18-18 8-18 18-18z"/>
+    <path d="M230 30h24"/>
+    <path d="M28 88h26v18H28z"/>
+    <path d="M84 84c9 0 16 7 16 16s-7 16-16 16-16-7-16-16 7-16 16-16z"/>
+    <path d="M126 90h22"/>
+    <path d="M174 84h24v20h-24z"/>
+    <path d="M226 92l10 6-10 6-10-6z"/>
+    <path d="M24 148h20"/>
+    <path d="M74 142h26l6 8-6 8H74l-6-8z"/>
+    <path d="M136 144h18v18h-18z"/>
+    <path d="M186 138c11 0 20 9 20 20s-9 20-20 20-20-9-20-20 9-20 20-20z"/>
+    <path d="M236 148h22"/>
+    <path d="M30 206h24v24H30z"/>
+    <path d="M84 212l10 6-10 6-10-6z"/>
+    <path d="M130 206h26"/>
+    <path d="M182 210h24"/>
+    <path d="M232 204c8 0 14 6 14 14s-6 14-14 14-14-6-14-14 6-14 14-14z"/>
+  </g>
+  <g fill="#d4a017" opacity="0.55" font-family="Arial, sans-serif" font-size="10" font-weight="700">
+    <text x="66" y="44">Py</text>
+    <text x="116" y="98">JS</text>
+    <text x="170" y="154">API</text>
+    <text x="62" y="222">DB</text>
+    <text x="214" y="64">AI</text>
+    <text x="212" y="186">DEV</text>
+  </g>
+</svg>

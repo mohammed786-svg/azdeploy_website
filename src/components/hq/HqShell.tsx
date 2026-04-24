@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { hqFetch } from "@/lib/hq-client";
 
 const NAV = [
   { href: "/hq", label: "Dashboard", match: (p: string) => p === "/hq" },
@@ -16,7 +17,9 @@ const NAV = [
   { href: "/hq/invoices", label: "Invoices & billing", match: (p: string) => p.startsWith("/hq/invoices") },
   { href: "/hq/receipts", label: "Receipts", match: (p: string) => p.startsWith("/hq/receipts") },
   { href: "/hq/expenses", label: "Expenses", match: (p: string) => p.startsWith("/hq/expenses") },
+  { href: "/hq/attendance", label: "Attendance", match: (p: string) => p.startsWith("/hq/attendance") },
   { href: "/hq/reports", label: "Reports", match: (p: string) => p.startsWith("/hq/reports") },
+  { href: "/hq/chat", label: "Chat inbox", match: (p: string) => p.startsWith("/hq/chat") },
   { href: "/hq/blog", label: "Blog", match: (p: string) => p.startsWith("/hq/blog") },
 ];
 
@@ -34,8 +37,21 @@ export default function HqShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const raw = window.localStorage.getItem("hq_login_at");
+    if (!raw) return;
+    const at = Number(raw);
+    if (!Number.isFinite(at) || at <= 0) return;
+    const twelveHours = 12 * 60 * 60 * 1000;
+    if (Date.now() - at > twelveHours) {
+      void logout();
+    }
+  }, []);
+
   async function logout() {
-    await fetch("/api/hq/logout", { method: "POST", credentials: "include" });
+    if (typeof window !== "undefined") window.localStorage.removeItem("hq_login_at");
+    await hqFetch<{ ok?: boolean }>("/api/hq/logout", { method: "POST" });
     window.location.href = "/hq/login";
   }
 

@@ -16,6 +16,7 @@ export default function HqBlogEditPage() {
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
 
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
@@ -28,6 +29,36 @@ export default function HqBlogEditPage() {
   const [seoTitle, setSeoTitle] = useState("");
   const [seoDescription, setSeoDescription] = useState("");
   const [keywords, setKeywords] = useState("");
+
+  async function onCoverImageUpload(file: File | null) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setErr("Please upload an image file.");
+      return;
+    }
+    const maxBytes = 5 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      setErr("Image size must be under 5MB.");
+      return;
+    }
+    setUploadingCover(true);
+    setErr("");
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await hqFetch<{ url: string }>(
+        "/api/hq/uploads/blog-image",
+        { method: "POST", body: form },
+        { successMessage: "Cover image uploaded." }
+      );
+      if (!res?.url) throw new Error("Upload failed");
+      setCoverImageUrl(res.url);
+    } catch (ex) {
+      setErr(ex instanceof Error ? ex.message : "Cover image upload failed");
+    } finally {
+      setUploadingCover(false);
+    }
+  }
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -185,6 +216,18 @@ export default function HqBlogEditPage() {
               onChange={(e) => setCoverImageUrl(e.target.value)}
               className="mt-1 w-full rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm"
             />
+            <div className="mt-2 flex flex-wrap items-center gap-3">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => void onCoverImageUpload(e.target.files?.[0] ?? null)}
+                className="block text-xs text-[#94a3b8] file:mr-3 file:rounded-lg file:border file:border-white/15 file:bg-white/5 file:px-3 file:py-1.5 file:text-[11px] file:font-mono file:text-[#cbd5e1] hover:file:bg-white/10"
+              />
+              {uploadingCover ? <span className="text-xs text-[#94a3b8] font-mono">Uploading…</span> : null}
+            </div>
+            {coverImageUrl ? (
+              <img src={coverImageUrl} alt="Cover preview" className="mt-3 h-28 w-full rounded-xl border border-white/10 object-cover" />
+            ) : null}
           </label>
           <div className="flex flex-wrap items-center gap-6">
             <label className="flex items-center gap-2 cursor-pointer">

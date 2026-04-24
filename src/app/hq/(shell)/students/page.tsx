@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { hqFetch } from "@/lib/hq-client";
 import { hqListUrl } from "@/lib/hq-list-url";
+import { maskStudentId } from "@/lib/student-id-mask";
 import HqListToolbar from "@/components/hq/HqListToolbar";
 import ConfirmPasswordModal from "@/components/hq/ConfirmPasswordModal";
 
@@ -23,6 +24,7 @@ type Student = {
   phone: string;
   currentBatchName?: string | null;
   currentBatchId?: string | null;
+  batchTimingLabel?: string | null;
   status?: string;
   updatedAt?: number;
   /** Unpaid invoice total — same basis as student profile billing hint */
@@ -159,6 +161,7 @@ export default function HqStudentsPage() {
                   <th className="px-4 py-3 whitespace-nowrap">ID</th>
                   <th className="px-4 py-3">Contact</th>
                   <th className="px-4 py-3">Current batch</th>
+                <th className="px-4 py-3">Timing</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3 text-right whitespace-nowrap">Balance due</th>
                   <th className="px-4 py-3 text-right">Delete</th>
@@ -167,7 +170,7 @@ export default function HqStudentsPage() {
               <tbody className="divide-y divide-white/[0.04]">
                 {items.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-10 text-center text-[#64748b] font-mono text-sm">
+                    <td colSpan={8} className="px-4 py-10 text-center text-[#64748b] font-mono text-sm">
                       No students match filters.
                     </td>
                   </tr>
@@ -188,7 +191,7 @@ export default function HqStudentsPage() {
                         </td>
                         <td className="px-4 py-3 align-top">
                           <span className="text-sm font-mono font-semibold text-[#fde68a] tabular-nums">
-                            {typeof s.serial === "number" ? s.serial : "—"}
+                            {maskStudentId(typeof s.serial === "number" ? s.serial : null)}
                           </span>
                           <div
                             className="text-[10px] font-mono text-[#64748b] mt-1 break-all max-w-[200px]"
@@ -202,6 +205,7 @@ export default function HqStudentsPage() {
                           <div className="text-xs text-[#64748b]">{s.phone}</div>
                         </td>
                         <td className="px-4 py-3 text-[#94a3b8]">{s.currentBatchName || "—"}</td>
+                        <td className="px-4 py-3 text-[#94a3b8]">{s.batchTimingLabel || "—"}</td>
                         <td className="px-4 py-3">
                           <span className="rounded-full border border-white/10 px-2 py-0.5 text-[11px] font-mono text-[#cbd5e1]">
                             {s.status ?? "—"}

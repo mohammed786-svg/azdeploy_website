@@ -10,6 +10,7 @@ import { StudentBillingHint, type StudentBillingSummary } from "@/components/hq/
 
 type Student = { id: string; fullName: string };
 type Fee = { id: string; name: string; code: string };
+type StudentDetail = { item: { feeStructureId?: string | null } };
 type Invoice = {
   id: string;
   invoiceNumber: string;
@@ -117,6 +118,24 @@ export default function HqInvoicesPage() {
     };
   }, [createOpen, studentId]);
 
+  useEffect(() => {
+    if (!createOpen || !studentId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const d = await hqFetch<StudentDetail>(`/api/hq/students/${studentId}`);
+        if (cancelled) return;
+        const defaultFee = String(d?.item?.feeStructureId ?? "");
+        setFeeStructureId(defaultFee);
+      } catch {
+        if (!cancelled) setFeeStructureId("");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [createOpen, studentId]);
+
   async function onCreate(e: React.FormEvent) {
     e.preventDefault();
     if (!studentId || !feeStructureId) {
@@ -133,7 +152,7 @@ export default function HqInvoicesPage() {
           feeStructureId,
           taxPercent: Number(taxPercent) || 0,
           baseDate,
-          status: "sent",
+          status: "unpaid",
         }),
       });
       setStudentId("");

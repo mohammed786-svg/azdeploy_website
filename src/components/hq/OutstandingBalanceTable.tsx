@@ -65,6 +65,7 @@ export default function OutstandingBalanceTable({ data, loading, onPageChange, e
               <tr className="border-b border-white/[0.06] text-[10px] font-mono uppercase text-[#64748b]">
                 <th className="px-4 py-3">Invoice</th>
                 <th className="px-4 py-3">Student</th>
+                <th className="px-4 py-3 text-right">Student total outstanding</th>
                 <th className="px-4 py-3">Installment</th>
                 <th className="px-4 py-3">Due</th>
                 <th className="px-4 py-3 text-right">Outstanding</th>
@@ -79,6 +80,12 @@ export default function OutstandingBalanceTable({ data, loading, onPageChange, e
                     </Link>
                   </td>
                   <td className="px-4 py-3 text-white">{row.studentName}</td>
+                  <td className="px-4 py-3 text-right tabular-nums text-amber-200/95 font-medium">
+                    {row.currency}{" "}
+                    {Number(row.studentOutstandingTotal ?? row.outstanding).toLocaleString("en-IN", {
+                      minimumFractionDigits: 2,
+                    })}
+                  </td>
                   <td className="px-4 py-3 text-[#94a3b8]">{row.installmentLabel}</td>
                   <td className="px-4 py-3 text-[#64748b] text-xs font-mono">{row.dueDate || "—"}</td>
                   <td className="px-4 py-3 text-right tabular-nums text-amber-300/90">

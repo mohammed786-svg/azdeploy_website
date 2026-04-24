@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { normalizeHttpError, resolveApiOrigin } from '@/lib/api-http';
+import { showToast } from '@/lib/toast';
 
 type PublicStudentCountResponse = {
   count: number;
@@ -22,8 +24,19 @@ export default function StudentsPanel() {
     const t0 = typeof performance !== 'undefined' ? performance.now() : 0;
     (async () => {
       try {
-        const res = await fetch('/api/public/student-count', { cache: 'no-store' });
-        const json = (await res.json()) as PublicStudentCountResponse;
+        const base = resolveApiOrigin();
+        const url = `${base.replace(/\/$/, "")}/api/v1/public/student-count`;
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) {
+          throw new Error(normalizeHttpError(res.status));
+        }
+        const raw = (await res.json()) as
+          | PublicStudentCountResponse
+          | { success?: boolean; data?: PublicStudentCountResponse };
+        const json =
+          raw && typeof raw === "object" && "success" in raw
+            ? (raw as { data?: PublicStudentCountResponse }).data || ({} as PublicStudentCountResponse)
+            : (raw as PublicStudentCountResponse);
         const t1 = typeof performance !== 'undefined' ? performance.now() : 0;
         if (!cancelled) {
           setData(json);
@@ -31,6 +44,7 @@ export default function StudentsPanel() {
         }
       } catch {
         if (!cancelled) {
+          showToast("Could not load student count. Showing fallback values.", "info");
           setData({
             count: 1,
             seatsLeft: 29,
@@ -83,7 +97,7 @@ export default function StudentsPanel() {
         {loading
           ? 'LOADING_ENROLLMENTS...'
           : data?.fallback
-            ? 'LOCAL_PREVIEW · CONFIGURE_FIREBASE'
+            ? 'LOCAL_PREVIEW · CONFIGURE_DJANGO_API'
             : 'ENROLLMENTS_SYNCED'}
       </p>
 

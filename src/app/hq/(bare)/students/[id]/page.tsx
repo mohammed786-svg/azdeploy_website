@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { hqFetch } from "@/lib/hq-client";
 import { hqListUrl } from "@/lib/hq-list-url";
+import { maskStudentId } from "@/lib/student-id-mask";
 import HqModal from "@/components/hq/HqModal";
 
 type HistoryEntry = { batchId: string; batchName: string; enrolledAt: number; leftAt?: number };
@@ -13,6 +14,7 @@ type Student = {
   id: string;
   serial?: number;
   fullName?: string;
+  profileImageUrl?: string;
   email?: string;
   phone?: string;
   degree?: string;
@@ -24,6 +26,8 @@ type Student = {
   currentBatchId?: string | null;
   currentBatchName?: string | null;
   feeStructureId?: string | null;
+  batchTimingId?: string | null;
+  batchTimingLabel?: string | null;
   batchHistory?: HistoryEntry[];
   createdAt?: number;
   updatedAt?: number;
@@ -36,6 +40,7 @@ type FeeStructure = {
   totalAmount: number;
   currency: string;
 };
+type BatchTiming = { id: string; batchId: string; label: string; startTime: string; endTime: string; active: boolean };
 
 type Inv = {
   id: string;
@@ -96,6 +101,7 @@ export default function HqStudentDetailPage() {
   const [editErr, setEditErr] = useState("");
   const [editBatches, setEditBatches] = useState<{ id: string; name: string }[]>([]);
   const [editFees, setEditFees] = useState<{ id: string; name: string; code: string }[]>([]);
+  const [editTimings, setEditTimings] = useState<BatchTiming[]>([]);
   const [efullName, setEfullName] = useState("");
   const [eemail, setEemail] = useState("");
   const [ephone, setEphone] = useState("");
@@ -107,6 +113,9 @@ export default function HqStudentDetailPage() {
   const [estatus, setEstatus] = useState("active");
   const [ebatchId, setEbatchId] = useState("");
   const [efeeId, setEfeeId] = useState("");
+  const [ebatchTimingId, setEbatchTimingId] = useState("");
+  const [eProfileImageUrl, setEProfileImageUrl] = useState("");
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [ePassword, setEPassword] = useState("");
 
   const load = useCallback(async () => {
@@ -155,17 +164,19 @@ export default function HqStudentDetailPage() {
     let cancelled = false;
     (async () => {
       try {
-        const [b, f] = await Promise.all([
+        const [b, f, t] = await Promise.all([
           hqFetch<{ items: { id: string; name?: string }[] }>(
             hqListUrl("/api/hq/batches", { page: 1, pageSize: 100, sort: "name_asc" })
           ),
           hqFetch<{ items: { id: string; name?: string; code?: string }[] }>(
             hqListUrl("/api/hq/fee-structures", { page: 1, pageSize: 100, sort: "name_asc" })
           ),
+          hqFetch<{ items: BatchTiming[] }>(hqListUrl("/api/hq/batch-timings", { page: 1, pageSize: 1000, sort: "label_asc" })),
         ]);
         if (cancelled) return;
         setEditBatches((b.items ?? []).map((x) => ({ id: x.id, name: x.name ?? x.id })));
         setEditFees((f.items ?? []).map((x) => ({ id: x.id, name: x.name ?? "", code: x.code ?? "" })));
+        setEditTimings((t.items ?? []).filter((x) => x.active !== false));
       } catch {
         /* dropdowns stay empty */
       }
@@ -188,9 +199,41 @@ export default function HqStudentDetailPage() {
     setEstatus((student.status ?? "active").trim() || "active");
     setEbatchId(student.currentBatchId ?? "");
     setEfeeId(student.feeStructureId ?? "");
+    setEbatchTimingId(student.batchTimingId ?? "");
+    setEProfileImageUrl(student.profileImageUrl ?? "");
     setEPassword("");
     setEditErr("");
     setEditOpen(true);
+  }
+
+  async function onEditProfileImageChange(file: File | null) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setEditErr("Please upload an image file.");
+      return;
+    }
+    const maxBytes = 2 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      setEditErr("Image size must be under 2MB.");
+      return;
+    }
+    setUploadingPhoto(true);
+    setEditErr("");
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await hqFetch<{ url: string }>(
+        "/api/hq/uploads/profile-image",
+        { method: "POST", body: form },
+        { successMessage: "Profile image uploaded." }
+      );
+      if (!res?.url) throw new Error("Upload failed");
+      setEProfileImageUrl(res.url);
+    } catch (e) {
+      setEditErr(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setUploadingPhoto(false);
+    }
   }
 
   if (loading) {
@@ -243,16 +286,34 @@ export default function HqStudentDetailPage() {
 
         <header>
           <p className="text-[10px] font-mono text-[#64748b] tracking-[0.35em] uppercase">Student profile</p>
-          <h1 className="mt-2 text-2xl sm:text-3xl font-bold text-white">{student.fullName ?? "—"}</h1>
-          <p className="mt-2 text-lg font-mono font-semibold text-[#fde68a] tabular-nums">
-            Student ID · {typeof student.serial === "number" ? student.serial : "—"}
-          </p>
-          <p className="mt-1 text-[10px] font-mono text-[#64748b] break-all max-w-full" title={student.id}>
-            Record key · {student.id}
-          </p>
+          <div className="mt-3 flex items-start gap-4">
+            <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border border-white/10 bg-white/5">
+              {student.profileImageUrl ? (
+                <img
+                  src={student.profileImageUrl}
+                  alt={`${student.fullName ?? "Student"} profile`}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-[10px] font-mono text-[#64748b]">
+                  No photo
+                </div>
+              )}
+            </div>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">{student.fullName ?? "—"}</h1>
+              <p className="mt-2 text-lg font-mono font-semibold text-[#fde68a] tabular-nums">
+                Student ID · {maskStudentId(typeof student.serial === "number" ? student.serial : null)}
+              </p>
+              <p className="mt-1 text-[10px] font-mono text-[#64748b] break-all max-w-full" title={student.id}>
+                Record key · {student.id}
+              </p>
+            </div>
+          </div>
           <div className="mt-4 text-sm text-[#94a3b8] space-y-1">
             <p>{student.email}</p>
             <p>{student.phone}</p>
+            {student.city ? <p className="text-[#94a3b8]">Address · {student.city}</p> : null}
             {student.gender ? <p className="text-[#94a3b8]">Gender · {formatGenderLabel(student.gender)}</p> : null}
             {(student.degree || student.college) && (
               <p>
@@ -265,6 +326,9 @@ export default function HqStudentDetailPage() {
               </span>
               {student.currentBatchName && (
                 <span className="ml-2 text-[#64748b] font-mono text-xs">Batch: {student.currentBatchName}</span>
+              )}
+              {student.batchTimingLabel && (
+                <span className="ml-2 text-[#64748b] font-mono text-xs">Timing: {student.batchTimingLabel}</span>
               )}
             </p>
           </div>
@@ -418,10 +482,44 @@ export default function HqStudentDetailPage() {
 
       <HqModal open={editOpen} onClose={() => setEditOpen(false)} title="Edit student" size="lg">
         <p className="text-xs text-[#64748b] mb-4">
-          Student ID · {typeof student.serial === "number" ? student.serial : "—"} (read-only) · Record key ·{" "}
+          Student ID · {maskStudentId(typeof student.serial === "number" ? student.serial : null)} (read-only) · Record key ·{" "}
           <span className="font-mono text-[#94a3b8]">{student.id}</span>
         </p>
         <div className="grid sm:grid-cols-2 gap-4">
+          <div className="sm:col-span-2 rounded-2xl border border-white/10 bg-black/30 p-4">
+            <p className="text-[10px] font-mono uppercase text-[#64748b]">Profile photo</p>
+            <div className="mt-3 flex items-center gap-4">
+              <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border border-white/10 bg-white/5">
+                {eProfileImageUrl ? (
+                  <img src={eProfileImageUrl} alt="Student profile preview" className="h-full w-full object-cover" />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-[10px] font-mono text-[#64748b]">
+                    No photo
+                  </div>
+                )}
+              </div>
+              <div className="space-y-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => void onEditProfileImageChange(e.target.files?.[0] ?? null)}
+                  className="block text-xs text-[#94a3b8] file:mr-3 file:rounded-lg file:border file:border-white/15 file:bg-white/5 file:px-3 file:py-1.5 file:text-[11px] file:font-mono file:text-[#cbd5e1] hover:file:bg-white/10"
+                />
+                <div className="flex flex-wrap items-center gap-2">
+                  {uploadingPhoto ? <span className="text-[11px] font-mono text-[#94a3b8]">Uploading…</span> : null}
+                  {eProfileImageUrl ? (
+                    <button
+                      type="button"
+                      onClick={() => setEProfileImageUrl("")}
+                      className="rounded-lg border border-white/10 px-2.5 py-1 text-[10px] font-mono uppercase text-[#94a3b8] hover:bg-white/5"
+                    >
+                      Remove photo
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </div>
           <label className="block sm:col-span-2">
             <span className="text-[10px] font-mono uppercase text-[#64748b]">Full name</span>
             <input
@@ -486,7 +584,7 @@ export default function HqStudentDetailPage() {
             />
           </label>
           <label className="block">
-            <span className="text-[10px] font-mono uppercase text-[#64748b]">City</span>
+            <span className="text-[10px] font-mono uppercase text-[#64748b]">Address</span>
             <input
               value={ecity}
               onChange={(e) => setEcity(e.target.value)}
@@ -530,6 +628,23 @@ export default function HqStudentDetailPage() {
                   {f.code ? `${f.code} — ${f.name}` : f.name || f.id}
                 </option>
               ))}
+            </select>
+          </label>
+          <label className="block sm:col-span-2">
+            <span className="text-[10px] font-mono uppercase text-[#64748b]">Batch timing</span>
+            <select
+              value={ebatchTimingId}
+              onChange={(e) => setEbatchTimingId(e.target.value)}
+              className="mt-1.5 w-full rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm text-white"
+            >
+              <option value="">— None —</option>
+              {editTimings
+                .filter((t) => t.batchId === ebatchId)
+                .map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.label} ({t.startTime} - {t.endTime})
+                  </option>
+                ))}
             </select>
           </label>
           <label className="block sm:col-span-2">
@@ -587,9 +702,11 @@ export default function HqStudentDetailPage() {
                       passoutYear: epassoutYear,
                       city: ecity,
                       gender: egender,
+                      profileImageUrl: eProfileImageUrl,
                       status: estatus.trim() || "active",
                       currentBatchId: ebatchId || null,
                       feeStructureId: efeeId || null,
+                      batchTimingId: ebatchTimingId || null,
                     }),
                   });
                   setEditOpen(false);

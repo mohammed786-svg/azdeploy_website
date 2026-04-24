@@ -1,28 +1,42 @@
 import "server-only";
 
-import { getAdminDatabase, isFirebaseAdminConfigured } from "@/lib/firebase-admin";
 import type { BlogPostRow } from "@/lib/hq-blog-types";
 
-function rowsFromSnap(val: Record<string, Record<string, unknown>> | null): BlogPostRow[] {
-  if (!val) return [];
-  return Object.keys(val).map((id) => ({ id, ...(val[id] as object) } as BlogPostRow));
+async function fetchDjangoPublishedPosts(): Promise<BlogPostRow[] | null> {
+  const base = process.env.NEXT_PUBLIC_DJANGO_API_ORIGIN?.trim();
+  if (!base) return null;
+  try {
+    const res = await fetch(`${base.replace(/\/$/, "")}/api/v1/public/blog`, { cache: "no-store" });
+    if (!res.ok) return [];
+    const data = (await res.json()) as { items?: BlogPostRow[]; data?: { items?: BlogPostRow[] } };
+    return data.items ?? data.data?.items ?? [];
+  } catch {
+    return [];
+  }
 }
 
 /** Published posts only, newest first. For `/blog` and sitemap. */
 export async function getPublishedBlogPosts(): Promise<BlogPostRow[]> {
-  if (!isFirebaseAdminConfigured()) return [];
-  const snap = await getAdminDatabase().ref("hq/blogPosts").once("value");
-  const all = rowsFromSnap(snap.val() as Record<string, Record<string, unknown>> | null);
-  const pub = all.filter((p) => p.published && (p.publishedAt || p.updatedAt));
-  pub.sort((a, b) => (Number(b.publishedAt) || Number(b.updatedAt)) - (Number(a.publishedAt) || Number(a.updatedAt)));
-  return pub;
+  const django = await fetchDjangoPublishedPosts();
+  return django ?? [];
 }
 
 export async function getPublishedPostBySlug(slug: string): Promise<BlogPostRow | null> {
-  if (!isFirebaseAdminConfigured()) return null;
-  const norm = slug.toLowerCase();
+  const base = process.env.NEXT_PUBLIC_DJANGO_API_ORIGIN?.trim();
+  if (base) {
+    try {
+      const res = await fetch(`${base.replace(/\/$/, "")}/api/v1/public/blog/${encodeURIComponent(slug)}`, { cache: "no-store" });
+      if (res.ok) {
+        const data = (await res.json()) as { item?: BlogPostRow; data?: { item?: BlogPostRow } };
+        return data.item ?? data.data?.item ?? null;
+      }
+    } catch {
+      /* fallback below */
+    }
+  }
   const posts = await getPublishedBlogPosts();
-  return posts.find((p) => p.slug.toLowerCase() === norm) ?? null;
+  const norm = slug.toLowerCase();
+  return posts.find((p) => String(p.slug || "").toLowerCase() === norm) ?? null;
 }
 
 export async function getAllSlugsForBuild(): Promise<string[]> {

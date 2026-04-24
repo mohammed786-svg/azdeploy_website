@@ -11,10 +11,13 @@ type Inst = {
   id: string;
   label: string;
   amount: number;
+  amountReceived?: number;
+  /** Outstanding on this installment (after allocating invoice payments FIFO). */
+  installmentRemaining?: number;
   dueDate?: string;
   paid?: boolean;
-  paidAt?: number;
-  payments?: { amount: number; paymentMethod: string; paidAt: number; note?: string }[];
+  paidAt?: string;
+  payments?: { amount: number; paymentMethod: string; paidAt: string; note?: string }[];
 };
 
 type Invoice = {
@@ -33,6 +36,10 @@ type Invoice = {
   installments: Inst[];
   notes?: string;
   createdAt?: number;
+  paidAmount?: number;
+  dueAmount?: number;
+  /** total − paidAmount (authoritative cap for new payments). */
+  balanceRemaining?: number;
 };
 
 export default function HqInvoiceDetailPage() {
@@ -48,6 +55,7 @@ export default function HqInvoiceDetailPage() {
   const [payPassword, setPayPassword] = useState("");
   const [paySaving, setPaySaving] = useState(false);
   const [payErr, setPayErr] = useState("");
+  const [payMax, setPayMax] = useState(0);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const load = useCallback(async () => {
@@ -72,11 +80,60 @@ export default function HqInvoiceDetailPage() {
     };
   }, [id, load]);
 
-  function openPayModal(inst: Inst) {
+  function installmentReceived(inst: Inst): number {
     const due = Number(inst.amount) || 0;
-    const received = (inst.payments ?? []).reduce((s, p) => s + (Number(p.amount) || 0), 0);
-    const remaining = Math.max(0, due - received);
-    setPayAmount(String(remaining > 0 ? Math.round(remaining * 100) / 100 : due));
+    if (inst.installmentRemaining != null) {
+      const rem = Math.max(0, Number(inst.installmentRemaining));
+      return Math.max(0, due - rem);
+    }
+    if (inst.amountReceived != null) {
+      return Number(inst.amountReceived) || 0;
+    }
+    return (inst.payments ?? []).reduce((s, p) => s + (Number(p.amount) || 0), 0);
+  }
+
+  function invoiceBalanceRemaining(inv: Invoice): number {
+    if (inv.balanceRemaining != null && Number.isFinite(Number(inv.balanceRemaining))) {
+      return Math.max(0, Number(inv.balanceRemaining));
+    }
+    return Math.max(0, Number(inv.total) - Number(inv.paidAmount ?? 0));
+  }
+
+  function clampPayAmountField(raw: string, cap: number): string {
+    if (cap <= 0) return raw;
+    const t = raw.trim();
+    if (t === "" || t === ".") return raw;
+    const n = Number(t);
+    if (!Number.isFinite(n)) return raw;
+    if (n > cap) return String(Math.round(cap * 100) / 100);
+    if (n < 0) return "0";
+    return raw;
+  }
+
+  function normalizePayAmountOnBlur(cap: number) {
+    if (cap <= 0) return;
+    const t = payAmount.trim();
+    if (t === "" || t === ".") return;
+    const n = Number(t);
+    if (!Number.isFinite(n)) return;
+    const clamped = Math.min(Math.max(n, 0.01), cap);
+    if (Math.abs(clamped - n) > 1e-9) {
+      setPayAmount(String(Math.round(clamped * 100) / 100));
+    }
+  }
+
+  function openPayModal(inst: Inst) {
+    if (!item) return;
+    const due = Number(inst.amount) || 0;
+    const received = installmentReceived(inst);
+    const instRem =
+      inst.installmentRemaining != null
+        ? Math.max(0, Number(inst.installmentRemaining))
+        : Math.max(0, due - received);
+    const invBal = invoiceBalanceRemaining(item);
+    const maxPay = Math.round(Math.min(instRem, invBal) * 100) / 100;
+    setPayMax(maxPay);
+    setPayAmount(maxPay > 0 ? String(maxPay) : "0");
     setPayMethod("Cash");
     setPayNote("");
     setPayPassword("");
@@ -86,10 +143,17 @@ export default function HqInvoiceDetailPage() {
 
   async function submitPayment(e: React.FormEvent) {
     e.preventDefault();
-    if (!markInst) return;
+    if (!markInst || !item) return;
     const amt = Number(payAmount);
     if (!Number.isFinite(amt) || amt <= 0) {
       setPayErr("Enter a positive amount.");
+      return;
+    }
+    const cap = payMax > 0 ? payMax : 0;
+    if (cap > 0 && amt > cap + 0.02) {
+      setPayErr(
+        `Amount cannot exceed ${item.currency} ${cap.toLocaleString("en-IN", { minimumFractionDigits: 2 })} (installment outstanding or invoice balance).`
+      );
       return;
     }
     if (!payPassword.trim()) {
@@ -145,6 +209,18 @@ export default function HqInvoiceDetailPage() {
   }
 
   const created = item.createdAt ? new Date(item.createdAt) : new Date();
+  const collectedAmt = Number(item.paidAmount ?? 0);
+  const balanceAmt = Number(
+    item.balanceRemaining ?? item.dueAmount ?? Math.max(0, item.total - (item.paidAmount ?? 0))
+  );
+  const statusNorm = (item.status ?? "").toLowerCase();
+  const statusStyles: Record<string, string> = {
+    paid: "border-emerald-400/50 bg-emerald-500/15 text-emerald-200",
+    partial: "border-amber-400/45 bg-amber-500/12 text-amber-100",
+    unpaid: "border-slate-400/40 bg-slate-500/10 text-slate-200",
+    cancelled: "border-red-400/40 bg-red-500/10 text-red-200",
+  };
+  const statusClass = statusStyles[statusNorm] ?? "border-white/15 bg-white/5 text-[#e2e8f0]";
 
   return (
     <div className="space-y-6">
@@ -183,7 +259,31 @@ export default function HqInvoiceDetailPage() {
             <p className="text-[#64748b] mt-2">
               {created.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
             </p>
-            <p className="mt-2 text-xs text-[#94a3b8] uppercase">Status: {item.status}</p>
+            <p className="mt-3">
+              <span
+                className={`inline-flex items-center rounded-lg border px-3 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider ${statusClass}`}
+              >
+                Status · {item.status}
+              </span>
+            </p>
+            <div className="mt-4 flex flex-col gap-2 sm:items-end">
+              <div className="flex w-full max-w-[280px] flex-col gap-2 sm:items-stretch">
+                <div className="rounded-xl border border-emerald-400/35 bg-emerald-500/[0.12] px-3 py-2.5 text-left shadow-[0_0_24px_-8px_rgba(52,211,153,0.35)]">
+                  <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-emerald-200/80">Collected</p>
+                  <p className="mt-1 text-base font-semibold tabular-nums tracking-tight text-emerald-100">
+                    {item.currency}{" "}
+                    {collectedAmt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-amber-400/35 bg-amber-500/[0.1] px-3 py-2.5 text-left shadow-[0_0_24px_-8px_rgba(251,191,36,0.3)]">
+                  <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-amber-200/85">Balance due</p>
+                  <p className="mt-1 text-base font-semibold tabular-nums tracking-tight text-amber-50">
+                    {item.currency}{" "}
+                    {balanceAmt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </header>
 
@@ -204,21 +304,50 @@ export default function HqInvoiceDetailPage() {
           )}
         </section>
 
-        <section className="mt-6 text-sm space-y-2">
-          <p className="text-[10px] font-mono uppercase text-[#64748b]">Lines</p>
-          <ul className="space-y-1">
+        <section className="mt-6 rounded-xl border border-white/[0.08] bg-black/25 p-4 sm:p-5">
+          <p className="text-[10px] font-mono uppercase tracking-wider text-[#64748b] mb-3">Fee breakdown</p>
+          <div className="space-y-2 text-sm">
             {item.lineItems.map((line, i) => (
-              <li key={i} className="flex justify-between gap-2 text-[#cbd5e1]">
+              <div key={i} className="flex justify-between gap-4 text-[#cbd5e1]">
                 <span>{line.description}</span>
-                <span className="font-mono tabular-nums">
+                <span className="font-mono tabular-nums shrink-0">
                   {item.currency} {Number(line.amount).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </span>
-              </li>
+              </div>
             ))}
-          </ul>
-          <p className="text-right font-mono text-[#00d4ff] pt-2 border-t border-white/10">
-            Total {item.currency} {Number(item.total).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-          </p>
+            {Number(item.taxAmount ?? 0) > 0.005 && (
+              <div className="flex justify-between gap-4 text-[#94a3b8] text-xs">
+                <span>
+                  Tax
+                  {item.taxPercent != null && Number(item.taxPercent) > 0
+                    ? ` (${Number(item.taxPercent).toLocaleString("en-IN")}%)`
+                    : null}
+                </span>
+                <span className="font-mono tabular-nums shrink-0">
+                  {item.currency}{" "}
+                  {Number(item.taxAmount ?? 0).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            )}
+            <div className="flex justify-between gap-4 pt-2 border-t border-white/10 font-mono text-[#e2e8f0]">
+              <span className="uppercase text-[11px] tracking-wide text-[#94a3b8]">Invoice total</span>
+              <span className="tabular-nums font-semibold text-white">
+                {item.currency} {Number(item.total).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+            <div className="flex justify-between gap-4 rounded-lg border border-emerald-500/25 bg-emerald-500/[0.08] px-3 py-2">
+              <span className="text-[11px] font-mono uppercase tracking-wide text-emerald-200/90">Paid so far</span>
+              <span className="font-mono tabular-nums font-semibold text-emerald-100">
+                {item.currency} {collectedAmt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+            <div className="flex justify-between gap-4 rounded-lg border border-amber-500/25 bg-amber-500/[0.08] px-3 py-2">
+              <span className="text-[11px] font-mono uppercase tracking-wide text-amber-100/95">Remaining</span>
+              <span className="font-mono tabular-nums font-semibold text-amber-50">
+                {item.currency} {balanceAmt.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+          </div>
         </section>
 
         {(item.installments?.length ?? 0) > 0 && (
@@ -227,8 +356,12 @@ export default function HqInvoiceDetailPage() {
             <ul className="space-y-2 text-sm">
               {item.installments.map((x) => {
                 const due = Number(x.amount) || 0;
-                const received = (x.payments ?? []).reduce((s, p) => s + (Number(p.amount) || 0), 0);
-                const showProgress = !x.paid && received > 0;
+                const received = installmentReceived(x);
+                const instOut =
+                  x.installmentRemaining != null
+                    ? Math.max(0, Number(x.installmentRemaining))
+                    : Math.max(0, due - received);
+                const showProgress = !x.paid && received > 0.005;
                 return (
                   <li key={x.id} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
                     <div className="text-[#cbd5e1]">
@@ -236,6 +369,17 @@ export default function HqInvoiceDetailPage() {
                         {x.label}
                         {x.dueDate && <span className="text-[#64748b]"> · due {x.dueDate}</span>}
                       </span>
+                      {!x.paid && (
+                        <p className="text-[10px] font-mono text-[#94a3b8] mt-0.5">
+                          Outstanding {item.currency}{" "}
+                          {instOut.toLocaleString("en-IN", { minimumFractionDigits: 2 })} on this installment
+                          <span className="text-[#64748b]">
+                            {" "}
+                            · Invoice balance {item.currency}{" "}
+                            {invoiceBalanceRemaining(item).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                          </span>
+                        </p>
+                      )}
                       {showProgress && (
                         <p className="text-[10px] font-mono text-amber-200/80 mt-0.5">
                           Received {item.currency}{" "}
@@ -293,16 +437,31 @@ export default function HqInvoiceDetailPage() {
               <span className="text-white font-medium">{markInst.label}</span>
               {markInst.dueDate && <span className="text-[#64748b]"> · due {markInst.dueDate}</span>}
             </p>
+            <p className="text-[11px] font-mono text-[#94a3b8] leading-relaxed">
+              Maximum you can record here:{" "}
+              <span className="text-amber-200/90">
+                {item.currency}{" "}
+                {payMax.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+              </span>{" "}
+              (lesser of this installment&apos;s outstanding and the invoice balance).
+            </p>
             <label className="block">
-              <span className="text-[10px] font-mono uppercase text-[#64748b]">Amount received ({item.currency})</span>
+              <span className="text-[10px] font-mono uppercase text-[#64748b]">
+                Amount received ({item.currency}) — cannot exceed maximum above
+              </span>
               <input
                 type="number"
-                min={0.01}
+                inputMode="decimal"
+                min={payMax > 0 ? 0.01 : 0}
+                max={payMax > 0 ? payMax : undefined}
                 step="0.01"
                 value={payAmount}
-                onChange={(e) => setPayAmount(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm text-white tabular-nums"
+                onChange={(e) => setPayAmount(clampPayAmountField(e.target.value, payMax))}
+                onBlur={() => normalizePayAmountOnBlur(payMax)}
+                onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                className="mt-1.5 w-full rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm text-white tabular-nums [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 required
+                disabled={payMax <= 0}
               />
             </label>
             <label className="block">
@@ -356,7 +515,7 @@ export default function HqInvoiceDetailPage() {
               </button>
               <button
                 type="submit"
-                disabled={paySaving}
+                disabled={paySaving || payMax <= 0}
                 className="rounded-xl bg-emerald-500/15 border border-emerald-400/40 px-4 py-2 text-xs font-mono uppercase text-emerald-200 hover:bg-emerald-500/25 disabled:opacity-50"
               >
                 {paySaving ? "Saving…" : "Save payment"}

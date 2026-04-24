@@ -5,11 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { push, ref, serverTimestamp } from "firebase/database";
 import HudHeader from "@/components/HudHeader";
 import FloatingActions from "@/components/FloatingActions";
 import RegistrationMarquee from "@/components/RegistrationMarquee";
-import { getFirebaseDatabase, initFirebaseAnalytics, isFirebaseConfigured } from "@/lib/firebase";
+import { initFirebaseAnalytics } from "@/lib/firebase";
+import { normalizeHttpError, resolveApiOrigin } from "@/lib/api-http";
+import { showToast } from "@/lib/toast";
 import { ENQUIRY_DEGREE_OPTIONS } from "@/lib/enquiry-degree";
 import { validateIndiaMobileForEnquiry } from "@/lib/phone-e164";
 
@@ -192,12 +193,6 @@ export default function EnquiryClient() {
       setStatus("error");
       return;
     }
-    if (!isFirebaseConfigured()) {
-      setErrorMsg("Firebase is not configured. Add NEXT_PUBLIC_FIREBASE_* keys to .env.local.");
-      setStatus("error");
-      return;
-    }
-
     const payload = {
       fullName,
       email,
@@ -210,23 +205,44 @@ export default function EnquiryClient() {
       preferredBatch: String(fd.get("preferredBatch") ?? "").trim(),
       message: String(fd.get("message") ?? "").trim(),
       source: "enquiry_page",
-      createdAt: serverTimestamp(),
     };
 
     try {
-      const db = getFirebaseDatabase();
-      await push(ref(db, "enquiries"), payload);
+      const base = resolveApiOrigin();
+      const url = `${base.replace(/\/$/, "")}/api/v1/public/enquiry`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const txt = await res.text();
+      let parsed: { success?: boolean; data?: unknown; message?: string; error?: string } | null = null;
+      try {
+        parsed = txt ? (JSON.parse(txt) as { success?: boolean; data?: unknown; message?: string; error?: string }) : null;
+      } catch {
+        parsed = null;
+      }
+      if (!res.ok) {
+        let msg = txt;
+        if (parsed?.error || parsed?.message) msg = parsed.error || parsed.message || msg;
+        const finalMsg = normalizeHttpError(res.status, msg || "Failed to submit enquiry");
+        showToast(finalMsg, "error");
+        throw new Error(finalMsg);
+      }
+      if (parsed && "success" in parsed && parsed.success === false) {
+        const msg = parsed.message || "Failed to submit enquiry";
+        showToast(msg, "error");
+        throw new Error(msg);
+      }
       form.reset();
       setPhone("");
       setDegreeValue("");
+      showToast("Enquiry submitted successfully.", "success");
       router.push("/enquiry/success");
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Unknown error";
-      setErrorMsg(
-        /permission/i.test(msg)
-          ? "Could not save (database rules). Check Firebase Console → Realtime Database → Rules for /enquiries."
-          : `${msg} — try WhatsApp if this persists.`
-      );
+      setErrorMsg(`${msg} — try WhatsApp if this persists.`);
+      showToast(msg, "error");
       setStatus("error");
     }
   }

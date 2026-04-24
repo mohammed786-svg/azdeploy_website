@@ -19,6 +19,7 @@ type Receipt = {
   amount: number;
   currency: string;
   purpose: string;
+  paymentMethod?: string;
   receivedAt?: number;
   createdAt?: number;
 };
@@ -47,7 +48,7 @@ export default function HqReceiptsPage() {
   const [studentId, setStudentId] = useState("");
   const [amount, setAmount] = useState("");
   const [purpose, setPurpose] = useState("Fee payment");
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [receivedAt, setReceivedAt] = useState(() => new Date().toISOString().slice(0, 10));
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
@@ -133,7 +134,7 @@ export default function HqReceiptsPage() {
           studentId,
           amount: Number(amount),
           purpose,
-          paymentMethod: paymentMethod || undefined,
+          paymentMethod: paymentMethod.trim() || "Cash",
           receivedAt,
           notes,
         }),
@@ -173,7 +174,10 @@ export default function HqReceiptsPage() {
         </div>
         <button
           type="button"
-          onClick={() => setCreateOpen(true)}
+          onClick={() => {
+            setPaymentMethod("Cash");
+            setCreateOpen(true);
+          }}
           className="shrink-0 rounded-xl bg-white/10 border border-white/20 px-5 py-2.5 text-xs font-mono uppercase tracking-wider text-white hover:bg-white/15"
         >
           Record payment
@@ -236,13 +240,20 @@ export default function HqReceiptsPage() {
               />
             </label>
             <label className="block sm:col-span-2">
-              <span className="text-[10px] font-mono uppercase text-[#64748b]">Payment method</span>
-              <input
+              <span className="text-[10px] font-mono uppercase text-[#64748b]">Payment type</span>
+              <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                placeholder="UPI / Cash / Bank…"
-                className="mt-1 w-full rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm"
-              />
+                className="mt-1 w-full rounded-xl border border-white/10 bg-black/50 px-3 py-2.5 text-sm text-white"
+              >
+                <option value="Cash">Cash</option>
+                <option value="UPI">UPI</option>
+                <option value="Card">Card</option>
+                <option value="Bank transfer">Bank transfer</option>
+                <option value="NEFT / RTGS">NEFT / RTGS</option>
+                <option value="Cheque">Cheque</option>
+                <option value="Other">Other</option>
+              </select>
             </label>
             <label className="block sm:col-span-2">
               <span className="text-[10px] font-mono uppercase text-[#64748b]">Notes</span>
@@ -315,13 +326,14 @@ export default function HqReceiptsPage() {
                 <th className="px-4 py-3">Student</th>
                 <th className="px-4 py-3">Amount</th>
                 <th className="px-4 py-3">Purpose</th>
+                <th className="px-4 py-3">Payment</th>
                 <th className="px-4 py-3">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.04]">
               {items.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-[#64748b] font-mono text-sm">
+                  <td colSpan={6} className="px-4 py-10 text-center text-[#64748b] font-mono text-sm">
                     No receipts.
                   </td>
                 </tr>
@@ -348,6 +360,9 @@ export default function HqReceiptsPage() {
                     </td>
                     <td className="px-4 py-3 text-[#94a3b8] max-w-[200px] truncate" title={r.purpose}>
                       {r.purpose}
+                    </td>
+                    <td className="px-4 py-3 text-[#94a3b8] text-xs font-mono whitespace-nowrap">
+                      {r.paymentMethod ?? "—"}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-2">

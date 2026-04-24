@@ -387,8 +387,8 @@ export default function HqFeesPage() {
                 </p>
                 {fs.installments?.length ? (
                   <ul className="mt-3 space-y-1 text-xs text-[#64748b] font-mono">
-                    {fs.installments.map((x) => (
-                      <li key={x.id}>
+                    {fs.installments.map((x, idx) => (
+                      <li key={`${fs.id}-inst-${idx}-${x.id || "noid"}`}>
                         {x.label}: {fs.currency} {Number(x.amount).toLocaleString("en-IN")} · due +{x.dueOffsetDays}d
                       </li>
                     ))}

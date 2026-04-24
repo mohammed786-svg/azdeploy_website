@@ -14,6 +14,7 @@ type Inst = {
   id: string;
   label: string;
   amount: number;
+  amountReceived?: number;
   dueDate?: string;
   paid?: boolean;
 };
@@ -37,6 +38,13 @@ type Invoice = {
 
 function formatMoney(n: number, currency: string) {
   return `${currency} ${Number(n).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;
+}
+
+function formatDueDateOnly(raw?: string) {
+  if (!raw) return "";
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return raw;
+  return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 }
 
 export default function InvoicePrintPage() {
@@ -113,13 +121,15 @@ export default function InvoicePrintPage() {
 
       <header className="border-b-2 border-neutral-900 pb-4 mb-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start">
-          <div className="flex flex-col sm:flex-row sm:items-start gap-3 min-w-0">
-            <div className="shrink-0">
-              <PrintLogoBlack className="h-14 sm:h-16 w-[240px] max-w-[min(100%,240px)] min-h-[3.5rem]" />
+          <div className="min-w-0">
+            <div className="shrink-0 -ml-2">
+              <PrintLogoBlack align="left" className="h-20 sm:h-24 w-[260px] max-w-[260px] object-left object-top" />
             </div>
-            <div className="min-w-0 text-sm text-neutral-800">
+            <div className="min-w-0 text-sm text-neutral-800 mt-1">
               <h1 className="text-lg font-bold text-neutral-900 leading-tight">{INVOICE_ORG.legalName}</h1>
-              <p className="text-[10px] uppercase tracking-wide text-neutral-500 mt-0.5">Tax invoice (GST)</p>
+              <p className="text-[10px] uppercase tracking-wide text-neutral-500 mt-0.5">
+                {hasGst ? "Tax Invoice (GST)" : "Bill of Supply"}
+              </p>
               {INVOICE_ORG.addressLines.map((line) => (
                 <p key={line} className="mt-1 leading-snug">
                   {line}
@@ -160,7 +170,7 @@ export default function InvoicePrintPage() {
             {item.dueDate && (
               <>
                 <p className="text-[9px] uppercase tracking-wider text-neutral-500 mt-2">Due date</p>
-                <p className="font-mono text-neutral-900">{item.dueDate}</p>
+                <p className="font-mono text-neutral-900">{formatDueDateOnly(item.dueDate)}</p>
               </>
             )}
             <p className="text-[9px] uppercase tracking-wider text-neutral-500 mt-2">Place of supply</p>
@@ -172,7 +182,7 @@ export default function InvoicePrintPage() {
         </div>
       </header>
 
-      <section className="mb-5">
+      <section className="mb-4">
         <p className="text-[9px] uppercase tracking-wider text-neutral-500">Details of receiver (bill to)</p>
         <p className="text-base font-semibold text-neutral-900 mt-1">{item.studentName}</p>
         <p className="text-xs text-neutral-600 mt-1">
@@ -180,14 +190,14 @@ export default function InvoicePrintPage() {
         </p>
       </section>
 
-      <table className="w-full text-xs border-collapse border border-neutral-900 mb-4">
+      <table className="w-full text-xs border-collapse border border-neutral-900 mb-3">
         <thead>
           <tr className="bg-neutral-100 print:bg-neutral-100 border-b border-neutral-900">
             <th className="border border-neutral-300 py-2 px-2 text-left w-8">#</th>
             <th className="border border-neutral-300 py-2 px-2 text-left">Description of supply</th>
             <th className="border border-neutral-300 py-2 px-2 text-center w-20 whitespace-nowrap">SAC</th>
             <th className="border border-neutral-300 py-2 px-2 text-right w-28 whitespace-nowrap">
-              Taxable value ({item.currency})
+              {hasGst ? `Taxable value (${item.currency})` : `Amount (${item.currency})`}
             </th>
           </tr>
         </thead>
@@ -205,11 +215,11 @@ export default function InvoicePrintPage() {
         </tbody>
       </table>
 
-      <div className="text-sm space-y-1 mb-4">
+      <div className="text-sm space-y-1 mb-3">
         <div className="flex justify-end border-t border-neutral-300 pt-2">
           <div className="w-full max-w-sm space-y-1 font-mono text-xs">
             <div className="flex justify-between gap-4">
-              <span className="text-neutral-600">Total taxable value</span>
+              <span className="text-neutral-600">{hasGst ? "Total taxable value" : "Subtotal"}</span>
               <span className="tabular-nums">{formatMoney(item.subtotal, item.currency)}</span>
             </div>
             {hasGst ? (
@@ -231,11 +241,7 @@ export default function InvoicePrintPage() {
                   @ {taxPct}% — verify with your tax advisor.
                 </p>
               </>
-            ) : (
-              <p className="text-[10px] text-neutral-500 pt-1">
-                No GST charged on this invoice (nil / exempt / not applicable — confirm classification with your CA).
-              </p>
-            )}
+            ) : null}
             <div className="flex justify-between gap-4 pt-2 border-t border-neutral-900 font-bold text-base text-neutral-900">
               <span>Invoice total</span>
               <span className="tabular-nums">{formatMoney(item.total, item.currency)}</span>
@@ -244,56 +250,92 @@ export default function InvoicePrintPage() {
         </div>
       </div>
 
-      <section className="rounded border border-neutral-300 bg-neutral-50 print:bg-white p-3 mb-5 text-sm">
+      <section className="rounded border border-neutral-300 bg-neutral-50 print:bg-white p-3 mb-3 text-sm">
         <p className="text-[9px] uppercase tracking-wider text-neutral-500 mb-1">Amount in words</p>
         <p className="text-neutral-900 font-medium leading-relaxed">{amountInWordsINR(Number(item.total))}</p>
       </section>
 
       {(item.installments?.length ?? 0) > 0 && (
-        <section className="border border-neutral-200 rounded p-3 mb-5">
+        <section className="border border-neutral-200 rounded p-3 mb-3">
           <p className="text-[9px] uppercase tracking-wider text-neutral-500 mb-2">Installment schedule</p>
           <ul className="text-sm space-y-1">
-            {item.installments.map((x) => (
-              <li key={x.id} className="flex justify-between gap-2 border-b border-neutral-100 last:border-0 pb-1">
-                <span className="text-neutral-800">
-                  {x.label}
-                  {x.dueDate && <span className="text-neutral-500"> · due {x.dueDate}</span>}
-                </span>
-                <span className="font-mono tabular-nums">
-                  {item.currency} {Number(x.amount).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                  {x.paid ? <span className="text-emerald-700 text-xs ml-1">Paid</span> : null}
-                </span>
-              </li>
-            ))}
+            {item.installments.map((x) => {
+              const due = Number(x.amount) || 0;
+              const rec = x.amountReceived != null ? Number(x.amountReceived) || 0 : 0;
+              const partial = !x.paid && rec > 0 && rec + 0.005 < due;
+              return (
+                <li key={x.id} className="flex justify-between gap-2 border-b border-neutral-100 last:border-0 pb-1">
+                  <span className="text-neutral-800">
+                    {x.label}
+                    {x.dueDate && <span className="text-neutral-500"> · due {formatDueDateOnly(x.dueDate)}</span>}
+                    {partial ? (
+                      <span className="text-amber-800 text-xs block mt-0.5">
+                        Received {item.currency} {rec.toLocaleString("en-IN", { minimumFractionDigits: 2 })} of{" "}
+                        {due.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="font-mono tabular-nums">
+                    {item.currency} {due.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                    {x.paid ? <span className="text-emerald-700 text-xs ml-1">Paid</span> : null}
+                    {partial ? <span className="text-amber-800 text-xs ml-1">Partial</span> : null}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}
 
       {item.notes && (
-        <section className="text-sm text-neutral-600 mb-4">
+        <section className="text-sm text-neutral-600 mb-3">
           <p className="text-[9px] uppercase text-neutral-500">Remarks / terms</p>
           <p className="mt-1 whitespace-pre-wrap">{item.notes}</p>
+          <p className="mt-1 font-semibold text-neutral-800">No Refund.</p>
+        </section>
+      )}
+      {!item.notes && (
+        <section className="text-sm text-neutral-600 mb-3">
+          <p className="text-[9px] uppercase text-neutral-500">Remarks / terms</p>
+          <p className="mt-1 font-semibold text-neutral-800">No Refund.</p>
         </section>
       )}
 
-      <div className="flex flex-col sm:flex-row sm:justify-between gap-8 pt-6 border-t border-neutral-200 text-sm">
+      <div className="flex flex-col sm:flex-row sm:justify-between gap-6 pt-4 border-t border-neutral-200 text-sm">
         <div className="text-xs text-neutral-600 max-w-md">
           <p className="font-semibold text-neutral-800">Declaration</p>
-          <p className="mt-1 leading-relaxed">
-            We declare that the particulars above are true and correct and that the taxable value and tax amounts
-            have been determined under the Central Goods and Services Tax Act, 2017 and applicable State GST law,
-            where applicable.
-          </p>
+          {hasGst ? (
+            <p className="mt-1 leading-relaxed">
+              We declare that the particulars above are true and correct and that the taxable value and tax amounts
+              have been determined under the Central Goods and Services Tax Act, 2017 and applicable State GST law,
+              where applicable.
+            </p>
+          ) : (
+            <p className="mt-1 leading-relaxed">
+              We declare that the particulars above are true and correct, and this Bill of Supply is issued for
+              supplies where GST is not charged, as applicable under prevailing GST provisions.
+            </p>
+          )}
         </div>
         <div className="text-right">
           <p className="text-xs text-neutral-600">For {INVOICE_ORG.legalName}</p>
-          <div className="mt-12 border-t border-neutral-400 inline-block min-w-[180px] pt-1">
+          <div className="mt-8 border-t border-neutral-400 inline-block min-w-[180px] pt-1">
             <p className="text-[10px] text-neutral-500">Authorised signatory</p>
           </div>
         </div>
       </div>
 
-      <footer className="pt-6 mt-6 border-t border-neutral-200 text-center text-[9px] text-neutral-500 leading-relaxed">
+      <section className="pt-3 mt-3 border-t border-neutral-200 text-[8px] text-neutral-600 leading-snug">
+        <p className="text-[9px] uppercase tracking-wider text-neutral-500 mb-1">Terms & Conditions</p>
+        <ul className="list-disc pl-4 space-y-0.5">
+          <li>Fees once paid are non-refundable. No Refund.</li>
+          <li>Installment due dates must be honored to avoid service interruption.</li>
+          <li>Certificate/placement support is provided as per academy policy and eligibility.</li>
+          <li>Any dispute is subject to Belagavi, Karnataka jurisdiction only.</li>
+        </ul>
+      </section>
+
+      <footer className="pt-3 mt-3 border-t border-neutral-200 text-center text-[9px] text-neutral-500 leading-relaxed">
         <p>
           Computer-generated document · SAC {sac} · {INVOICE_ORG.phones.join(" · ")}
         </p>

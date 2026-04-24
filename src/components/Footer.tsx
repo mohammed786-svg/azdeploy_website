@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ACADEMY_CONTACT_NUMBERS } from '@/lib/contact-info';
 
 export default function Footer() {
   return (
@@ -24,17 +25,37 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+            <h4 className="text-[#00d4ff] text-sm font-semibold uppercase tracking-wider mt-6 mb-3">Legal</h4>
+            <ul className="space-y-2">
+              {[
+                { href: "/privacy-policy", label: "Privacy Policy" },
+                { href: "/terms-and-conditions", label: "Terms & Conditions" },
+                { href: "/academy-policy", label: "Academy Policy" },
+                { href: "/eligibility", label: "Eligibility" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="text-[#94a3b8] hover:text-[#00d4ff] text-sm transition-colors">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
           <div>
             <h4 className="text-[#00d4ff] text-sm font-semibold uppercase tracking-wider mb-4">Contact</h4>
-            <a
-              href="https://wa.me/918296565587"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#94a3b8] hover:text-[#00d4ff] text-sm transition-colors block"
-            >
-              +91 82965 65587
-            </a>
+            <div className="space-y-2">
+              {ACADEMY_CONTACT_NUMBERS.map((n) => (
+                <a
+                  key={n.raw}
+                  href={`https://wa.me/${n.raw}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#94a3b8] hover:text-[#00d4ff] text-sm transition-colors block"
+                >
+                  {n.display}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
         <div className="border-t border-[#00d4ff]/20 mt-8 pt-8 text-center text-[#64748b] text-sm">

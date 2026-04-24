@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { hqFetch } from "@/lib/hq-client";
 import { hqListUrl } from "@/lib/hq-list-url";
+import { maskStudentId } from "@/lib/student-id-mask";
 import A4PrintShell from "@/components/hq/A4PrintShell";
 import { PrintLogoBlack } from "@/components/hq/PrintLogoBlack";
 import { sanitizeForPdfFilename } from "@/lib/hq-print-pdf-title";
@@ -15,6 +16,7 @@ type Student = {
   id: string;
   serial?: number;
   fullName?: string;
+  profileImageUrl?: string;
   email?: string;
   phone?: string;
   degree?: string;
@@ -171,6 +173,12 @@ export default function StudentProfilePrintPage() {
             .student-print-table thead { display: table-header-group; }
             .student-print-table tr { break-inside: avoid; }
             .student-print-outer { border: none !important; box-shadow: none !important; }
+            .student-print-table th, .student-print-table td { padding-top: 3px !important; padding-bottom: 3px !important; }
+            .student-print-compact-gap { margin-bottom: 8px !important; }
+            .student-print-outer, .student-print-outer * { color: #000 !important; }
+            .student-print-table, .student-print-table th, .student-print-table td { border-color: #000 !important; }
+            .student-print-outer [class*="text-neutral-"],
+            .student-print-outer [class*="text-amber-"] { color: #000 !important; }
           }
         `,
         }}
@@ -190,23 +198,39 @@ export default function StudentProfilePrintPage() {
       </div>
 
       <div className="student-print-outer border border-neutral-300 rounded-sm print:border-0 student-print-block">
-        <header className="border-b-2 border-neutral-900 pb-4 mb-4">
-          <div className="flex flex-col sm:flex-row sm:items-start gap-4 justify-between">
-            <PrintLogoBlack className="h-14 w-[240px] max-w-full min-h-[3.5rem] hq-print-logo" />
+        <header className="border-b border-neutral-900 pb-2 mb-2 student-print-compact-gap">
+          <div className="flex flex-col sm:flex-row sm:items-start gap-2 justify-between">
+            <PrintLogoBlack className="h-10 w-[190px] max-w-full min-h-[2.5rem] hq-print-logo" />
             <div className="text-right text-xs text-neutral-600">
               <p className="font-semibold uppercase tracking-wide text-neutral-800">Student profile</p>
-              <p className="mt-1">Record export</p>
+              <p className="mt-0.5">Record export</p>
             </div>
           </div>
         </header>
 
-        <section className="student-print-block mb-5">
-          <h1 className="text-xl font-bold text-neutral-900 leading-tight">{student.fullName ?? "—"}</h1>
-          <p className="mt-2 text-sm font-semibold text-neutral-800">
-            Student ID · {typeof student.serial === "number" ? student.serial : "—"}
-          </p>
-          <p className="mt-1 text-[10px] text-neutral-500 break-all font-mono">Record key · {student.id}</p>
-          <dl className="mt-4 grid gap-2 text-sm text-neutral-800">
+        <section className="student-print-block mb-3 student-print-compact-gap">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="text-lg font-bold text-neutral-900 leading-tight">{student.fullName ?? "—"}</h1>
+              <p className="mt-1 text-[11px] font-semibold text-neutral-800">
+                Student ID · {maskStudentId(typeof student.serial === "number" ? student.serial : null)}
+              </p>
+            </div>
+            <div className="h-24 w-20 shrink-0 overflow-hidden rounded-md border border-neutral-300 bg-neutral-100">
+              {student.profileImageUrl ? (
+                <img
+                  src={student.profileImageUrl}
+                  alt={`${student.fullName ?? "Student"} profile`}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-[10px] font-mono text-neutral-500">
+                  No photo
+                </div>
+              )}
+            </div>
+          </div>
+          <dl className="mt-2 grid gap-1 text-[11px] text-neutral-800">
             {student.email && (
               <div className="flex gap-2">
                 <dt className="text-neutral-500 w-28 shrink-0">Email</dt>
@@ -225,12 +249,10 @@ export default function StudentProfilePrintPage() {
                 <dd>{formatGenderLabel(student.gender)}</dd>
               </div>
             )}
-            {student.city && (
-              <div className="flex gap-2">
-                <dt className="text-neutral-500 w-28 shrink-0">City</dt>
-                <dd>{student.city}</dd>
-              </div>
-            )}
+            <div className="flex gap-2">
+              <dt className="text-neutral-500 w-28 shrink-0">Address</dt>
+              <dd>{student.city || "—"}</dd>
+            </div>
             {(student.degree || student.college) && (
               <div className="flex gap-2">
                 <dt className="text-neutral-500 w-28 shrink-0">Education</dt>
@@ -256,29 +278,29 @@ export default function StudentProfilePrintPage() {
           </dl>
         </section>
 
-        <section className="student-print-block mb-5 pb-4 border-b border-neutral-200">
-          <h2 className="text-sm font-bold text-neutral-900 uppercase tracking-wide mb-2">Fee structure</h2>
+        <section className="student-print-block mb-3 pb-2 border-b border-neutral-200 student-print-compact-gap">
+          <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wide mb-1">Fee structure</h2>
           {fee ? (
-            <p className="text-sm text-neutral-800">
+            <p className="text-[11px] text-neutral-800">
               <span className="font-mono font-semibold">{fee.code}</span> — {fee.name} · {fee.currency}{" "}
               {Number(fee.totalAmount).toLocaleString("en-IN")}
             </p>
           ) : student.feeStructureId ? (
-            <p className="text-sm text-amber-800">Linked fee ID not found (may have been deleted).</p>
+            <p className="text-[11px] text-amber-800">Linked fee ID not found (may have been deleted).</p>
           ) : (
-            <p className="text-sm text-neutral-500">No fee structure linked.</p>
+            <p className="text-[11px] text-neutral-500">No fee structure linked.</p>
           )}
         </section>
 
-        <section className="mb-5">
-          <h2 className="text-sm font-bold text-neutral-900 uppercase tracking-wide mb-2">Invoices</h2>
+        <section className="mb-3 student-print-compact-gap">
+          <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wide mb-1">Invoices</h2>
           <table className="student-print-table w-full text-left text-[10pt] border border-neutral-300">
             <thead>
               <tr className="bg-neutral-100 border-b border-neutral-300">
-                <th className="px-2 py-1.5 font-semibold">Invoice</th>
-                <th className="px-2 py-1.5 font-semibold">Total</th>
-                <th className="px-2 py-1.5 font-semibold">Status</th>
-                <th className="px-2 py-1.5 font-semibold">Created</th>
+                <th className="px-2 py-1 font-semibold">Invoice</th>
+                <th className="px-2 py-1 font-semibold">Total</th>
+                <th className="px-2 py-1 font-semibold">Status</th>
+                <th className="px-2 py-1 font-semibold">Created</th>
               </tr>
             </thead>
             <tbody>
@@ -304,15 +326,15 @@ export default function StudentProfilePrintPage() {
           </table>
         </section>
 
-        <section className="mb-5">
-          <h2 className="text-sm font-bold text-neutral-900 uppercase tracking-wide mb-2">Receipts</h2>
+        <section className="mb-3 student-print-compact-gap">
+          <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wide mb-1">Receipts</h2>
           <table className="student-print-table w-full text-left text-[10pt] border border-neutral-300">
             <thead>
               <tr className="bg-neutral-100 border-b border-neutral-300">
-                <th className="px-2 py-1.5 font-semibold">Receipt</th>
-                <th className="px-2 py-1.5 font-semibold">Amount</th>
-                <th className="px-2 py-1.5 font-semibold">Purpose</th>
-                <th className="px-2 py-1.5 font-semibold">Received</th>
+                <th className="px-2 py-1 font-semibold">Receipt</th>
+                <th className="px-2 py-1 font-semibold">Amount</th>
+                <th className="px-2 py-1 font-semibold">Purpose</th>
+                <th className="px-2 py-1 font-semibold">Received</th>
               </tr>
             </thead>
             <tbody>
@@ -338,21 +360,20 @@ export default function StudentProfilePrintPage() {
           </table>
         </section>
 
-        <section className="student-print-block mb-5 pb-4 border-b border-neutral-200">
-          <h2 className="text-sm font-bold text-neutral-900 uppercase tracking-wide mb-2">Onboarding</h2>
+        <section className="student-print-block mb-3 pb-2 border-b border-neutral-200 student-print-compact-gap">
+          <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wide mb-1">Onboarding</h2>
           {onboarding.length === 0 ? (
             <p className="text-sm text-neutral-500">No onboarding records linked.</p>
           ) : (
-            <ul className="space-y-3 text-sm text-neutral-800">
+            <ul className="space-y-1.5 text-[11px] text-neutral-800">
               {onboarding.map((o) => (
-                <li key={o.id} className="border border-neutral-200 rounded p-2">
-                  <p className="text-[10px] font-mono text-neutral-600 break-all">ID · {o.id}</p>
-                  {o.fullName && <p className="mt-1 font-medium">{o.fullName}</p>}
-                  <p className="mt-1">
+                <li key={o.id} className="border border-neutral-200 rounded p-1.5">
+                  {o.fullName && <p className="mt-0.5 font-medium">{o.fullName}</p>}
+                  <p className="mt-0.5">
                     <span className="text-neutral-500">Status:</span> {o.status ?? "—"}
                   </p>
                   {o.createdAt != null && (
-                    <p className="text-xs text-neutral-600 mt-1">Created · {fmtDate(o.createdAt)}</p>
+                    <p className="text-[10px] text-neutral-600 mt-0.5">Created · {fmtDate(o.createdAt)}</p>
                   )}
                 </li>
               ))}
@@ -360,12 +381,12 @@ export default function StudentProfilePrintPage() {
           )}
         </section>
 
-        <section className="student-print-block mb-4">
-          <h2 className="text-sm font-bold text-neutral-900 uppercase tracking-wide mb-2">Batch history</h2>
+        <section className="student-print-block mb-2 student-print-compact-gap">
+          <h2 className="text-[11px] font-bold text-neutral-900 uppercase tracking-wide mb-1">Batch history</h2>
           {(student.batchHistory ?? []).length === 0 ? (
             <p className="text-sm text-neutral-500">No history entries.</p>
           ) : (
-            <ul className="space-y-2 text-xs text-neutral-800 font-mono">
+            <ul className="space-y-1 text-[10px] text-neutral-800 font-mono">
               {student.batchHistory!.map((h) => (
                 <li key={`${h.batchId}-${h.enrolledAt}`} className="border-l-2 border-neutral-300 pl-2">
                   {h.batchName || h.batchId} · enrolled {new Date(h.enrolledAt).toLocaleString("en-IN")}
@@ -376,7 +397,7 @@ export default function StudentProfilePrintPage() {
           )}
         </section>
 
-        <footer className="pt-4 border-t border-neutral-200 text-[9pt] text-neutral-500">
+        <footer className="pt-2 border-t border-neutral-200 text-[8.5pt] text-neutral-500">
           <p>
             Exported {printedAt.toLocaleString("en-IN", { dateStyle: "long", timeStyle: "short" })} · AZ Deploy Academy
           </p>

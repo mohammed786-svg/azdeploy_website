@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { getSiteUrl } from "@/lib/site-url";
+import FooterVisibility from "@/components/FooterVisibility";
+import GlobalChatWidget from "@/components/chat/GlobalChatWidget";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -73,6 +75,8 @@ export default function RootLayout({
     <html lang="en" className="overflow-x-hidden">
       <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased overflow-x-hidden min-w-0`}>
         {children}
+        <GlobalChatWidget />
+        <FooterVisibility />
       </body>
     </html>
   );

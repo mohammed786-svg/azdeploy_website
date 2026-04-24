@@ -67,6 +67,8 @@ export type PendingInstallmentRow = {
   dueDate: string;
   outstanding: number;
   currency: string;
+  /** Sum of outstanding installments across this student (all invoices). */
+  studentOutstandingTotal?: number;
 };
 
 /** One row per installment with a positive balance (for reports / Excel). */

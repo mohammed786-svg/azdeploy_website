@@ -1,10 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import WebsiteChatWidget from '@/components/chat/WebsiteChatWidget';
 
 export default function FloatingActions() {
   return (
     <div className="fixed bottom-16 sm:bottom-12 right-3 sm:right-8 z-40 flex flex-col items-end gap-2 sm:gap-3">
+      <WebsiteChatWidget
+        embedded
+        launcherClassName="group flex items-center gap-2 rounded-full bg-[#25d366]/90 text-black hover:bg-[#25d366] transition-colors shadow-lg pr-2 pl-4 py-2 sm:pr-3 sm:pl-5 sm:py-2.5"
+      />
       <a
         href="/courses"
         className="group flex items-center gap-2 rounded-full bg-[#f97316]/90 text-white hover:bg-[#f97316] transition-colors shadow-lg pr-2 pl-4 py-2 sm:pr-3 sm:pl-5 sm:py-2.5"

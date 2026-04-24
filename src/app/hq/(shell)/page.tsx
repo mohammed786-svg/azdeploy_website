@@ -31,6 +31,29 @@ type PublicStudentCounter = {
   countAtAnchor: number;
 };
 
+type PendingReminderSummary = {
+  todayDate: string;
+  previousDate: string;
+  todayPendingInr: number;
+  previousPendingInr: number;
+  todayRows: number;
+  previousRows: number;
+};
+
+function currentDaySlot(d = new Date()): "morning" | "evening" | "night" | null {
+  const h = d.getHours();
+  if (h >= 5 && h < 12) return "morning";
+  if (h >= 16 && h < 20) return "evening";
+  if (h >= 20 || h < 2) return "night";
+  return null;
+}
+
+function slotLabel(slot: "morning" | "evening" | "night"): string {
+  if (slot === "morning") return "Morning";
+  if (slot === "evening") return "Evening";
+  return "Night";
+}
+
 export default function HqDashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [counter, setCounter] = useState<PublicStudentCounter | null>(null);
@@ -46,6 +69,9 @@ export default function HqDashboardPage() {
   const [balanceOpen, setBalanceOpen] = useState(false);
   const [balData, setBalData] = useState<OutstandingPage | null>(null);
   const [balLoading, setBalLoading] = useState(false);
+  const [pendingReminder, setPendingReminder] = useState<PendingReminderSummary | null>(null);
+  const [pendingReminderOpen, setPendingReminderOpen] = useState(false);
+  const [pendingSlot, setPendingSlot] = useState<"morning" | "evening" | "night" | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,6 +81,31 @@ export default function HqDashboardPage() {
         if (!cancelled) setStats(data);
       } catch (e) {
         if (!cancelled) setErr(e instanceof Error ? e.message : "Failed to load");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const slot = currentDaySlot();
+    if (!slot) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const key = `hq_fees_pending_popup_seen_${today}_${slot}`;
+    if (typeof window !== "undefined" && window.localStorage.getItem(key) === "1") return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const d = await hqFetch<{ summary?: PendingReminderSummary }>(
+          hqListUrl("/api/hq/stats/outstanding-breakdown", { page: 1, pageSize: 5, sort: "createdAt_desc" })
+        );
+        if (cancelled || !d.summary) return;
+        setPendingReminder(d.summary);
+        setPendingSlot(slot);
+        setPendingReminderOpen(true);
+      } catch {
+        /* ignore */
       }
     })();
     return () => {
@@ -118,6 +169,14 @@ export default function HqDashboardPage() {
             {err}
           </p>
         )}
+        <div className="mt-4">
+          <Link
+            href="/hq/fees-pending"
+            className="inline-flex items-center rounded-xl border border-amber-500/35 bg-amber-500/10 px-4 py-2.5 text-xs font-mono uppercase tracking-wider text-amber-200 hover:bg-amber-500/20"
+          >
+            Full Screen Fees Pending Detail
+          </Link>
+        </div>
       </header>
 
       <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -271,6 +330,12 @@ export default function HqDashboardPage() {
           >
             Reports
           </Link>
+          <Link
+            href="/hq/chat"
+            className="rounded-xl border border-[#25d366]/35 bg-[#25d366]/10 px-4 py-2.5 text-xs font-mono uppercase tracking-wider text-[#86efac] hover:bg-[#25d366]/20 inline-flex items-center"
+          >
+            Chat inbox
+          </Link>
         </div>
       </div>
 
@@ -294,6 +359,61 @@ export default function HqDashboardPage() {
           loading={balLoading}
           onPageChange={(p) => void loadBalancePage(p)}
         />
+      </HqModal>
+
+      <HqModal
+        open={pendingReminderOpen}
+        onClose={() => {
+          setPendingReminderOpen(false);
+          if (pendingSlot && typeof window !== "undefined") {
+            const today = new Date().toISOString().slice(0, 10);
+            window.localStorage.setItem(`hq_fees_pending_popup_seen_${today}_${pendingSlot}`, "1");
+          }
+        }}
+        title={`Fees pending reminder${pendingSlot ? ` — ${slotLabel(pendingSlot)}` : ""}`}
+        size="lg"
+      >
+        {pendingReminder ? (
+          <div className="space-y-4">
+            <p className="text-xs text-[#64748b]">
+              Daily reminder for current and previous date pending fees. Open full screen detail for filters, table and
+              pagination.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-3">
+              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3">
+                <p className="text-[10px] font-mono uppercase text-amber-200/80">Current ({pendingReminder.todayDate})</p>
+                <p className="mt-1 text-lg font-bold text-amber-100 tabular-nums">
+                  INR {pendingReminder.todayPendingInr.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                </p>
+                <p className="mt-1 text-xs text-amber-100/80">{pendingReminder.todayRows} rows pending</p>
+              </div>
+              <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 p-3">
+                <p className="text-[10px] font-mono uppercase text-sky-200/80">Previous ({pendingReminder.previousDate})</p>
+                <p className="mt-1 text-lg font-bold text-sky-100 tabular-nums">
+                  INR {pendingReminder.previousPendingInr.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                </p>
+                <p className="mt-1 text-xs text-sky-100/80">{pendingReminder.previousRows} rows pending</p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <Link
+                href="/hq/fees-pending"
+                onClick={() => {
+                  setPendingReminderOpen(false);
+                  if (pendingSlot && typeof window !== "undefined") {
+                    const today = new Date().toISOString().slice(0, 10);
+                    window.localStorage.setItem(`hq_fees_pending_popup_seen_${today}_${pendingSlot}`, "1");
+                  }
+                }}
+                className="rounded-xl border border-amber-500/35 bg-amber-500/10 px-4 py-2 text-xs font-mono uppercase tracking-wider text-amber-200 hover:bg-amber-500/20"
+              >
+                Open detailed page
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm text-[#64748b] font-mono">Loading reminder…</p>
+        )}
       </HqModal>
 
       <div className="rounded-2xl border border-white/[0.06] bg-[#07070c]/80 p-6 sm:p-8 space-y-4">

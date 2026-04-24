@@ -1,12 +1,60 @@
+import { showToast } from "@/lib/toast";
+import { normalizeHttpError, resolveApiDbName, resolveApiOrigin } from "@/lib/api-http";
+
+type ApiVersion = "v1" | "v2";
+
+type HqClientOptions = {
+  /** Override API version for specific calls (default: v1). */
+  apiVersion?: ApiVersion;
+  /** If true, redirects to /hq/login on 401. Default false (stay on same screen). */
+  redirectOn401?: boolean;
+  /** Optional custom success toast for write operations. */
+  successMessage?: string;
+  /** Disable automatic success toast for write operations. */
+  suppressSuccessToast?: boolean;
+};
+
+function normalizeApiPath(path: string, apiVersion: ApiVersion): string {
+  if (/^https?:\/\//i.test(path)) return path;
+  if (!path.startsWith("/")) return path;
+
+  // Already versioned (e.g. /api/v1/* or /api/v2/*) -> keep as-is.
+  if (/^\/api\/v\d+\//.test(path)) return path;
+
+  // Unversioned API path -> prepend configured version.
+  if (path.startsWith("/api/")) {
+    return `/api/${apiVersion}/${path.slice("/api/".length)}`;
+  }
+  return path;
+}
+
 /** Client-side fetch for HQ API routes (session cookie). */
-export async function hqFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(path, {
+function apiUrl(path: string, options?: HqClientOptions): string {
+  const apiVersion = options?.apiVersion ?? "v1";
+  const normalizedPath = normalizeApiPath(path, apiVersion);
+  const base = resolveApiOrigin();
+  if (!base) return normalizedPath;
+  if (/^https?:\/\//i.test(normalizedPath)) return normalizedPath;
+  return `${base.replace(/\/$/, "")}${normalizedPath.startsWith("/") ? "" : "/"}${normalizedPath}`;
+}
+
+/** Client-side fetch for HQ API routes (session cookie). */
+export async function hqFetch<T>(path: string, init?: RequestInit, options?: HqClientOptions): Promise<T> {
+  const dbName = resolveApiDbName();
+  const method = (init?.method || "GET").toUpperCase();
+  const isWrite = method !== "GET" && method !== "HEAD";
+  const isFormData = typeof FormData !== "undefined" && init?.body instanceof FormData;
+  const mergedHeaders: HeadersInit = {
+    "X-Database-Name": dbName,
+    ...(init?.headers ?? {}),
+  };
+  if (!isFormData) {
+    (mergedHeaders as Record<string, string>)["Content-Type"] = "application/json";
+  }
+  const res = await fetch(apiUrl(path, options), {
     ...init,
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {}),
-    },
+    headers: mergedHeaders,
   });
   const text = await res.text();
   let data: unknown = null;
@@ -17,6 +65,7 @@ export async function hqFetch<T>(path: string, init?: RequestInit): Promise<T> {
   }
   if (!res.ok) {
     if (
+      options?.redirectOn401 &&
       res.status === 401 &&
       typeof window !== "undefined" &&
       window.location.pathname.startsWith("/hq") &&
@@ -24,15 +73,50 @@ export async function hqFetch<T>(path: string, init?: RequestInit): Promise<T> {
     ) {
       window.location.assign("/hq/login");
     }
-    const err = (data as { error?: string })?.error ?? text ?? res.statusText;
+    const rawErr =
+      (data as { error?: string; message?: string })?.error ??
+      (data as { message?: string })?.message ??
+      text ??
+      res.statusText;
+    const err = normalizeHttpError(res.status, rawErr);
+    if (typeof window !== "undefined") showToast(err, "error");
     throw new Error(err);
+  }
+  if (data && typeof data === "object" && "success" in (data as Record<string, unknown>)) {
+    const wrapped = data as {
+      success?: boolean;
+      message?: string;
+      data?: unknown;
+      error_code?: number;
+    };
+    if (!wrapped.success) {
+      if (typeof window !== "undefined") showToast(wrapped.message || "Request failed", "error");
+      throw new Error(wrapped.message || "Request failed");
+    }
+    if (isWrite && !options?.suppressSuccessToast && typeof window !== "undefined") {
+      showToast(options?.successMessage || "Saved successfully.", "success");
+    }
+    return (wrapped.data ?? {}) as T;
+  }
+  if (isWrite && !options?.suppressSuccessToast && typeof window !== "undefined") {
+    showToast(options?.successMessage || "Saved successfully.", "success");
   }
   return data as T;
 }
 
 /** Download a binary file from an HQ API route (session cookie). Does not parse JSON. */
-export async function hqDownloadBlob(path: string, fallbackFilename: string): Promise<void> {
-  const res = await fetch(path, { credentials: "include" });
+export async function hqDownloadBlob(
+  path: string,
+  fallbackFilename: string,
+  options?: HqClientOptions
+): Promise<void> {
+  const dbName = resolveApiDbName();
+  const res = await fetch(apiUrl(path, options), {
+    credentials: "include",
+    headers: {
+      "X-Database-Name": dbName,
+    },
+  });
   if (!res.ok) {
     const text = await res.text();
     let msg = text;
@@ -43,6 +127,7 @@ export async function hqDownloadBlob(path: string, fallbackFilename: string): Pr
       /* use raw text */
     }
     if (
+      options?.redirectOn401 &&
       res.status === 401 &&
       typeof window !== "undefined" &&
       window.location.pathname.startsWith("/hq") &&
@@ -50,7 +135,8 @@ export async function hqDownloadBlob(path: string, fallbackFilename: string): Pr
     ) {
       window.location.assign("/hq/login");
     }
-    throw new Error(msg || res.statusText);
+    if (typeof window !== "undefined") showToast(msg || res.statusText, "error");
+    throw new Error(normalizeHttpError(res.status, msg || res.statusText));
   }
   const blob = await res.blob();
   const cd = res.headers.get("Content-Disposition");
