@@ -126,7 +126,11 @@ export default function WebsiteChatWidget({ embedded = false, launcherClassName 
     <div className={embedded ? "relative z-[60]" : "fixed bottom-40 right-4 sm:bottom-44 sm:right-5 z-[60]"}>
       {open ? (
         <div
-          className={`${embedded ? "absolute bottom-full right-0 mb-3" : ""} w-[min(94vw,360px)] h-[min(68vh,520px)] rounded-2xl overflow-hidden shadow-2xl border border-black/20 bg-[#efeae2] flex flex-col`}
+          className={`${
+            embedded
+              ? "fixed bottom-24 right-2 left-2 sm:absolute sm:bottom-full sm:right-0 sm:left-auto sm:mb-3"
+              : "fixed bottom-24 right-2 left-2 sm:bottom-44 sm:right-5 sm:left-auto"
+          } w-auto sm:w-[min(94vw,360px)] h-[min(72dvh,520px)] rounded-2xl overflow-hidden shadow-2xl border border-black/20 bg-[#efeae2] flex flex-col`}
         >
           <div className="px-4 py-3 bg-[#075e54] text-white flex items-center justify-between">
             <div>
