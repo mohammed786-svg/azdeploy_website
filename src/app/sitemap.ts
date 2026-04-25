@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getPublishedBlogPosts } from "@/lib/blog-public-data";
+import { CITY_LANDINGS, cityLandingUrl } from "@/lib/city-landing";
 import { getSiteUrl } from "@/lib/site-url";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -27,5 +28,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.72,
   }));
 
-  return [...staticEntries, ...blogEntries];
+  const cityEntries: MetadataRoute.Sitemap = CITY_LANDINGS.map((c) => ({
+    url: `${baseUrl}${cityLandingUrl(c.slug)}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.78,
+  }));
+
+  return [...staticEntries, ...cityEntries, ...blogEntries];
 }

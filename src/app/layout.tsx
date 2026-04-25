@@ -4,6 +4,7 @@ import "./globals.css";
 import { getSiteUrl } from "@/lib/site-url";
 import FooterVisibility from "@/components/FooterVisibility";
 import GlobalChatWidget from "@/components/chat/GlobalChatWidget";
+import SeoLocalBusinessJsonLd from "@/components/SeoLocalBusinessJsonLd";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -24,9 +25,21 @@ export const metadata: Metadata = {
     template: "%s | AZDeploy Academy",
   },
   description:
-    "AZDeploy Academy - Become a real software engineer in 6 months. Learn Full Stack, AI, Data Engineering & DevOps with real-world projects, deployment experience, and production-level systems. Limited batches, 30% off for first 10 students.",
+    "AZDeploy Academy in Belagavi (Belgaum): software training institute for Full Stack, AI, and DevOps. Job-ready program for students from Belagavi, Hubli, Dharwad, and Kolhapur.",
   keywords: [
     "AZDeploy",
+    "best software institute in belagavi",
+    "best software training institute in belgaum",
+    "best academy in belagavi",
+    "software institute near belagavi",
+    "software training near me",
+    "full stack training belagavi",
+    "python django institute belagavi",
+    "devops institute belagavi",
+    "software institute hubli",
+    "software institute dharwad",
+    "software institute kolhapur",
+    "software institute kholapur",
     "Software Engineer Training",
     "Full Stack Developer",
     "AI Engineer",
@@ -44,7 +57,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AZDeploy Academy | Become a Real Software Engineer",
     description:
-      "Full Stack + AI + DevOps — All-in-One program with real production experience. Learn, Build, Deploy, Scale, Get Hired.",
+      "Belagavi software institute for Full Stack + AI + DevOps. Job-ready training for students near Belagavi, Belgaum, Hubli, Dharwad, and Kolhapur.",
     type: "website",
     url: getSiteUrl(),
     siteName: "AZ Deploy Academy",
@@ -74,6 +87,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden">
       <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased overflow-x-hidden min-w-0`}>
+        <SeoLocalBusinessJsonLd />
         {children}
         <GlobalChatWidget />
         <FooterVisibility />
