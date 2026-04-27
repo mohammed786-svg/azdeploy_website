@@ -123,9 +123,27 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
           const sum = (xi.payments ?? []).reduce((s, p) => s + (Number(p.amount) || 0), 0);
           return sum >= t - 0.02;
         });
+      const paidAmount = installments.reduce((sum, x) => {
+        const xi = x as {
+          amount?: number;
+          paid?: boolean;
+          payments?: { amount: number }[];
+        };
+        if (Array.isArray(xi.payments) && xi.payments.length > 0) {
+          return sum + xi.payments.reduce((s, p) => s + (Number(p.amount) || 0), 0);
+        }
+        // Backward compatibility for very old rows where only `paid=true` existed.
+        if (xi.paid) return sum + (Number(xi.amount) || 0);
+        return sum;
+      }, 0);
+      const total = Number(cur.total) || 0;
+      const dueAmount = Math.max(0, total - paidAmount);
       const next = {
         ...cur,
         installments,
+        paidAmount,
+        dueAmount,
+        balanceRemaining: dueAmount,
         status: allPaid ? "paid" : "partial",
         updatedAt: now,
       };
