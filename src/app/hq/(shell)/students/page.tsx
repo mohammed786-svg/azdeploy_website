@@ -30,6 +30,7 @@ type Student = {
   /** Unpaid invoice total — same basis as student profile billing hint */
   balanceOutstanding?: number;
   balanceCurrency?: string;
+  hasPlan?: boolean;
 };
 
 type PageData = {
@@ -179,6 +180,7 @@ export default function HqStudentsPage() {
                     const bal = Number(s.balanceOutstanding) || 0;
                     const cur = s.balanceCurrency ?? "INR";
                     const hasDue = bal > 0.005;
+                    const showPlanNotTaken = !s.hasPlan && !hasDue;
                     return (
                       <tr key={s.id} className="hover:bg-white/[0.02]">
                         <td className="px-4 py-3">
@@ -216,7 +218,7 @@ export default function HqStudentsPage() {
                             className={`font-mono text-sm tabular-nums ${hasDue ? "text-amber-200/95 font-semibold" : "text-emerald-300/85"}`}
                             title="Unpaid total on invoices (installments not marked paid, or full invoice if no installments)"
                           >
-                            {formatBalance(cur, bal)}
+                            {showPlanNotTaken ? "Plan not taken" : formatBalance(cur, bal)}
                           </span>
                         </td>
                         <td className="px-4 py-3 text-right">

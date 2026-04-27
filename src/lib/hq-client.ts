@@ -1,6 +1,6 @@
 import { showToast } from "@/lib/toast";
 import { normalizeHttpError, resolveApiDbName, resolveApiOrigin } from "@/lib/api-http";
-import { HQ_API_SESSION_STORAGE_KEY } from "@/lib/hq-session-keys";
+import { HQ_API_LOCAL_STORAGE_KEY, HQ_API_SESSION_STORAGE_KEY } from "@/lib/hq-session-keys";
 
 type ApiVersion = "v1" | "v2";
 
@@ -60,16 +60,53 @@ export async function hqFetch<T>(path: string, init?: RequestInit, options?: HqC
   if (!isFormData) {
     (mergedHeaders as Record<string, string>)["Content-Type"] = "application/json";
   }
-  const bearer =
-    typeof window !== "undefined" ? window.sessionStorage.getItem(HQ_API_SESSION_STORAGE_KEY) : null;
+  const getBearer = () => {
+    if (typeof window === "undefined") return null;
+    const s = window.sessionStorage.getItem(HQ_API_SESSION_STORAGE_KEY);
+    if (s) return s;
+    const l = window.localStorage.getItem(HQ_API_LOCAL_STORAGE_KEY);
+    if (l) {
+      window.sessionStorage.setItem(HQ_API_SESSION_STORAGE_KEY, l);
+      return l;
+    }
+    return null;
+  };
+  const persistBearer = (token: string) => {
+    if (typeof window === "undefined" || !token) return;
+    window.sessionStorage.setItem(HQ_API_SESSION_STORAGE_KEY, token);
+    window.localStorage.setItem(HQ_API_LOCAL_STORAGE_KEY, token);
+  };
+
+  const bearer = getBearer();
   if (bearer) {
     (mergedHeaders as Record<string, string>)["Authorization"] = `Bearer ${bearer}`;
   }
-  const res = await fetch(apiUrl(path, options), {
+  let res = await fetch(apiUrl(path, options), {
     ...init,
     credentials: "include",
     headers: mergedHeaders,
   });
+
+  // Auto-recover missing bearer in new tabs and retry once.
+  if (!res.ok && res.status === 401 && typeof window !== "undefined") {
+    try {
+      const r = await fetch("/api/hq/refresh-api-token", { credentials: "include" });
+      if (r.ok) {
+        const j = (await r.json()) as { apiSession?: string };
+        if (j.apiSession) {
+          persistBearer(j.apiSession);
+          const retryHeaders: HeadersInit = { ...mergedHeaders, Authorization: `Bearer ${j.apiSession}` };
+          res = await fetch(apiUrl(path, options), {
+            ...init,
+            credentials: "include",
+            headers: retryHeaders,
+          });
+        }
+      }
+    } catch {
+      /* fall through with original 401 handling */
+    }
+  }
   const text = await res.text();
   let data: unknown = null;
   try {
@@ -126,7 +163,9 @@ export async function hqDownloadBlob(
 ): Promise<void> {
   const dbName = resolveApiDbName();
   const bearer =
-    typeof window !== "undefined" ? window.sessionStorage.getItem(HQ_API_SESSION_STORAGE_KEY) : null;
+    typeof window !== "undefined"
+      ? window.sessionStorage.getItem(HQ_API_SESSION_STORAGE_KEY) || window.localStorage.getItem(HQ_API_LOCAL_STORAGE_KEY)
+      : null;
   const res = await fetch(apiUrl(path, options), {
     credentials: "include",
     headers: {

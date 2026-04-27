@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { hqFetch } from "@/lib/hq-client";
-import { HQ_API_SESSION_STORAGE_KEY } from "@/lib/hq-session-keys";
+import { HQ_API_LOCAL_STORAGE_KEY, HQ_API_SESSION_STORAGE_KEY } from "@/lib/hq-session-keys";
 
 const NAV = [
   { href: "/hq", label: "Dashboard", match: (p: string) => p === "/hq" },
@@ -58,6 +58,7 @@ export default function HqShell({ children }: { children: React.ReactNode }) {
     }
     if (typeof window !== "undefined") {
       window.localStorage.removeItem("hq_login_at");
+      window.localStorage.removeItem(HQ_API_LOCAL_STORAGE_KEY);
       window.sessionStorage.removeItem(HQ_API_SESSION_STORAGE_KEY);
     }
     await fetch("/api/hq/next-cookie/logout", { method: "POST", credentials: "include" });

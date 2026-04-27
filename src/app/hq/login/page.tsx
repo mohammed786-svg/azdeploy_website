@@ -5,15 +5,23 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { resolveApiDbName } from "@/lib/api-http";
 import { hqFetch } from "@/lib/hq-client";
-import { HQ_API_SESSION_STORAGE_KEY } from "@/lib/hq-session-keys";
+import { HQ_API_LOCAL_STORAGE_KEY, HQ_API_SESSION_STORAGE_KEY } from "@/lib/hq-session-keys";
 
 async function ensureHqApiSessionInStorage() {
   if (typeof window === "undefined") return;
   if (window.sessionStorage.getItem(HQ_API_SESSION_STORAGE_KEY)) return;
+  const localToken = window.localStorage.getItem(HQ_API_LOCAL_STORAGE_KEY);
+  if (localToken) {
+    window.sessionStorage.setItem(HQ_API_SESSION_STORAGE_KEY, localToken);
+    return;
+  }
   const r = await fetch("/api/hq/refresh-api-token", { credentials: "include" });
   if (!r.ok) return;
   const j = (await r.json()) as { apiSession?: string };
-  if (j.apiSession) window.sessionStorage.setItem(HQ_API_SESSION_STORAGE_KEY, j.apiSession);
+  if (j.apiSession) {
+    window.sessionStorage.setItem(HQ_API_SESSION_STORAGE_KEY, j.apiSession);
+    window.localStorage.setItem(HQ_API_LOCAL_STORAGE_KEY, j.apiSession);
+  }
 }
 
 function parseLoginError(data: unknown, fallback: string): string {
@@ -67,6 +75,7 @@ async function loginThroughDjangoProxy(email: string, password: string): Promise
   const inner = wrapped?.data;
   if (inner?.apiSession && typeof window !== "undefined") {
     window.sessionStorage.setItem(HQ_API_SESSION_STORAGE_KEY, inner.apiSession);
+    window.localStorage.setItem(HQ_API_LOCAL_STORAGE_KEY, inner.apiSession);
   }
 }
 
