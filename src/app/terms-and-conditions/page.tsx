@@ -43,7 +43,11 @@ export default function TermsAndConditionsPage() {
           <h2 className="text-lg font-semibold text-white">4. Academic and Placement Disclaimer</h2>
           <p>
             AZDeploy Academy provides training, mentoring, and career support. Job placement depends on student performance, attendance, discipline, technical
-            capability, and market conditions. No unconditional job guarantee is made unless explicitly documented in writing.
+            capability, and market conditions. No unconditional placement commitment is made unless explicitly documented in writing.
+          </p>
+          <p className="mt-2">
+            AZDeploy Academy has good industry connections and provides active placement assistance; however, placement support is offered after a student becomes
+            industry-ready by completing program learning outcomes, project work, assignments, interview preparation, and required academy guidelines.
           </p>
         </section>
 

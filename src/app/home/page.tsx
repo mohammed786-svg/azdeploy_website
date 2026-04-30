@@ -8,6 +8,7 @@ import OrbitStarsField from "@/components/OrbitStarsField";
 import RegistrationMarquee from "@/components/RegistrationMarquee";
 import { WhyAzDeploy } from "@/components/WhyAzDeploy";
 import AzcrashCourseMark from "@/components/AzcrashCourseMark";
+import AdmissionPopup from "@/components/AdmissionPopup";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -36,6 +37,7 @@ const STATS = [
 export default function HomePage() {
   return (
     <div className="min-h-screen hud-bg hud-grid">
+      <AdmissionPopup />
       <HudHeader />
 
       <main className="pt-20 sm:pt-24 pb-24 sm:pb-20 min-h-screen">
@@ -138,6 +140,9 @@ export default function HomePage() {
                 </p>
                 <p className="text-[10px] sm:text-xs md:text-base text-white/90 font-mono break-words">
                   THINK_ELITE_BUILD_REAL_CONQUER_PLACEMENTS
+                </p>
+                <p className="text-[10px] sm:text-xs text-[#00d4ff]/80 font-mono mt-2">
+                  ONLINE + OFFLINE TRAINING AVAILABLE
                 </p>
               </div>
             </div>

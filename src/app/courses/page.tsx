@@ -73,18 +73,46 @@ export default function CoursesPage() {
       <HudHeader />
       <main className="relative z-10 pt-16 pb-24 sm:pb-20">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
-          <p className="courses-fade-in text-center text-[10px] sm:text-xs font-mono text-[#94a3b8] tracking-[0.2em] uppercase mb-2">
-            Not just another course
-          </p>
-          <h1 className="courses-fade-in text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#00f5d4] text-center mb-2 leading-tight px-2">
-            Become a Real Software Engineer in 6 Months
-          </h1>
-          <p className="courses-fade-in courses-fade-in-delay-1 text-center text-lg sm:text-xl font-bold text-white/95 mb-1">
-            AZ DEPLOY ACADEMY
-          </p>
-          <p className="courses-fade-in courses-fade-in-delay-1 text-center text-sm font-mono text-[#ffd700] mb-4">
-            First time in Belagavi
-          </p>
+          <div className="courses-fade-in relative max-w-5xl mx-auto mb-8 rounded-2xl border border-[#00d4ff]/30 bg-gradient-to-br from-[#071321]/85 via-[#0b0b14]/90 to-[#1b1030]/80 p-4 sm:p-6 md:p-8 shadow-[0_0_60px_rgba(0,212,255,0.12)] transition-all duration-300 hover:border-[#00d4ff]/55 hover:shadow-[0_0_90px_rgba(0,212,255,0.22)]">
+            <div className="absolute top-0 right-3 sm:right-5 -translate-y-1/2 z-10 rounded-full border border-[#ffd700]/45 bg-[#0f1320] px-3 py-1 shadow-[0_0_18px_rgba(255,215,0,0.22)] transition-all duration-300 hover:border-[#ffd700]/75 hover:bg-[#1a1f30] hover:shadow-[0_0_28px_rgba(255,215,0,0.38)]">
+              <p className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.18em] text-[#fde68a]">
+                First time in Belagavi
+              </p>
+            </div>
+
+            <p className="text-center text-[10px] sm:text-xs font-mono text-[#94a3b8] tracking-[0.22em] uppercase mb-2">
+              Not just another course
+            </p>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#00f5d4] text-center leading-tight px-2">
+              Become a Real Software Engineer in 6 Months
+            </h1>
+            <p className="mt-2 text-center text-lg sm:text-xl font-bold text-white/95">AZ DEPLOY ACADEMY</p>
+
+            <div className="mt-5 max-w-4xl mx-auto rounded-xl border border-[#00d4ff]/35 bg-[#00d4ff]/10 px-4 sm:px-6 py-4 text-center">
+              <p className="text-xs sm:text-sm font-mono uppercase tracking-wider text-[#7dd3fc]">Dedicated Job Assistance</p>
+              <p className="mt-2 text-center uppercase tracking-[0.08em] leading-tight">
+                <span className="inline-block text-sm sm:text-base md:text-lg font-mono font-semibold text-[#ffe27a] drop-shadow-[0_0_12px_rgba(255,215,0,0.5)]">
+                  UP TO
+                </span>{" "}
+                <span className="inline-block text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#7df9ff] via-[#00d4ff] to-[#00f5d4] drop-shadow-[0_0_18px_rgba(0,212,255,0.85)]">
+                  12 LPA
+                </span>{" "}
+                <span className="inline-block text-base sm:text-xl md:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#ffe566] via-[#ffd700] to-[#cfa100] drop-shadow-[0_0_14px_rgba(255,215,0,0.65)]">
+                  JOB ASSISTANCE
+                </span>
+              </p>
+              <p className="mt-2 text-sm text-white/90 leading-relaxed">
+                AZDeploy Academy is not just a training institute. We help students become industry-ready by working on real-world production-level projects,
+                deployment, interview preparation, resume building, GitHub portfolio, and placement support.
+              </p>
+              <p className="mt-3 inline-flex items-center justify-center rounded-full border border-[#00f5d4]/45 bg-[#00f5d4]/10 px-3 py-1 text-xs sm:text-sm font-mono text-[#86ffe7]">
+                Online + Offline Training Services Available
+              </p>
+              <p className="mt-3 text-xs text-[#94a3b8] leading-relaxed">
+                Best software training academy in Belagavi · Python full stack course in Belagavi · AI training academy in Belagavi · Job placement software course · Real-world project training
+              </p>
+            </div>
+          </div>
           <div className="courses-fade-in courses-fade-in-delay-1 mb-8">
             <AzcrashCourseMark
               href="#batch-timings"
@@ -142,6 +170,33 @@ export default function CoursesPage() {
             <p className="text-center text-sm text-[#94a3b8] max-w-2xl mx-auto leading-relaxed">
               Six months of structured learning plus hands-on practice: you won&apos;t stop at tutorials — you&apos;ll design APIs, tune databases,
               put services behind Nginx, containerize with Docker, automate with CI/CD, and deploy to a real cloud VPS — the same moving parts you&apos;ll see on the job.
+            </p>
+          </div>
+
+          <div className="courses-fade-in courses-fade-in-delay-2 hud-corner-border max-w-4xl mx-auto p-5 sm:p-7 mb-10 border-[#ffd700]/35 bg-[#ffd700]/[0.06]">
+            <p className="text-[11px] font-mono uppercase tracking-[0.3em] text-[#ffd700] text-center">All-in-One Industry Ready Program</p>
+            <h3 className="text-center text-lg sm:text-2xl font-bold text-white mt-2">
+              AI + Frontend + Backend + Data Engineering + DevOps + Deployment
+            </h3>
+            <div className="mt-4 grid sm:grid-cols-2 gap-2 text-sm text-white/85">
+              <p>• Dedicated Job Assistance</p>
+              <p>• 6 Months Industry Ready Program</p>
+              <p>• Real Client-Level Projects</p>
+              <p>• Frontend: React / Next.js</p>
+              <p>• Backend: Python / Django / APIs</p>
+              <p>• Database: PostgreSQL</p>
+              <p>• DevOps: Ubuntu, Nginx, SSL, Deployment</p>
+              <p>• AI Tools & Automation</p>
+              <p>• Online + Offline Learning Modes</p>
+              <p className="sm:col-span-2">• GitHub + Resume + Interview Preparation</p>
+            </div>
+            <div className="mt-5 text-center">
+              <a href="/enquiry" className="inline-flex items-center justify-center rounded-lg border border-[#00d4ff]/55 bg-[#00d4ff]/20 px-6 py-3 text-sm font-semibold text-[#bff3ff] hover:bg-[#00d4ff]/30">
+                Enroll Now
+              </a>
+            </div>
+            <p className="mt-4 text-xs text-[#94a3b8] text-center leading-relaxed">
+              Job assistance is applicable for students who successfully complete the program, projects, assignments, interview preparation, and follow academy placement guidelines.
             </p>
           </div>
 
@@ -268,6 +323,9 @@ export default function CoursesPage() {
                     : "opacity-90 border border-[#00d4ff]/20"
                 }`}
               >
+                <p className="inline-flex text-[9px] font-mono uppercase tracking-wider px-2 py-1 rounded-full border border-[#00d4ff]/40 text-[#7dd3fc] bg-[#00d4ff]/10 mb-2">
+                  Job Assistance Support
+                </p>
                 <h3 className={`font-bold font-mono text-sm ${course.highlight ? "text-[#ffd700]" : "text-[#94a3b8]"}`}>
                   {course.name}
                 </h3>

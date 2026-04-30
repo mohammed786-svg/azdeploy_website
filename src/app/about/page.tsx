@@ -76,6 +76,10 @@ export default function AboutPage() {
             <p>
               Everyone depends on AI—but not everyone uses it well because they haven&apos;t built strong basics. We make our students <strong className="text-[#00d4ff]">think first, then use AI</strong> to boost their work. We make them capable of <strong className="text-[#00d4ff]">cracking interviews</strong> by teaching real concepts and industry secrets.
             </p>
+            <p>
+              We also have <strong className="text-[#00d4ff]">strong industry connections</strong> and hiring-network exposure, but our placement support is outcome-based: we first make you
+              <strong className="text-[#00d4ff]"> industry-ready with real project execution</strong>, communication, and interview discipline, and only then we position you for job opportunities.
+            </p>
           </div>
         </section>
 

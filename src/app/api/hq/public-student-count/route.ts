@@ -9,6 +9,19 @@ import {
   savePublicStudentCountSettings,
 } from "@/lib/public-student-count-rtdb";
 
+async function fetchUniqueVisitorsFromDjango(): Promise<number> {
+  const base = (process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:7003").replace(/\/$/, "");
+  try {
+    const res = await fetch(`${base}/api/v1/public/student-count`, { cache: "no-store" });
+    if (!res.ok) return 0;
+    const json = (await res.json()) as { uniqueVisitors?: unknown };
+    const n = Number(json?.uniqueVisitors ?? 0);
+    return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+  } catch {
+    return 0;
+  }
+}
+
 function okPayload(merged: PublicStudentCountSettings, today: string) {
   const payload = computePublicPayload(merged, today);
   return {
@@ -30,6 +43,7 @@ export async function GET(request: NextRequest) {
   const today = utcYmd();
   const defaultTotal = DEFAULT_BATCH_CAPACITY * 3;
   if (!isFirebaseAdminConfigured()) {
+    const uniqueVisitors = await fetchUniqueVisitorsFromDjango();
     return NextResponse.json({
       configured: false,
       today,
@@ -40,6 +54,7 @@ export async function GET(request: NextRequest) {
       totalSeatsRemaining: defaultTotal - 1,
       anchorDate: today,
       countAtAnchor: 1,
+      uniqueVisitors,
     });
   }
   try {
@@ -48,6 +63,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Failed to load settings" }, { status: 500 });
     }
     const payload = computePublicPayload(settings, today);
+    const uniqueVisitors = await fetchUniqueVisitorsFromDjango();
     return NextResponse.json({
       configured: true,
       today,
@@ -58,6 +74,7 @@ export async function GET(request: NextRequest) {
       totalSeatsRemaining: payload.totalSeatsRemaining,
       anchorDate: settings.anchorDate,
       countAtAnchor: settings.countAtAnchor,
+      uniqueVisitors,
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Unknown error";

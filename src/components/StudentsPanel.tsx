@@ -10,6 +10,7 @@ type PublicStudentCountResponse = {
   batchCapacity: number;
   totalAvailableSeats: number;
   totalSeatsRemaining: number;
+  uniqueVisitors?: number;
   fallback?: boolean;
   error?: string;
 };
@@ -22,10 +23,25 @@ export default function StudentsPanel() {
   useEffect(() => {
     let cancelled = false;
     const t0 = typeof performance !== 'undefined' ? performance.now() : 0;
+    const key = "az_visitor_device_id";
+    let deviceId = "";
+    try {
+      const existing = window.localStorage.getItem(key);
+      if (existing && existing.trim()) {
+        deviceId = existing.trim();
+      } else {
+        deviceId = (typeof crypto !== "undefined" && "randomUUID" in crypto)
+          ? crypto.randomUUID()
+          : `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+        window.localStorage.setItem(key, deviceId);
+      }
+    } catch {
+      deviceId = `${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    }
     (async () => {
       try {
         const base = resolveApiOrigin();
-        const url = `${base.replace(/\/$/, "")}/api/v1/public/student-count`;
+        const url = `${base.replace(/\/$/, "")}/api/v1/public/student-count?deviceId=${encodeURIComponent(deviceId)}`;
         const res = await fetch(url, { cache: 'no-store' });
         if (!res.ok) {
           throw new Error(normalizeHttpError(res.status));
@@ -109,6 +125,10 @@ export default function StudentsPanel() {
         <div className="flex justify-between gap-2">
           <span>BATCH_LEFT: {loading ? '—' : seatsLeft}</span>
           <span>LATENCY: {latencyMs != null ? `${latencyMs}ms` : '—'}</span>
+        </div>
+        <div className="flex justify-between gap-2">
+          <span>UNIQUE_DEVICES: {loading ? "—" : (data?.uniqueVisitors ?? 0)}</span>
+          <span>ONE_DEVICE=ONE</span>
         </div>
       </div>
     </div>

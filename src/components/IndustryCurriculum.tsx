@@ -236,7 +236,7 @@ export default function IndustryCurriculum() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <p className="text-lg sm:text-xl font-bold text-white font-mono tabular-nums">6 mo</p>
+            <p className="text-lg sm:text-xl font-bold text-white font-mono tabular-nums">6 Months</p>
             <p className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-[#64748b] mt-1">Structured program</p>
           </div>
           <div className="px-2 text-center">

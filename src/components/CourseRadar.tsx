@@ -1,14 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
-/** One ongoing program — pillars show where you lean; not separate courses. */
-const journeyPillars = [
-  { pillar: 'FULLSTACK_AI_DEVOPS', fit: 'CORE_TRACK' },
-  { pillar: 'DEVELOPMENT', fit: 'BUILD_FOCUS' },
-  { pillar: 'DEVOPS_SYSTEMS', fit: 'OPS_FOCUS' },
-  { pillar: 'AI_DATA', fit: 'AI_DATA_FOCUS' },
-];
+import LeadCaptureMiniForm from '@/components/LeadCaptureMiniForm';
 
 export default function CourseRadar() {
   const [angle, setAngle] = useState(0);
@@ -23,10 +16,10 @@ export default function CourseRadar() {
       <div className="flex flex-col gap-1 mb-3">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="hud-label text-white">[JOURNEY_RADAR]</span>
-          <span className="text-[10px] font-mono text-[#22c55e] tracking-wide">ONE_PROGRAM</span>
+          <span className="text-[10px] font-mono text-[#22c55e] tracking-wide">LIVE_TRACK</span>
         </div>
         <p className="text-[9px] sm:text-[10px] font-mono text-[#64748b] leading-snug">
-          Same ongoing track — pick the emphasis that fits how you want to grow. Not four separate courses.
+          Placement-focused radar showing your target outcome and training mode.
         </p>
       </div>
 
@@ -67,22 +60,30 @@ export default function CourseRadar() {
       </div>
 
       <div className="space-y-1.5 overflow-hidden mb-2">
-        <div className="flex justify-between gap-2 text-[9px] sm:text-[10px] font-mono text-[#64748b] uppercase tracking-wide border-b border-[#00d4ff]/15 pb-1">
-          <span>Pillar</span>
-          <span className="text-right">Your fit</span>
+        <div className="rounded border border-[#00d4ff]/25 bg-[#00d4ff]/10 px-2 py-1">
+          <p className="text-sm sm:text-base font-bold text-[#00f5d4] uppercase tracking-wide text-center">
+            UP TO 12 LPA JOB ASSISTANCE
+          </p>
         </div>
-        {journeyPillars.map((row) => (
-          <div key={row.pillar} className="flex justify-between gap-2 text-[10px] sm:text-xs min-w-0">
-            <span className="text-white/90 font-mono truncate" title={row.pillar}>
-              {row.pillar}
-            </span>
-            <span className="text-[#00d4ff] font-mono shrink-0">{row.fit}</span>
-          </div>
-        ))}
+        <div className="flex justify-between gap-2 text-[9px] sm:text-[10px] font-mono text-[#64748b] uppercase tracking-wide border-b border-[#00d4ff]/15 pb-1">
+          <span>Mode</span>
+          <span className="text-right">Outcome</span>
+        </div>
+        <div className="flex justify-between gap-2 text-[10px] sm:text-xs min-w-0">
+          <span className="text-white/90 font-mono truncate">ONLINE + OFFLINE</span>
+          <span className="text-[#00d4ff] font-mono shrink-0">JOB_READY</span>
+        </div>
+        <div className="flex justify-between gap-2 text-[10px] sm:text-xs min-w-0">
+          <span className="text-white/90 font-mono truncate">REAL_PROJECTS</span>
+          <span className="text-[#00d4ff] font-mono shrink-0">PORTFOLIO</span>
+        </div>
       </div>
       <p className="text-[9px] font-mono text-[#475569] leading-relaxed border-t border-[#00d4ff]/10 pt-2">
-        /// Mentors help you map projects to the path that matches your strengths.
+        /// Mentors align your projects, interview prep, and deployment practice toward high-package placement outcomes.
       </p>
+      <div className="mt-3">
+        <LeadCaptureMiniForm source="home_journey_radar_capture" stacked />
+      </div>
     </div>
   );
 }

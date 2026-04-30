@@ -29,6 +29,7 @@ type PublicStudentCounter = {
   totalSeatsRemaining: number;
   anchorDate: string;
   countAtAnchor: number;
+  uniqueVisitors?: number;
 };
 
 type PendingReminderSummary = {
@@ -209,6 +210,19 @@ export default function HqDashboardPage() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <div className="block rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#00d4ff]/12 to-transparent to-[#0a0a10]/90 p-5 sm:p-6">
+            <p className="text-[10px] font-mono uppercase tracking-wider text-[#64748b]">Homepage unique visitors</p>
+            <p className="mt-3 text-3xl sm:text-4xl font-bold text-[#7dd3fc] tabular-nums">
+              {counter?.uniqueVisitors ?? "—"}
+            </p>
+            <p className="mt-2 text-xs text-[#64748b]">One device counts as one unique visitor</p>
+            <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-mono text-[#00d4ff]/80">
+              Live from public API
+            </span>
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}>
           <Link
             href="/hq/onboarding"
             className="block rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#fbbf24]/15 to-transparent to-[#0a0a10]/90 p-5 sm:p-6 hover:border-[#00d4ff]/20 transition-colors group"
@@ -222,7 +236,7 @@ export default function HqDashboardPage() {
           </Link>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}>
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14 }}>
           <Link
             href="/hq/receipts"
             className="block rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#34d399]/15 to-transparent to-[#0a0a10]/90 p-5 sm:p-6 hover:border-[#00d4ff]/20 transition-colors group"
@@ -238,7 +252,7 @@ export default function HqDashboardPage() {
           </Link>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14 }}>
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}>
           <Link
             href="/hq/expenses"
             className="block rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#f87171]/12 to-transparent to-[#0a0a10]/90 p-5 sm:p-6 hover:border-[#f87171]/25 transition-colors group"
@@ -254,7 +268,7 @@ export default function HqDashboardPage() {
           </Link>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}>
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}>
           <button
             type="button"
             onClick={() => setBalanceOpen(true)}
@@ -429,6 +443,7 @@ export default function HqDashboardPage() {
               Today (UTC): {counter.today} · Anchor: {counter.anchorDate} · Base: {counter.countAtAnchor} · Shown:{" "}
               <span className="text-[#00d4ff]">{counter.displayCount}</span> · Batch left: {counter.seatsLeft} · Total
               seats: {counter.totalAvailableSeats} · Program left: {counter.totalSeatsRemaining}
+              {counter.uniqueVisitors != null ? ` · Unique devices: ${counter.uniqueVisitors}` : ""}
               {!counter.configured && " · Firebase not configured — counter fixed at 1 on site"}
             </p>
           )}

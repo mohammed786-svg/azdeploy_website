@@ -77,7 +77,7 @@ export default function AzcrashCourseMark({
               </span>
             </span>
             <span className="mt-2.5 text-[10px] sm:text-[11px] font-mono text-[#94a3b8] tracking-[0.15em] uppercase text-center group-hover:text-[#cbd5e1] transition-colors">
-              Full-stack · AI · DevOps · 6 mo
+              Full-stack · AI · DevOps · 6 Months
             </span>
             {footerHint !== false && (
               <span className="mt-2 text-[9px] font-mono text-[#00d4ff]/0 group-hover:text-[#00d4ff]/90 transition-all duration-300 uppercase tracking-widest">

@@ -64,6 +64,9 @@ export function WhyAzDeploy({ variant = "full", className = "" }: Props) {
     return (
       <div className={className}>
         <h2 className="text-sm font-bold text-[#00d4ff] font-mono mb-3 hud-label">[WHY_AZDEPLOY]</h2>
+        <p className="inline-flex items-center rounded-full border border-[#ffd700]/45 bg-[#ffd700]/10 px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider text-[#ffe27a] shadow-[0_0_16px_rgba(255,215,0,0.25)] mb-3">
+          UP TO 12 LPA PACKAGE
+        </p>
         <p className="text-[10px] font-mono text-[#64748b] mb-3 leading-relaxed">
           Job-ready training from people who ship — Belagavi, limited batches.
         </p>
@@ -102,6 +105,9 @@ export function WhyAzDeploy({ variant = "full", className = "" }: Props) {
         <div className="relative px-4 py-8 sm:px-8 sm:py-10 md:px-10 md:py-12">
           <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
             <p className="text-[10px] sm:text-xs font-mono text-[#00d4ff] tracking-[0.35em] uppercase mb-3">[WHY_AZDEPLOY]</p>
+            <p className="inline-flex items-center rounded-full border border-[#ffd700]/45 bg-[#ffd700]/10 px-3 py-1 text-[10px] sm:text-xs font-mono font-semibold uppercase tracking-[0.2em] text-[#ffe27a] shadow-[0_0_22px_rgba(255,215,0,0.28)] mb-3">
+              UP TO 12 LPA PACKAGE
+            </p>
             <h2
               id="why-azdeploy-heading"
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-[#e0f4ff] to-[#00d4ff] mb-4 leading-tight"
