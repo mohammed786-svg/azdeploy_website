@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import LeadCaptureMiniForm from "@/components/LeadCaptureMiniForm";
 
 const DISMISS_KEY = "az_admission_popup_dismissed_at";
 const HIDE_FOR_MS = 24 * 60 * 60 * 1000;
+const ADMISSION_DELAY_MS = 10_000;
 
 export default function AdmissionPopup() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function AdmissionPopup() {
   const [showAdmissionPrompt, setShowAdmissionPrompt] = useState(false);
   const [waitingToShowPrompt, setWaitingToShowPrompt] = useState(false);
   const [delayStarted, setDelayStarted] = useState(false);
+  const skipTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -25,19 +27,53 @@ export default function AdmissionPopup() {
     return () => window.clearTimeout(t);
   }, []);
 
-  function showMainPromptAfterDelay() {
+  useEffect(() => {
+    return () => {
+      if (skipTimerRef.current != null) {
+        window.clearTimeout(skipTimerRef.current);
+        skipTimerRef.current = null;
+      }
+    };
+  }, []);
+
+  /** After successful lead submit: keep modal open and show the thank-you line, then main admission. */
+  function showMainPromptAfterSubmit() {
     if (delayStarted) return;
     setDelayStarted(true);
     setWaitingToShowPrompt(true);
     window.setTimeout(() => {
       setShowAdmissionPrompt(true);
       setWaitingToShowPrompt(false);
-    }, 10000);
+      setDelayStarted(false);
+    }, ADMISSION_DELAY_MS);
+  }
+
+  /** Skip: close modal immediately (no waiting copy), reopen with main admission after delay. Does not set 24h dismiss. */
+  function skipForNow() {
+    if (delayStarted) return;
+    setDelayStarted(true);
+    if (skipTimerRef.current != null) {
+      window.clearTimeout(skipTimerRef.current);
+    }
+    setWaitingToShowPrompt(false);
+    setOpen(false);
+    skipTimerRef.current = window.setTimeout(() => {
+      skipTimerRef.current = null;
+      setShowAdmissionPrompt(true);
+      setOpen(true);
+      setDelayStarted(false);
+    }, ADMISSION_DELAY_MS);
   }
 
   function closePopup() {
+    if (skipTimerRef.current != null) {
+      window.clearTimeout(skipTimerRef.current);
+      skipTimerRef.current = null;
+    }
     window.localStorage.setItem(DISMISS_KEY, String(Date.now()));
     setOpen(false);
+    setDelayStarted(false);
+    setWaitingToShowPrompt(false);
   }
 
   if (!mounted || !open) return null;
@@ -64,7 +100,7 @@ export default function AdmissionPopup() {
               source="home_admission_prompt"
               compact
               onSubmitted={() => {
-                showMainPromptAfterDelay();
+                showMainPromptAfterSubmit();
               }}
             />
             {waitingToShowPrompt ? (
@@ -74,11 +110,11 @@ export default function AdmissionPopup() {
             ) : null}
             <button
               type="button"
-              onClick={showMainPromptAfterDelay}
+              onClick={skipForNow}
               className="text-xs text-[#94a3b8] hover:text-white underline"
               disabled={waitingToShowPrompt}
             >
-              {waitingToShowPrompt ? "Please wait..." : "Skip for now"}
+              Skip for now
             </button>
           </div>
         ) : null}
