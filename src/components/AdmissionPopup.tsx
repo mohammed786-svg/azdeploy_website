@@ -137,7 +137,7 @@ export default function AdmissionPopup() {
         </div>
 
         <h2 className="text-xl sm:text-2xl font-bold text-white">🚀 Admissions Open – AZDeploy Academy</h2>
-        <p className="mt-2 text-lg sm:text-xl font-semibold text-[#00f5d4]">Up to 12 LPA Job Assistance in 6 Months</p>
+        <p className="mt-2 text-lg sm:text-xl font-semibold text-[#00f5d4]">Industry-Ready Training with Job Assistance in 6 Months</p>
         <p className="mt-2 text-sm text-white/80 leading-relaxed">
           Master AI, Frontend, Backend, Data Engineering, Ubuntu, Nginx Reverse Proxy, Deployment, and real production projects under industry experts.
         </p>

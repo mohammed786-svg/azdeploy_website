@@ -6,6 +6,8 @@ import { ProgramRoadmap } from "@/components/CourseRoadmap";
 import IndustryCurriculum from "@/components/IndustryCurriculum";
 import AzcrashCourseMark from "@/components/AzcrashCourseMark";
 import { WhyAzDeploy } from "@/components/WhyAzDeploy";
+import SpecializedCourses from "@/components/SpecializedCourses";
+import EnrollNowButton from "@/components/EnrollNowButton";
 
 export const metadata: Metadata = {
   title: "Courses",
@@ -90,18 +92,7 @@ export default function CoursesPage() {
 
             <div className="mt-5 max-w-4xl mx-auto rounded-xl border border-[#00d4ff]/35 bg-[#00d4ff]/10 px-4 sm:px-6 py-4 text-center">
               <p className="text-xs sm:text-sm font-mono uppercase tracking-wider text-[#7dd3fc]">Dedicated Job Assistance</p>
-              <p className="mt-2 text-center uppercase tracking-[0.08em] leading-tight">
-                <span className="inline-block text-sm sm:text-base md:text-lg font-mono font-semibold text-[#ffe27a] drop-shadow-[0_0_12px_rgba(255,215,0,0.5)]">
-                  UP TO
-                </span>{" "}
-                <span className="inline-block text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[#7df9ff] via-[#00d4ff] to-[#00f5d4] drop-shadow-[0_0_18px_rgba(0,212,255,0.85)]">
-                  12 LPA
-                </span>{" "}
-                <span className="inline-block text-base sm:text-xl md:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#ffe566] via-[#ffd700] to-[#cfa100] drop-shadow-[0_0_14px_rgba(255,215,0,0.65)]">
-                  JOB ASSISTANCE
-                </span>
-              </p>
-              <p className="mt-2 text-sm text-white/90 leading-relaxed">
+              <p className="mt-2 text-sm sm:text-base text-white/90 leading-relaxed">
                 AZDeploy Academy is not just a training institute. We help students become industry-ready by working on real-world production-level projects,
                 deployment, interview preparation, resume building, GitHub portfolio, and placement support.
               </p>
@@ -191,14 +182,18 @@ export default function CoursesPage() {
               <p className="sm:col-span-2">• GitHub + Resume + Interview Preparation</p>
             </div>
             <div className="mt-5 text-center">
-              <a href="/enquiry" className="inline-flex items-center justify-center rounded-lg border border-[#00d4ff]/55 bg-[#00d4ff]/20 px-6 py-3 text-sm font-semibold text-[#bff3ff] hover:bg-[#00d4ff]/30">
-                Enroll Now
-              </a>
+              <EnrollNowButton
+                source="courses_all_in_one_program"
+                modalTitle="Enroll — All-in-One Industry Ready Program"
+                modalSubtitle="Share your name and mobile number. Email is optional. Our team will guide you on batch timing and admission."
+              />
             </div>
             <p className="mt-4 text-xs text-[#94a3b8] text-center leading-relaxed">
               Job assistance is applicable for students who successfully complete the program, projects, assignments, interview preparation, and follow academy placement guidelines.
             </p>
           </div>
+
+          <SpecializedCourses />
 
           <IndustryCurriculum />
 

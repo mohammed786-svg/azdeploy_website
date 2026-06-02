@@ -62,7 +62,7 @@ export default function CourseRadar() {
       <div className="space-y-1.5 overflow-hidden mb-2">
         <div className="rounded border border-[#00d4ff]/25 bg-[#00d4ff]/10 px-2 py-1">
           <p className="text-sm sm:text-base font-bold text-[#00f5d4] uppercase tracking-wide text-center">
-            UP TO 12 LPA JOB ASSISTANCE
+            DEDICATED JOB ASSISTANCE
           </p>
         </div>
         <div className="flex justify-between gap-2 text-[9px] sm:text-[10px] font-mono text-[#64748b] uppercase tracking-wide border-b border-[#00d4ff]/15 pb-1">

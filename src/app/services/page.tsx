@@ -6,7 +6,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "AZDeploy Academy services: up to 12 LPA job assistance track, custom software solutions from idea to deployment, customized ERP for schools/colleges/universities, hospital management systems, and enterprise web applications.",
+    "AZDeploy Academy services: industry-ready training with job assistance, custom software solutions from idea to deployment, customized ERP for schools/colleges/universities, hospital management systems, and enterprise web applications.",
 };
 
 const OFFICE_ADDRESS = {
@@ -17,7 +17,7 @@ const OFFICE_ADDRESS = {
 export default function ServicesPage() {
   const trainingServices = [
     {
-      title: "UPTO_12_LPA_JOB_ASSISTANCE",
+      title: "JOB_ASSISTANCE_TRACK",
       desc: "Structured 6-month industry-ready training with placement support, interview practice, project reviews, and portfolio guidance. We focus on employability outcomes, not just course completion.",
       points: ["Placement-oriented curriculum", "Interview preparation", "Resume + GitHub portfolio building", "Dedicated placement support roadmap"],
     },
@@ -74,7 +74,7 @@ export default function ServicesPage() {
           </p>
 
           <div className="max-w-5xl mx-auto mb-10 rounded-2xl border border-[#00d4ff]/35 bg-[#00d4ff]/10 p-5 sm:p-7 text-center">
-            <p className="text-xs sm:text-sm font-mono uppercase tracking-wider text-[#7dd3fc]">Up to 12 LPA Job Assistance</p>
+            <p className="text-xs sm:text-sm font-mono uppercase tracking-wider text-[#7dd3fc]">Dedicated Job Assistance</p>
             <p className="mt-2 text-sm text-white/85 leading-relaxed">
               AZDeploy Academy delivers career-focused training with project execution, deployment experience, interview preparation, resume building, GitHub portfolio support, and guided placement assistance.
             </p>

@@ -480,6 +480,131 @@ label[for],
   }
 }
 
+/* Course overview roadmap — modal step entrance */
+.roadmap-step-enter {
+  opacity: 0;
+  animation: roadmap-step-in 0.55s ease-out forwards;
+}
+
+@keyframes roadmap-step-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.roadmap-flow-line {
+  animation: roadmap-flow-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes roadmap-flow-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scaleX(0.92);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scaleX(1);
+  }
+}
+
+.roadmap-icon-float {
+  animation: roadmap-icon-float 3.2s ease-in-out infinite;
+}
+
+@keyframes roadmap-icon-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.roadmap-panel {
+  animation: roadmap-panel-in 0.65s ease-out forwards;
+}
+
+@keyframes roadmap-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.roadmap-grid-overlay {
+  background-image:
+    linear-gradient(rgba(0, 212, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.roadmap-icon-ring {
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.roadmap-icon-ring:hover {
+  transform: scale(1.08) translateY(-2px);
+  border-color: rgba(0, 212, 255, 0.45);
+  box-shadow: 0 0 24px rgba(0, 212, 255, 0.25);
+}
+
+.roadmap-dash-flow {
+  animation: roadmap-dash-flow 2.8s linear infinite;
+}
+
+@keyframes roadmap-dash-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+.roadmap-vertical-line {
+  background: linear-gradient(180deg, transparent, rgba(0, 212, 255, 0.5) 15%, rgba(0, 245, 212, 0.7) 50%, rgba(255, 215, 0, 0.5) 85%, transparent);
+  animation: roadmap-vertical-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes roadmap-vertical-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.roadmap-step-card {
+  backdrop-filter: blur(8px);
+}
+
+.roadmap-goal-pulse {
+  animation: roadmap-goal-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes roadmap-goal-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 16px rgba(0, 245, 212, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(0, 245, 212, 0.45);
+  }
+}
+
 /* About page: staggered entrance */
 .about-enter {
   opacity: 0;
