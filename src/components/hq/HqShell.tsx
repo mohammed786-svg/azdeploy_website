@@ -22,6 +22,7 @@ const NAV = [
   { href: "/hq/reports", label: "Reports", match: (p: string) => p.startsWith("/hq/reports") },
   { href: "/hq/chat", label: "Chat inbox", match: (p: string) => p.startsWith("/hq/chat") },
   { href: "/hq/blog", label: "Blog", match: (p: string) => p.startsWith("/hq/blog") },
+  { href: "/hq/profile", label: "My profile", match: (p: string) => p.startsWith("/hq/profile") },
 ];
 
 function NavIcon({ active }: { active: boolean }) {
