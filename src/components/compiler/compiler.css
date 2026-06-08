@@ -1,0 +1,46 @@
+/* Default system cursor inside the IDE (overrides site-wide sword cursor). */
+.compiler-ide,
+.compiler-ide * {
+  cursor: auto !important;
+}
+
+.compiler-ide a,
+.compiler-ide button,
+.compiler-ide [role="button"],
+.compiler-ide label,
+.compiler-ide summary {
+  cursor: pointer !important;
+}
+
+.compiler-ide input,
+.compiler-ide textarea,
+.compiler-ide select,
+.compiler-ide [contenteditable="true"],
+.compiler-ide .monaco-editor,
+.compiler-ide .monaco-editor * {
+  cursor: text !important;
+}
+
+.compiler-ide .tree-drag-over {
+  outline: 1px solid #4fc1ff;
+  outline-offset: -1px;
+  background: rgba(79, 193, 255, 0.12);
+}
+
+.compiler-editor-wrap .monaco-editor,
+.compiler-editor-wrap .monaco-editor-background,
+.compiler-editor-wrap .margin {
+  background-color: transparent !important;
+}
+
+.compiler-editor-wrap .monaco-editor .view-overlays .current-line {
+  border: none;
+}
+
+html[data-compiler-theme="dark"] .compiler-editor-wrap {
+  background: #1e1e1e;
+}
+
+html[data-compiler-theme="light"] .compiler-editor-wrap {
+  background: #ffffff;
+}

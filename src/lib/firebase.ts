@@ -16,7 +16,7 @@ function firebaseConfig() {
 
 export function isFirebaseConfigured(): boolean {
   const c = firebaseConfig();
-  return Boolean(c.apiKey && c.databaseURL && c.projectId && c.appId);
+  return Boolean(c.apiKey && c.authDomain && c.databaseURL && c.projectId && c.appId);
 }
 
 /** Call only from client components. */

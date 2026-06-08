@@ -23,6 +23,7 @@ const NAV = [
   { href: "/hq/chat", label: "Chat inbox", match: (p: string) => p.startsWith("/hq/chat") },
   { href: "/hq/blog", label: "Blog", match: (p: string) => p.startsWith("/hq/blog") },
   { href: "/hq/profile", label: "My profile", match: (p: string) => p.startsWith("/hq/profile") },
+  { href: "/hq/compiler", label: "Academy compiler", match: (p: string) => p.startsWith("/hq/compiler") },
 ];
 
 function NavIcon({ active }: { active: boolean }) {
