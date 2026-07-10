@@ -158,6 +158,7 @@ export default function InvoicePrintPage() {
               <p className="mt-2 text-xs text-neutral-700">
                 <span className="text-neutral-500">Contact:</span> {INVOICE_ORG.phones.join(" · ")}
               </p>
+              <p className="text-xs text-neutral-700">{INVOICE_ORG.website}</p>
             </div>
           </div>
           <div className="text-left sm:text-right text-sm shrink-0 border border-neutral-200 rounded p-3 bg-neutral-50 print:bg-white">
@@ -337,7 +338,7 @@ export default function InvoicePrintPage() {
 
       <footer className="pt-3 mt-3 border-t border-neutral-200 text-center text-[9px] text-neutral-500 leading-relaxed">
         <p>
-          Computer-generated document · SAC {sac} · {INVOICE_ORG.phones.join(" · ")}
+          Computer-generated document · SAC {sac} · {INVOICE_ORG.phones.join(" · ")} · {INVOICE_ORG.website}
         </p>
       </footer>
     </A4PrintShell>

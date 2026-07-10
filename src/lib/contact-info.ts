@@ -14,6 +14,5 @@ export function academyGoogleMapsUrl(): string {
 
 export const ACADEMY_CONTACT_NUMBERS = [
   { display: "+91 82965 65587", raw: "918296565587" },
-  { display: "+91 89712 44513", raw: "918971244513" },
   { display: "+91 73383 60607", raw: "917338360607" },
 ] as const;

@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { hqFetch } from "@/lib/hq-client";
 import { INVOICE_ORG } from "@/lib/invoice-org";
 import A4PrintShell from "@/components/hq/A4PrintShell";
+import EditReceiptBar from "@/components/hq/EditReceiptBar";
 import { PrintLogoBlack } from "@/components/hq/PrintLogoBlack";
 import { sanitizeForPdfFilename } from "@/lib/hq-print-pdf-title";
 
@@ -74,6 +75,23 @@ export default function ReceiptPrintPage() {
 
   return (
     <A4PrintShell>
+      <EditReceiptBar
+        apiPath={`/api/hq/receipts/${id}`}
+        receivedAt={item.receivedAt}
+        amount={item.amount}
+        currency={item.currency}
+        onSaved={(patch) =>
+          setItem((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  ...(patch.receivedAt != null ? { receivedAt: patch.receivedAt } : {}),
+                  ...(patch.amount != null ? { amount: patch.amount } : {}),
+                }
+              : prev
+          )
+        }
+      />
       <div className="print:hidden mb-4 flex flex-wrap gap-2 text-sm">
         <Link href="/hq/receipts" className="text-blue-700 underline">
           ← Receipts
@@ -103,6 +121,7 @@ export default function ReceiptPrintPage() {
           <p className="pt-1">
             <span className="text-neutral-500">Contact:</span> {INVOICE_ORG.phones.join(" · ")}
           </p>
+          <p>{INVOICE_ORG.website}</p>
         </div>
       </header>
 
@@ -157,6 +176,7 @@ export default function ReceiptPrintPage() {
       <footer className="pt-8 border-t border-neutral-200 text-center text-[9px] text-neutral-500 leading-relaxed space-y-1">
         <p>{INVOICE_ORG.legalName}</p>
         <p>{INVOICE_ORG.phones.join(" · ")}</p>
+        <p>{INVOICE_ORG.website}</p>
         <p className="text-neutral-400">Computer-generated receipt</p>
       </footer>
     </A4PrintShell>

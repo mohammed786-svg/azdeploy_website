@@ -348,9 +348,6 @@ export default function CoursesPage() {
               <a href="https://wa.me/918296565587" target="_blank" rel="noopener noreferrer" className="text-[#00d4ff] link-underline font-mono">
                 +91 82965 65587
               </a>
-              <a href="https://wa.me/918971244513" target="_blank" rel="noopener noreferrer" className="text-[#00d4ff] link-underline font-mono">
-                +91 89712 44513
-              </a>
               <a href="https://wa.me/917338360607" target="_blank" rel="noopener noreferrer" className="text-[#00d4ff] link-underline font-mono">
                 +91 73383 60607
               </a>

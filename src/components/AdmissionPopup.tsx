@@ -190,7 +190,6 @@ export default function AdmissionPopup() {
 
         <div className="mt-4 text-xs font-mono text-[#94a3b8] flex flex-wrap gap-x-4 gap-y-1">
           <a href="tel:+918296565587" className="hover:text-[#7dd3fc]">+91 8296565587</a>
-          <a href="tel:+918971244513" className="hover:text-[#7dd3fc]">+91 8971244513</a>
         </div>
           </>
         ) : null}

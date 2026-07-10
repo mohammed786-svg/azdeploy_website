@@ -6,7 +6,7 @@ import { ACADEMY_CONTACT_NUMBERS, ACADEMY_OFFICE, academyGoogleMapsUrl } from "@
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact AZDeploy Academy. Office: Plot 516, Ramteerth Nagar, Belagavi. WhatsApp & call: +91 82965 65587, +91 89712 44513, +91 73383 60607.",
+    "Contact AZDeploy Academy. Office: Plot 516, Ramteerth Nagar, Belagavi. WhatsApp & call: +91 82965 65587, +91 73383 60607.",
 };
 
 const OFFICE = ACADEMY_OFFICE;
