@@ -19,8 +19,8 @@ type Receipt = {
   purpose: string;
   paymentMethod?: string;
   notes?: string;
-  receivedAt?: number;
-  createdAt?: number;
+  receivedAt?: string | number;
+  createdAt?: string | number;
 };
 
 export default function ReceiptPrintPage() {
