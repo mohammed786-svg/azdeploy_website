@@ -32,20 +32,20 @@ function patchReactTranslateConflicts() {
   proto.__azGtPatched = true;
 
   const originalRemoveChild = proto.removeChild;
-  proto.removeChild = function (child: Node) {
+  proto.removeChild = function <T extends Node>(child: T): T {
     if (child.parentNode !== this) return child;
     try {
-      return originalRemoveChild.call(this, child);
+      return originalRemoveChild.call(this, child) as T;
     } catch {
       return child;
     }
   };
 
   const originalInsertBefore = proto.insertBefore;
-  proto.insertBefore = function (newNode: Node, ref: Node | null) {
+  proto.insertBefore = function <T extends Node>(newNode: T, ref: Node | null): T {
     if (ref && ref.parentNode !== this) return newNode;
     try {
-      return originalInsertBefore.call(this, newNode, ref);
+      return originalInsertBefore.call(this, newNode, ref) as T;
     } catch {
       return newNode;
     }
