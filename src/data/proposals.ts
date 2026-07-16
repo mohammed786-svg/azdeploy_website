@@ -466,9 +466,9 @@ export const samruddhiMedicalProposal: Proposal = {
   template: "medical-college",
   title: "Custom Medical College ERP Proposal",
   subtitle: "Prepared exclusively for Samruddhi College of Nursing",
-  cost: "₹45",
+  cost: "₹60",
   gstNote: "+ 18% GST",
-  timeline: "45 Days",
+  timeline: "45–60 Working Days",
   objective:
     "Build a fully customized ERP ecosystem for Samruddhi College of Nursing to automate operations, reduce paperwork, and give management complete visibility through one unified platform.",
   objectiveDetails: [],
@@ -489,7 +489,7 @@ export const samruddhiMedicalProposal: Proposal = {
     "We build fully customized ERP ecosystems designed specifically around your institution's workflow.",
     "Every module can be customized according to your existing processes at no additional customization cost.",
     "Our objective is to reduce paperwork, automate daily operations, improve communication, and provide complete visibility to management through one unified platform.",
-    "Entire implementation will be completed within 45 days from the date of one month plan upfront payment and final feature discussion.",
+    "Entire implementation will be completed within 45–60 working days from the date of one month plan upfront payment and final feature discussion.",
   ],
   solutionItems: [
     "Student Management",
@@ -530,7 +530,7 @@ export const samruddhiMedicalProposal: Proposal = {
   pricingPlans: [
     {
       title: "Per Student Plan",
-      price: "₹45",
+      price: "₹60",
       originalPrice: "₹65",
       cadence: "Per Student / Month",
       gstNote: "+18% GST",
@@ -553,7 +553,7 @@ export const samruddhiMedicalProposal: Proposal = {
       highlighted: true,
       badge: "MOST RECOMMENDED",
       offerNote:
-        "We normally charge ₹65 per student/month for a 500-student institution, but we are offering ₹45 specially for your institution.",
+        "We normally charge ₹65 per student/month for a 500-student institution, but we are offering ₹60 specially for your institution.",
     },
     {
       title: "Unlimited Institutional Plan",

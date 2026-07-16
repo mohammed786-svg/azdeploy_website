@@ -201,15 +201,21 @@ export function MedicalCollegeProposalDocument({
                       {plan.title}
                     </CardTitle>
                     <div>
+                      <div className="flex flex-wrap items-end gap-3">
+                        {plan.originalPrice ? (
+                          <p className="text-2xl font-bold text-muted-foreground line-through decoration-2">
+                            {plan.originalPrice}
+                          </p>
+                        ) : null}
+                        <p className="text-4xl font-extrabold tracking-tight text-[#00d4ff]">
+                          {plan.price}
+                        </p>
+                      </div>
                       {plan.originalPrice ? (
-                        <p className="text-sm font-medium text-muted-foreground">
-                          Standard pricing for a 500-student institution:{" "}
-                          <span className="line-through">{plan.originalPrice}</span>
+                        <p className="mt-1 text-xs font-medium text-muted-foreground">
+                          Standard rate for a 500-student institution
                         </p>
                       ) : null}
-                      <p className="text-4xl font-extrabold tracking-tight text-[#00d4ff]">
-                        {plan.price}
-                      </p>
                       <p className="mt-1 text-sm font-medium text-foreground/80">{plan.cadence}</p>
                       <p className="text-sm font-semibold text-[#00d4ff]">{plan.gstNote}</p>
                     </div>
@@ -362,7 +368,7 @@ export function MedicalCollegeProposalDocument({
             </div>
             <div className="mt-5 rounded-2xl bg-[#00d4ff]/10 p-4">
               <p className="text-sm font-medium leading-relaxed text-foreground/90 sm:text-base">
-                Complete delivery within 45 Days from the date of one month plan
+                Complete delivery within {proposal.timeline} from the date of one month plan
                 upfront payment and final feature approval.
               </p>
             </div>
