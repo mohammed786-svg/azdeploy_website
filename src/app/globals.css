@@ -16,6 +16,71 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-space-grotesk), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
+  /* Proposal pages — AZDeploy HUD theme */
+  --color-brand-gold: #00d4ff;
+  --color-brand-gold-foreground: #0a0a0c;
+  --color-muted: #12121a;
+  --color-muted-foreground: #94a3b8;
+  --color-border: rgba(0, 212, 255, 0.2);
+  --color-card: #0e0e14;
+  --color-card-foreground: #e8f4f8;
+  --color-primary: #00d4ff;
+  --color-primary-foreground: #0a0a0c;
+  --color-secondary: rgba(0, 212, 255, 0.12);
+  --color-secondary-foreground: #e8f4f8;
+  --color-destructive: #f87171;
+  --color-ring: #00d4ff;
+  --color-input: rgba(0, 212, 255, 0.25);
+}
+
+/* Proposal shell matches main site HUD */
+.proposal-shell {
+  --background: #0a0a0c;
+  --foreground: #e8f4f8;
+  --color-background: #0a0a0c;
+  --color-foreground: #e8f4f8;
+  --color-brand-gold: #00d4ff;
+  --color-brand-gold-foreground: #0a0a0c;
+  --color-muted: #12121a;
+  --color-muted-foreground: #94a3b8;
+  --color-border: rgba(0, 212, 255, 0.2);
+  --color-card: #0e0e14;
+  --color-card-foreground: #e8f4f8;
+  --color-primary: #00d4ff;
+  --color-primary-foreground: #0a0a0c;
+  background: #0a0a0c;
+  color: #e8f4f8;
+}
+
+.proposal-shell .proposal-document {
+  background: #0a0a0c !important;
+  color: #e8f4f8 !important;
+}
+
+.proposal-shell .bg-white,
+.proposal-shell .bg-white\/85,
+.proposal-shell .bg-white\/80,
+.proposal-shell .bg-white\/90 {
+  background-color: rgba(14, 14, 20, 0.92) !important;
+}
+
+.proposal-shell .border-white\/60,
+.proposal-shell .border-white\/70 {
+  border-color: rgba(0, 212, 255, 0.2) !important;
+}
+
+.proposal-shell .via-white,
+.proposal-shell .to-white,
+.proposal-shell .from-white {
+  --tw-gradient-from: #0e0e14 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: #0a0a0c var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #0e0e14, var(--tw-gradient-to) !important;
+}
+
+.proposal-document-panel {
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: rgba(10, 10, 14, 0.85);
+  box-shadow: 0 0 40px rgba(0, 212, 255, 0.06);
 }
 
 * {
@@ -1498,4 +1563,52 @@ label[for],
   .azcrash-mark:hover {
     transform: none;
   }
+}
+
+/* —— Google Website Translator —— */
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+#goog-gt-tt,
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+}
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+body {
+  top: 0 !important;
+}
+.skiptranslate iframe,
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+}
+.google-translate-wrap .goog-te-gadget {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif !important;
+  font-size: 0 !important;
+  color: transparent !important;
+}
+.google-translate-wrap .goog-te-gadget > span {
+  display: none !important;
+}
+.google-translate-wrap .goog-te-combo {
+  font-size: 11px !important;
+  font-family: var(--font-jetbrains-mono), monospace !important;
+  color: rgba(232, 244, 248, 0.75) !important;
+  background: rgba(10, 10, 18, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 6px !important;
+  padding: 4px 6px !important;
+  max-width: 160px !important;
+  outline: none !important;
+}
+.google-translate-wrap .goog-te-combo:focus {
+  border-color: rgba(0, 212, 255, 0.45) !important;
+  box-shadow: none;
+}
+.google-translate-wrap .goog-logo-link,
+.google-translate-wrap .goog-te-gadget .goog-te-combo + span {
+  display: none !important;
 }

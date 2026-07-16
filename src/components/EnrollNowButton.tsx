@@ -9,6 +9,7 @@ type Props = {
   className?: string;
   modalTitle?: string;
   modalSubtitle?: string;
+  whatsappMessage?: string;
 };
 
 export default function EnrollNowButton({
@@ -17,6 +18,7 @@ export default function EnrollNowButton({
   className = "inline-flex items-center justify-center rounded-lg border border-[#00d4ff]/55 bg-[#00d4ff]/20 px-6 py-3 text-sm font-semibold text-[#bff3ff] hover:bg-[#00d4ff]/30 transition-colors",
   modalTitle,
   modalSubtitle,
+  whatsappMessage,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -31,6 +33,7 @@ export default function EnrollNowButton({
         source={source}
         title={modalTitle}
         subtitle={modalSubtitle}
+        whatsappMessage={whatsappMessage}
       />
     </>
   );

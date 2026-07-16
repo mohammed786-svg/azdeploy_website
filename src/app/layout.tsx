@@ -5,6 +5,7 @@ import { getSiteUrl } from "@/lib/site-url";
 import FooterVisibility from "@/components/FooterVisibility";
 import GlobalChatWidget from "@/components/chat/GlobalChatWidget";
 import SeoLocalBusinessJsonLd from "@/components/SeoLocalBusinessJsonLd";
+import GoogleTranslate from "@/components/GoogleTranslate";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -25,18 +26,21 @@ export const metadata: Metadata = {
     template: "%s | AZDeploy Academy",
   },
   description:
-    "AZDeploy Academy in Belagavi (Belgaum): software training institute for Full Stack, AI, and DevOps. Job-ready program for students from Belagavi, Hubli, Dharwad, and Kolhapur.",
+    "AZDeploy Academy — best software training academy in Belagavi (Belgaum) for Full Stack, AI & DevOps. Serving Belagavi, Hubli, Hubballi, Dharwad, and Kolhapur with job-ready mentorship.",
   keywords: [
     "AZDeploy",
     "best software institute in belagavi",
     "best software training institute in belgaum",
     "best academy in belagavi",
+    "best academy in belgaum",
     "software institute near belagavi",
     "software training near me",
     "full stack training belagavi",
     "python django institute belagavi",
     "devops institute belagavi",
+    "ai training belagavi",
     "software institute hubli",
+    "software institute hubballi",
     "software institute dharwad",
     "software institute kolhapur",
     "software institute kholapur",
@@ -57,7 +61,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AZDeploy Academy | Become a Real Software Engineer",
     description:
-      "Belagavi software institute for Full Stack + AI + DevOps. Job-ready training for students near Belagavi, Belgaum, Hubli, Dharwad, and Kolhapur.",
+      "Best software training academy in Belagavi (Belgaum) — Full Stack + AI + DevOps for Belagavi, Hubli, Hubballi, Dharwad, and Kolhapur.",
     type: "website",
     url: getSiteUrl(),
     siteName: "AZ Deploy Academy",
@@ -89,6 +93,7 @@ export default function RootLayout({
       <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased overflow-x-hidden min-w-0`}>
         <SeoLocalBusinessJsonLd />
         {children}
+        <GoogleTranslate />
         <GlobalChatWidget />
         <FooterVisibility />
       </body>

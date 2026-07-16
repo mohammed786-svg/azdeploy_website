@@ -8,17 +8,26 @@ import { getSiteUrl } from "@/lib/site-url";
 export const revalidate = 120;
 
 const BLOG_INDEX_DESC =
-  "Insights on Python Full Stack, Android, DevOps, and job-ready IT training from AZ Deploy Academy trainers.";
+  "AZDeploy Academy blog: best software training in Belagavi & Belgaum, Full Stack, AI, DevOps, Hubli, Dharwad & Kolhapur guides — short-tail and long-tail career insights.";
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Blog | Software Training Belagavi Tips & Guides",
   description: BLOG_INDEX_DESC,
+  keywords: [
+    "best software training institute in belagavi",
+    "full stack developer course",
+    "python full stack belagavi",
+    "devops course belagavi",
+    "software training hubli",
+    "software institute kolhapur",
+    "job oriented software course",
+  ],
   alternates: {
     canonical: `${getSiteUrl()}/blog`,
   },
   openGraph: {
-    title: "Blog | AZ Deploy Academy",
-    description: "Articles on full-stack development, Android, and building a career in IT.",
+    title: "Blog | AZ Deploy Academy — Belagavi Software Training",
+    description: BLOG_INDEX_DESC,
     url: `${getSiteUrl()}/blog`,
     type: "website",
   },
@@ -61,8 +70,8 @@ export default async function BlogIndexPage() {
             Academy Blog
           </h1>
           <p className="mt-4 text-center text-sm sm:text-base text-[#94a3b8] max-w-2xl mx-auto leading-relaxed">
-            Practical notes on Python, Django, React, Android, Linux, and becoming job-ready—written by trainers who ship
-            real products.
+            Guides for Belagavi / Belgaum students and learners from Hubli, Dharwad &amp; Kolhapur — Full Stack, AI, DevOps,
+            and how to become job-ready. Add more articles anytime from the HQ blog dashboard.
           </p>
         </section>
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import HudHeader from "@/components/HudHeader";
 import FloatingActions from "@/components/FloatingActions";
 import CoursesFloatingIcons from "@/components/CoursesFloatingIcons";
@@ -8,20 +9,18 @@ import AzcrashCourseMark from "@/components/AzcrashCourseMark";
 import { WhyAzDeploy } from "@/components/WhyAzDeploy";
 import SpecializedCourses from "@/components/SpecializedCourses";
 import EnrollNowButton from "@/components/EnrollNowButton";
+import { CITY_LANDINGS, cityLandingUrl } from "@/lib/city-landing";
 
 export const metadata: Metadata = {
-  title: "Courses",
+  title: "Courses | Best Software Training in Belagavi",
   description:
-    "AZ Deploy Academy Belagavi — AZCrash 1.0: industry-ready curriculum (Python, SQL, Django, React, DevOps, AWS, AI & Gen AI). One 6-month Full-Stack + AI + DevOps program. Batch timings: Morning 9–11, Afternoon 3–5, Evening 6–8.",
+    "AZ Deploy Academy Belagavi — best software training academy for Full-Stack + AI + DevOps. Students from Belagavi, Belgaum, Hubli, Dharwad & Kolhapur. Batches: Morning 9–11, Afternoon 3–5, Evening 6–8.",
 };
 
 const OFFICE_ADDRESS = {
   addressLine1: "Plot no. 516, Main Road, Ramteerth Nagar, Lakshmipuri Layout, Auto Nagar, Belagavi, Karnataka 590016",
   addressLine2: "VFF GROUP Building — First Floor",
 };
-
-const WHATSAPP_INQUIRY =
-  "https://wa.me/918296565587?text=Hi,%20I%20am%20interested%20in%20the%20Full-Stack%20%2B%20AI%20%2B%20DevOps%20program";
 
 const BATCH_SLOTS = [
   {
@@ -185,7 +184,7 @@ export default function CoursesPage() {
               <EnrollNowButton
                 source="courses_all_in_one_program"
                 modalTitle="Enroll — All-in-One Industry Ready Program"
-                modalSubtitle="Share your name and mobile number. Email is optional. Our team will guide you on batch timing and admission."
+                modalSubtitle="Submit the form for a callback, or open WhatsApp with a ready enrollment message."
               />
             </div>
             <p className="mt-4 text-xs text-[#94a3b8] text-center leading-relaxed">
@@ -278,16 +277,14 @@ export default function CoursesPage() {
                   <a href="#batch-timings" className="text-[#ffd700] underline underline-offset-2 hover:text-[#ffe566]">
                     batch timing
                   </a>{" "}
-                  (morning / afternoon / evening) on WhatsApp.
+                  (morning / afternoon / evening).
                 </p>
-                <a
-                  href={WHATSAPP_INQUIRY}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#00d4ff]/20 border border-[#00d4ff]/50 text-[#00d4ff] font-medium hover:bg-[#00d4ff]/30 transition-colors"
-                >
-                  Enquiry — WhatsApp
-                </a>
+                <EnrollNowButton
+                  source="courses_enrollment_card"
+                  label="Enroll / Enquire"
+                  modalTitle="Enroll — Full-Stack + AI + DevOps"
+                  modalSubtitle="Submit the form for a callback, or open WhatsApp with a ready enrollment message."
+                />
               </div>
             </div>
           </div>
@@ -328,6 +325,28 @@ export default function CoursesPage() {
                 <p className="text-[#22c55e]/90 text-[10px] sm:text-xs font-mono mt-3 tracking-wide">SAME_PROGRAM · PICK_EMPHASIS</p>
               </div>
             ))}
+          </div>
+
+          {/* Local SEO — regional cities */}
+          <div className="courses-fade-in max-w-4xl mx-auto mb-12 hud-panel p-6 sm:p-8 text-center">
+            <h2 className="text-lg sm:text-xl font-bold text-white mb-2">
+              Best software training academy in Belagavi — serving the region
+            </h2>
+            <p className="text-sm text-white/70 leading-relaxed mb-5">
+              AZDeploy Academy is based in Belagavi (Belgaum) and trains students from Hubli, Hubballi, Dharwad, and Kolhapur
+              through online + offline batches. Explore city pages for local details.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {CITY_LANDINGS.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={cityLandingUrl(c.slug)}
+                  className="text-xs sm:text-sm px-3 py-2 rounded-lg border border-[#00d4ff]/35 text-[#00d4ff] hover:bg-[#00d4ff]/15 transition-colors"
+                >
+                  {c.city}
+                </Link>
+              ))}
+            </div>
           </div>
 
           {/* Office + contacts */}

@@ -11,9 +11,9 @@ import AzcrashCourseMark from "@/components/AzcrashCourseMark";
 import AdmissionPopup from "@/components/AdmissionPopup";
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Home | Best Software Training Academy in Belagavi",
   description:
-    "AZ Deploy Academy Belagavi — AZCrash 1.0 flagship program: Full-Stack + AI + DevOps (6 months). React, Django, PostgreSQL, Linux, Nginx, Docker, CI/CD, AWS. Choose your focus within the same track.",
+    "AZ Deploy Academy — best software training academy in Belagavi (Belgaum). Full-Stack + AI + DevOps (6 months). Serving Belagavi, Hubli, Hubballi, Dharwad & Kolhapur.",
 };
 
 const TAGLINES = [

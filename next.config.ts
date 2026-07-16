@@ -5,6 +5,25 @@ const reactDir = path.resolve(__dirname, "node_modules/react");
 const reactDomDir = path.resolve(__dirname, "node_modules/react-dom");
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/software-training-in-hubballi",
+        destination: "/software-training-in-hubli",
+        permanent: true,
+      },
+      {
+        source: "/proposal/educational-erp",
+        destination: "/proposal/educational-erp-madhu-mam",
+        permanent: true,
+      },
+      {
+        source: "/proposal/student-tracking",
+        destination: "/proposal/student-tracking-madhu-mam",
+        permanent: true,
+      },
+    ];
+  },
   // Webpack (--webpack flag): one react + react-dom from node_modules for the whole app.
   webpack: (config, { isServer }) => {
     if (!isServer) {

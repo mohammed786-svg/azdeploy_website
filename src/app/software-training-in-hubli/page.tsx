@@ -1,19 +1,24 @@
 import type { Metadata } from "next";
 import CityLandingPage from "@/components/CityLandingPage";
-import { CITY_LANDINGS } from "@/lib/city-landing";
+import { getCityLanding } from "@/lib/city-landing";
 import { getSiteUrl } from "@/lib/site-url";
 
-const landing = CITY_LANDINGS.find((c) => c.slug === "software-training-in-hubli")!;
+const landing = getCityLanding("software-training-in-hubli")!;
 
 export const metadata: Metadata = {
-  title: "Software Training Institute in Hubli",
-  description:
-    "Searching for software training in Hubli? Learn Full Stack, AI, and DevOps with AZDeploy Academy’s job-ready curriculum and mentorship.",
+  title: { absolute: landing.seoTitle },
+  description: landing.seoDescription,
   alternates: { canonical: `${getSiteUrl()}/${landing.slug}` },
   keywords: landing.focusKeywords,
+  openGraph: {
+    title: landing.seoTitle,
+    description: landing.seoDescription,
+    url: `${getSiteUrl()}/${landing.slug}`,
+    locale: "en_IN",
+    type: "website",
+  },
 };
 
 export default function Page() {
   return <CityLandingPage landing={landing} />;
 }
-

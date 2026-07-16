@@ -31,8 +31,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const cityEntries: MetadataRoute.Sitemap = CITY_LANDINGS.map((c) => ({
     url: `${baseUrl}${cityLandingUrl(c.slug)}`,
     lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.78,
+    changeFrequency: "weekly" as const,
+    priority: c.city === "Belagavi" || c.city === "Belgaum" ? 0.9 : 0.82,
   }));
 
   return [...staticEntries, ...cityEntries, ...blogEntries];

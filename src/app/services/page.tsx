@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import HudHeader from "@/components/HudHeader";
 import FloatingActions from "@/components/FloatingActions";
+import ServicesEnquiryGrid from "@/components/ServicesEnquiryGrid";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "AZDeploy Academy services: industry-ready training with job assistance, custom software solutions from idea to deployment, customized ERP for schools/colleges/universities, hospital management systems, and enterprise web applications.",
+    "AZDeploy Academy services: websites, mobile apps, customised ERP, CRM, business automation, AI automation, plus industry-ready training with job assistance and enterprise software solutions.",
 };
 
 const OFFICE_ADDRESS = {
@@ -69,9 +70,11 @@ export default function ServicesPage() {
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white text-glow-teal text-center mb-4 hud-label">
             [OUR_SERVICES]
           </h1>
-          <p className="text-white/70 text-center max-w-2xl mx-auto mb-16 font-mono text-sm">
+          <p className="text-white/70 text-center max-w-2xl mx-auto mb-10 sm:mb-12 font-mono text-sm">
             Professional training and software services focused on real outcomes: employability, product quality, and business transformation.
           </p>
+
+          <ServicesEnquiryGrid />
 
           <div className="max-w-5xl mx-auto mb-10 rounded-2xl border border-[#00d4ff]/35 bg-[#00d4ff]/10 p-5 sm:p-7 text-center">
             <p className="text-xs sm:text-sm font-mono uppercase tracking-wider text-[#7dd3fc]">Dedicated Job Assistance</p>

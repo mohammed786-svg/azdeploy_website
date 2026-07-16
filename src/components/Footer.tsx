@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ACADEMY_CONTACT_NUMBERS } from '@/lib/contact-info';
+import { CITY_LANDINGS, cityLandingUrl } from '@/lib/city-landing';
 
 export default function Footer() {
   return (
@@ -11,16 +12,30 @@ export default function Footer() {
               AZDeploy Academy
             </h3>
             <p className="text-[#94a3b8] text-sm leading-relaxed max-w-md">
-              Building student lives with real IT knowledge. We make students job-ready with industry veterans who have deployed 500+ products. Think first, then use AI.
+              Best software training academy in Belagavi (Belgaum) — Full Stack, AI &amp; DevOps for students from Belagavi,
+              Hubli, Hubballi, Dharwad, and Kolhapur. Industry mentors. Job-ready outcomes.
             </p>
           </div>
           <div>
             <h4 className="text-[#00d4ff] text-sm font-semibold uppercase tracking-wider mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {['/home', '/courses', '/about', '/trainer', '/contact'].map((path) => (
+              {['/home', '/courses', '/blog', '/about', '/trainer', '/contact'].map((path) => (
                 <li key={path}>
                   <Link href={path} className="text-[#94a3b8] hover:text-[#00d4ff] text-sm transition-colors">
                     {path === '/home' ? 'Home' : path.slice(1).charAt(0).toUpperCase() + path.slice(2)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <h4 className="text-[#00d4ff] text-sm font-semibold uppercase tracking-wider mt-6 mb-3">Training Locations</h4>
+            <ul className="space-y-2">
+              {CITY_LANDINGS.map((c) => (
+                <li key={c.slug}>
+                  <Link
+                    href={cityLandingUrl(c.slug)}
+                    className="text-[#94a3b8] hover:text-[#00d4ff] text-sm transition-colors"
+                  >
+                    Software training in {c.city}
                   </Link>
                 </li>
               ))}
@@ -56,10 +71,13 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+            <p className="mt-4 text-xs text-[#64748b] leading-relaxed">
+              Belagavi campus · Online for Hubli, Dharwad &amp; Kolhapur
+            </p>
           </div>
         </div>
         <div className="border-t border-[#00d4ff]/20 mt-8 pt-8 text-center text-[#64748b] text-sm">
-          © {new Date().getFullYear()} AZDeploy Academy. All rights reserved.
+          © {new Date().getFullYear()} AZDeploy Academy. Best software training in Belagavi / Belgaum. All rights reserved.
         </div>
       </div>
     </footer>
