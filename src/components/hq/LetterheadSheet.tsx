@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { HR_COMPANY } from "@/lib/hr-letter-templates";
+import { HR_COMPANY, HR_LETTER_FONT } from "@/lib/hr-letter-templates";
 
 /**
  * Fixed A4 sheet with company letterhead as a 1:1 background.
@@ -27,8 +27,8 @@ export default function LetterheadSheet({
 }) {
   const sheet = (
     <div
-      className="lh-sheet relative h-[297mm] w-[210mm] overflow-hidden bg-white text-neutral-900 shadow-xl print:shadow-none"
-      style={{ fontFamily: 'Georgia, "Times New Roman", Times, serif' }}
+      className="lh-sheet relative h-[297mm] w-[210mm] overflow-hidden bg-white text-black shadow-xl print:shadow-none"
+      style={{ fontFamily: HR_LETTER_FONT }}
     >
       <div className="lh-bg pointer-events-none absolute inset-0">
         <Image
@@ -44,44 +44,44 @@ export default function LetterheadSheet({
 
       {/* Value after printed "Ref No :" — same baseline as letterhead label */}
       <div
-        className="absolute z-20 flex items-center text-[10.5pt] leading-none text-black"
+        className="absolute z-20 flex items-center text-[11.5pt] font-bold leading-none text-black"
         style={{ top: "45.2mm", left: "20mm", height: "5mm", width: "90mm" }}
       >
         {editableMeta ? (
           <input
             value={refNo}
             onChange={(e) => onRefNoChange?.(e.target.value)}
-            className="h-full w-full border-0 bg-transparent p-0 text-[10.5pt] leading-none outline-none focus:underline"
+            className="h-full w-full border-0 bg-transparent p-0 text-[11.5pt] font-bold leading-none outline-none focus:underline"
             placeholder="AZD/HR/2026/001"
           />
         ) : (
-          <span className="block truncate font-medium tracking-wide leading-none">{refNo}</span>
+          <span className="block truncate font-bold leading-none">{refNo}</span>
         )}
       </div>
 
       {/* Value after printed "Date :" — same baseline as letterhead label */}
       <div
-        className="absolute z-20 flex items-center justify-end text-[10.5pt] leading-none text-black"
+        className="absolute z-20 flex items-center justify-end text-[11.5pt] font-bold leading-none text-black"
         style={{ top: "45.2mm", right: "14mm", height: "5mm", width: "60mm" }}
       >
         {editableMeta ? (
           <input
             value={dateLabel}
             onChange={(e) => onDateChange?.(e.target.value)}
-            className="h-full w-full border-0 bg-transparent p-0 text-right text-[10.5pt] leading-none outline-none focus:underline"
+            className="h-full w-full border-0 bg-transparent p-0 text-right text-[11.5pt] font-bold leading-none outline-none focus:underline"
             placeholder="DD/MM/YYYY"
           />
         ) : (
-          <span className="block font-medium leading-none">{dateLabel}</span>
+          <span className="block font-bold leading-none">{dateLabel}</span>
         )}
       </div>
 
       {/* Body below Ref/Date band */}
       <div
-        className="absolute z-10 overflow-hidden text-[10.5pt] leading-[1.55] text-black"
-        style={{ top: "62mm", left: "14mm", right: "14mm", bottom: "18mm" }}
+        className="absolute z-10 overflow-hidden text-[11pt] leading-[1.38] text-black"
+        style={{ top: "52mm", left: "14mm", right: "14mm", bottom: "6mm" }}
       >
-        <div className="hr-letter-body [&_p]:my-[0.5em] [&_strong]:font-semibold">{children}</div>
+        <div className="hr-letter-body text-justify [&_p]:my-[0.26em] [&_strong]:font-bold [&_img.hr-company-signature]:block">{children}</div>
       </div>
     </div>
   );
