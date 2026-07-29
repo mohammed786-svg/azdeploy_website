@@ -47,7 +47,15 @@ export default function StaffDashboardPage() {
   }, [load]);
 
   async function checkIn(action: "check_in" | "check_out" | "wfh" | "leave") {
+    const messages: Record<string, string> = {
+      check_in: "Confirm check-in? Official time is 9:30 AM. Only one check-in allowed today.",
+      wfh: "Confirm WFH check-in? Official time is 9:30 AM. Only one check-in allowed today.",
+      leave: "Mark today as Leave?",
+      check_out: "Confirm check-out? Only one check-out allowed today.",
+    };
+    if (!window.confirm(messages[action] || "Confirm?")) return;
     setBusy(true);
+    setErr("");
     try {
       await staffFetch(
         "/api/staff/attendance",
@@ -62,12 +70,17 @@ export default function StaffDashboardPage() {
         { successMessage: action === "check_out" ? "Checked out" : "Attendance saved" }
       );
       await load();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Attendance failed");
     } finally {
       setBusy(false);
     }
   }
 
   const s = data?.stats;
+  const att = data?.todayAttendance;
+  const checkedIn = Boolean(att?.checkInAt);
+  const checkedOut = Boolean(att?.checkOutAt);
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -95,14 +108,17 @@ export default function StaffDashboardPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-white/70">Attendance</h2>
-          {data?.todayAttendance ? (
+          <p className="mt-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100">
+            Check in quickly — official time <strong>9:30 AM</strong>. One check-in & one check-out per day (used for salary calculation).
+          </p>
+          {att ? (
             <div className="mt-3 space-y-1 text-sm text-white/80">
               <p>
-                Status: <span className="font-semibold text-[#86efac]">{data.todayAttendance.status}</span> ·{" "}
-                {data.todayAttendance.workMode}
+                Status: <span className="font-semibold text-[#86efac]">{att.status}</span>
+                {att.lateMinutes ? <span className="ml-2 text-amber-300">({att.lateMinutes}m late)</span> : null}
               </p>
-              <p>In: {formatStaffTime(data.todayAttendance.checkInAt)}</p>
-              <p>Out: {formatStaffTime(data.todayAttendance.checkOutAt)}</p>
+              <p>In: {formatStaffTime(att.checkInAt)}</p>
+              <p>Out: {formatStaffTime(att.checkOutAt)}</p>
             </div>
           ) : (
             <p className="mt-3 text-sm text-white/45">Not marked yet for today.</p>
@@ -110,37 +126,40 @@ export default function StaffDashboardPage() {
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
-              disabled={busy}
+              disabled={busy || checkedIn}
               onClick={() => void checkIn("check_in")}
-              className="rounded-xl bg-[#0ea5e9] px-3 py-2 text-xs font-semibold text-white disabled:opacity-50"
+              className="rounded-xl bg-[#0ea5e9] px-3 py-2 text-xs font-semibold text-white disabled:opacity-40"
             >
-              Check in
+              {checkedIn ? "Checked in" : "Check in"}
             </button>
             <button
               type="button"
-              disabled={busy}
+              disabled={busy || checkedIn}
               onClick={() => void checkIn("wfh")}
-              className="rounded-xl border border-white/15 px-3 py-2 text-xs disabled:opacity-50"
+              className="rounded-xl border border-white/15 px-3 py-2 text-xs disabled:opacity-40"
             >
               WFH
             </button>
             <button
               type="button"
-              disabled={busy}
+              disabled={busy || checkedIn}
               onClick={() => void checkIn("leave")}
-              className="rounded-xl border border-white/15 px-3 py-2 text-xs disabled:opacity-50"
+              className="rounded-xl border border-white/15 px-3 py-2 text-xs disabled:opacity-40"
             >
               Leave
             </button>
             <button
               type="button"
-              disabled={busy}
+              disabled={busy || !checkedIn || checkedOut}
               onClick={() => void checkIn("check_out")}
-              className="rounded-xl border border-[#22c55e]/40 px-3 py-2 text-xs text-[#86efac] disabled:opacity-50"
+              className="rounded-xl border border-[#22c55e]/40 px-3 py-2 text-xs text-[#86efac] disabled:opacity-40"
             >
-              Check out
+              {checkedOut ? "Checked out" : "Check out"}
             </button>
           </div>
+          <Link href="/staff/attendance" className="mt-3 inline-block text-xs text-[#7dd3fc] hover:underline">
+            Full attendance →
+          </Link>
         </section>
 
         <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">

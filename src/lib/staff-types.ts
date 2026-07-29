@@ -46,6 +46,7 @@ export type StaffAttendance = {
   status: string;
   workMode: string;
   notes?: string;
+  lateMinutes?: number;
 };
 
 export type StaffReport = {

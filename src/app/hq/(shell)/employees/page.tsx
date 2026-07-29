@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { hqFetch } from "@/lib/hq-client";
 import HqModal from "@/components/hq/HqModal";
@@ -244,6 +245,9 @@ export default function HqEmployeesPage() {
                 <td className="px-3 py-2.5">
                   <div className="flex flex-wrap gap-2">
                     <button type="button" onClick={() => void openEdit(emp)} className="text-xs text-[#a78bfa] hover:underline">Edit</button>
+                    <Link href={`/hq/employees/${emp.id}/hr-docs`} className="text-xs text-[#fbbf24] hover:underline">
+                      HR letters
+                    </Link>
                     <button
                       type="button"
                       onClick={() => {
