@@ -76,7 +76,7 @@ function setGoogTransCookie(lang: string) {
 
 function shouldHide(pathname: string | null): boolean {
   if (!pathname) return false;
-  const hidden = ["/hq", "/proposal", "/academy", "/android-doc", "/python-doc", "/trainer/"];
+  const hidden = ["/hq", "/proposal", "/academy", "/staff", "/android-doc", "/python-doc", "/trainer/"];
   return hidden.some((p) => pathname === p || pathname.startsWith(p));
 }
 
