@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { getSiteUrl } from "@/lib/site-url";
@@ -96,6 +97,10 @@ export default function RootLayout({
         <GoogleTranslate />
         <GlobalChatWidget />
         <FooterVisibility />
+        <Script
+          src="https://shown.io/metrics/V10NjzAm0A"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
