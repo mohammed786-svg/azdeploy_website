@@ -1,4 +1,4 @@
-import { ACADEMY_CONTACT_NUMBERS, ACADEMY_OFFICE, academyGoogleMapsUrl } from "@/lib/contact-info";
+import { ACADEMY_CONTACT_NUMBERS, ACADEMY_OFFICE, academyGoogleMapsUrl, COMPANY_REGISTRATION } from "@/lib/contact-info";
 import { getSiteUrl } from "@/lib/site-url";
 
 export default function SeoLocalBusinessJsonLd() {
@@ -15,6 +15,13 @@ export default function SeoLocalBusinessJsonLd() {
     description:
       "Best software training academy in Belagavi (Belgaum) for Full-Stack, AI, and DevOps. Serving students from Belagavi, Hubli, Hubballi, Dharwad, and Kolhapur.",
     telephone: ACADEMY_CONTACT_NUMBERS[0].display,
+    vatID: COMPANY_REGISTRATION.gstin,
+    taxID: COMPANY_REGISTRATION.gstin,
+    identifier: [
+      { "@type": "PropertyValue", name: "GSTIN", value: COMPANY_REGISTRATION.gstin },
+      { "@type": "PropertyValue", name: "Udyam MSME", value: COMPANY_REGISTRATION.udyam },
+      { "@type": "PropertyValue", name: "PAN", value: COMPANY_REGISTRATION.pan },
+    ],
     priceRange: "₹₹",
     openingHoursSpecification: [
       {

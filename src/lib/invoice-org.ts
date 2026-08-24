@@ -13,8 +13,8 @@ export const INVOICE_ORG = {
   stateCode: "29",
   placeOfSupply: "Karnataka",
   defaultSac: process.env.NEXT_PUBLIC_INVOICE_DEFAULT_SAC?.trim() || "999293",
-  gstin: process.env.NEXT_PUBLIC_INVOICE_GSTIN?.trim() || "",
-  pan: process.env.NEXT_PUBLIC_INVOICE_PAN?.trim() || "",
+  gstin: process.env.NEXT_PUBLIC_INVOICE_GSTIN?.trim() || "29EYXPM1962C1ZU",
+  pan: process.env.NEXT_PUBLIC_INVOICE_PAN?.trim() || "EYXPM1962C",
   website:
     process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/^https?:\/\//, "").replace(/\/$/, "") || "www.azdeploy.com",
 } as const;

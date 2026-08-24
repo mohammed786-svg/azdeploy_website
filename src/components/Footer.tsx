@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ACADEMY_CONTACT_NUMBERS } from '@/lib/contact-info';
+import { ACADEMY_CONTACT_NUMBERS, COMPANY_REGISTRATION } from '@/lib/contact-info';
 import { CITY_LANDINGS, cityLandingUrl } from '@/lib/city-landing';
 
 export default function Footer() {
@@ -74,6 +74,19 @@ export default function Footer() {
             <p className="mt-4 text-xs text-[#64748b] leading-relaxed">
               Belagavi campus · Online for Hubli, Dharwad &amp; Kolhapur
             </p>
+            <div className="mt-4 space-y-1 text-xs font-mono text-[#94a3b8]">
+              <p>
+                <span className="text-[#00d4ff]/80">GSTIN</span>{" "}
+                <span className="tracking-wide">{COMPANY_REGISTRATION.gstin}</span>
+              </p>
+              <p>
+                <span className="text-[#00d4ff]/80">MSME / Udyam</span>{" "}
+                <span className="tracking-wide">{COMPANY_REGISTRATION.udyam}</span>
+              </p>
+              <p className="text-[#64748b]">
+                {COMPANY_REGISTRATION.enterpriseType} enterprise · {COMPANY_REGISTRATION.majorActivity}
+              </p>
+            </div>
           </div>
         </div>
         <div className="border-t border-[#00d4ff]/20 mt-8 pt-8 text-center text-[#64748b] text-sm">

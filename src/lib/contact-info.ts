@@ -16,3 +16,12 @@ export const ACADEMY_CONTACT_NUMBERS = [
   { display: "+91 82965 65587", raw: "918296565587" },
   { display: "+91 73383 60607", raw: "917338360607" },
 ] as const;
+
+/** GST and MSME (Udyam) — shown on public contact / footer. */
+export const COMPANY_REGISTRATION = {
+  gstin: "29EYXPM1962C1ZU",
+  pan: "EYXPM1962C",
+  udyam: "UDYAM-KR-04-0178755",
+  enterpriseType: "Micro",
+  majorActivity: "Services",
+} as const;

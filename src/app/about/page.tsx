@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import HudHeader from "@/components/HudHeader";
 import FloatingActions from "@/components/FloatingActions";
 import Link from "next/link";
+import { COMPANY_REGISTRATION } from "@/lib/contact-info";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -80,6 +81,36 @@ export default function AboutPage() {
               We also have <strong className="text-[#00d4ff]">strong industry connections</strong> and hiring-network exposure, but our placement support is outcome-based: we first make you
               <strong className="text-[#00d4ff]"> industry-ready with real project execution</strong>, communication, and interview discipline, and only then we position you for job opportunities.
             </p>
+          </div>
+        </section>
+
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
+          <div className="hud-panel p-6 md:p-8 about-enter">
+            <h2 className="text-[#00d4ff] text-lg font-mono font-semibold border-b border-[#00d4ff]/30 pb-2 mb-4">
+              [GST_AND_MSME]
+            </h2>
+            <div className="grid gap-3 sm:grid-cols-2 text-sm font-mono text-white/80">
+              <p>
+                <span className="text-white/45">GSTIN</span>
+                <br />
+                <span className="text-[#00d4ff] tracking-wide">{COMPANY_REGISTRATION.gstin}</span>
+              </p>
+              <p>
+                <span className="text-white/45">MSME / Udyam</span>
+                <br />
+                <span className="text-[#00d4ff] tracking-wide">{COMPANY_REGISTRATION.udyam}</span>
+              </p>
+              <p>
+                <span className="text-white/45">Enterprise</span>
+                <br />
+                {COMPANY_REGISTRATION.enterpriseType} · {COMPANY_REGISTRATION.majorActivity}
+              </p>
+              <p>
+                <span className="text-white/45">PAN</span>
+                <br />
+                {COMPANY_REGISTRATION.pan}
+              </p>
+            </div>
           </div>
         </section>
 

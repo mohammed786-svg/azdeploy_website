@@ -9,6 +9,7 @@ import RegistrationMarquee from "@/components/RegistrationMarquee";
 import { WhyAzDeploy } from "@/components/WhyAzDeploy";
 import AzcrashCourseMark from "@/components/AzcrashCourseMark";
 import AdmissionPopup from "@/components/AdmissionPopup";
+import { COMPANY_REGISTRATION } from "@/lib/contact-info";
 
 export const metadata: Metadata = {
   title: "Home | Best Software Training Academy in Belagavi",
@@ -89,6 +90,14 @@ export default function HomePage() {
               <p className="hero-year-outline text-xl sm:text-2xl md:text-3xl font-bold font-mono mt-2 sm:mt-3 tracking-widest">
                 2026
               </p>
+              <div className="mt-2 sm:mt-3 space-y-0.5 font-mono text-[9px] sm:text-[10px] md:text-xs text-[#00d4ff]/80 tracking-wide">
+                <p>
+                  GSTIN <span className="text-white/90 tracking-widest">{COMPANY_REGISTRATION.gstin}</span>
+                </p>
+                <p>
+                  MSME / Udyam <span className="text-white/90 tracking-widest">{COMPANY_REGISTRATION.udyam}</span>
+                </p>
+              </div>
               <AzcrashCourseMark href="/courses" orbitBackground={false} />
               <p className="text-[10px] sm:text-xs md:text-sm lg:text-base text-[#00d4ff] mt-6 sm:mt-8 font-mono tracking-wide sm:tracking-widest max-w-lg mx-auto leading-relaxed break-words px-1 w-full min-w-0">
                 {wrapAtUnderscores(TAGLINES[0])}

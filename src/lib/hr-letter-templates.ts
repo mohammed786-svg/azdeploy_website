@@ -37,9 +37,9 @@ export const HR_DOC_TYPE_LABELS = HR_DOC_LABELS;
 export const HR_COMPANY = {
   name: "AZDeploy Academy",
   addressLine: "Belagavi, Karnataka, India",
-  gstin: "29AAKCA1234A1Z5",
+  gstin: "29EYXPM1962C1ZU",
   /** Alias used by editor / API payloads */
-  gstNo: "29AAKCA1234A1Z5",
+  gstNo: "29EYXPM1962C1ZU",
   letterheadSrc: "/company_letter_head_a4.jpg",
   signatureSrc: "/signature.png",
 };

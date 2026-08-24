@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import HudHeader from "@/components/HudHeader";
 import FloatingActions from "@/components/FloatingActions";
-import { ACADEMY_CONTACT_NUMBERS, ACADEMY_OFFICE, academyGoogleMapsUrl } from "@/lib/contact-info";
+import { ACADEMY_CONTACT_NUMBERS, ACADEMY_OFFICE, academyGoogleMapsUrl, COMPANY_REGISTRATION } from "@/lib/contact-info";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -32,6 +32,30 @@ export default function ContactPage() {
               <p className="text-[#00d4ff] text-xs font-mono uppercase tracking-wider mb-3">OFFICE_LOCATION</p>
               <p className="text-white/90 text-sm">{OFFICE.addressLine1}</p>
               <p className="text-white/90 text-sm font-semibold text-[#00d4ff]/90 mt-1">{OFFICE.addressLine2}</p>
+            </div>
+
+            <div className="border border-[#00d4ff]/30 rounded p-4 bg-black/30">
+              <p className="text-[#00d4ff] text-xs font-mono uppercase tracking-wider mb-3">GST_AND_MSME</p>
+              <dl className="space-y-2 text-sm font-mono">
+                <div className="flex flex-col sm:flex-row sm:gap-3">
+                  <dt className="text-white/50 shrink-0 w-36">GSTIN</dt>
+                  <dd className="text-white/90 tracking-wide">{COMPANY_REGISTRATION.gstin}</dd>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:gap-3">
+                  <dt className="text-white/50 shrink-0 w-36">MSME / Udyam</dt>
+                  <dd className="text-white/90 tracking-wide">{COMPANY_REGISTRATION.udyam}</dd>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:gap-3">
+                  <dt className="text-white/50 shrink-0 w-36">Enterprise</dt>
+                  <dd className="text-white/90">
+                    {COMPANY_REGISTRATION.enterpriseType} · {COMPANY_REGISTRATION.majorActivity}
+                  </dd>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:gap-3">
+                  <dt className="text-white/50 shrink-0 w-36">PAN</dt>
+                  <dd className="text-white/90 tracking-wide">{COMPANY_REGISTRATION.pan}</dd>
+                </div>
+              </dl>
             </div>
 
             {/* Map */}
