@@ -8,6 +8,7 @@ import { useState } from 'react';
 const navLinks = [
   { href: '/', label: 'HOME' },
   { href: '/courses', label: 'COURSES' },
+  // { href: '/ebooks', label: 'EBOOKS' },
   { href: '/blog', label: 'BLOG' },
   { href: '/enquiry', label: 'ENQUIRY' },
   { href: '/services', label: 'SERVICES' },
@@ -15,6 +16,17 @@ const navLinks = [
   { href: '/trainer', label: 'TRAINER' },
   { href: '/contact', label: 'CONTACT' },
 ];
+
+function CustomerLoginCta({ className = '' }: { className?: string }) {
+  return (
+    <Link
+      href="/library/login"
+      className={`flex items-center justify-center gap-1.5 px-2.5 sm:px-4 py-2 sm:py-2.5 border border-[#fde68a]/50 bg-[#fde68a]/10 text-[#fde68a] text-[10px] sm:text-xs md:text-sm font-mono uppercase tracking-wider hover:bg-[#fde68a]/20 transition-colors shrink-0 whitespace-nowrap ${className}`}
+    >
+      LOGIN
+    </Link>
+  );
+}
 
 function EnrollCta({ className = '' }: { className?: string }) {
   return (
@@ -61,12 +73,13 @@ function LogoMark({ compact }: { compact?: boolean }) {
 export default function HudHeader() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  // const loginActive = pathname.startsWith('/library');
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 hud-bg border-b border-[#00d4ff]/30 backdrop-blur-md">
       <nav className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Mobile: 3 equal columns — logo truly centered between menu and ENROLL */}
-        <div className="md:hidden grid grid-cols-3 items-center gap-1 h-16 min-h-[4rem] w-full">
+        {/* Mobile: menu | logo | login + enroll */}
+        <div className="md:hidden grid grid-cols-[auto_1fr_auto] items-center gap-1 h-16 min-h-[4rem] w-full">
           <div className="flex justify-start items-center min-w-0">
             <button
               type="button"
@@ -83,12 +96,13 @@ export default function HudHeader() {
           <div className="flex justify-center items-center min-w-0 px-0.5">
             <LogoMark compact />
           </div>
-          <div className="flex justify-end items-center min-w-0">
+          <div className="flex justify-end items-center gap-1.5 min-w-0">
+            {/* <CustomerLoginCta className={loginActive ? 'border-[#fde68a] bg-[#fde68a]/20' : ''} /> */}
             <EnrollCta />
           </div>
         </div>
 
-        {/* Desktop: logo left · nav center · ENROLL right */}
+        {/* Desktop: logo left · nav center · LOGIN + ENROLL right */}
         <div className="hidden md:flex items-center justify-between h-16 min-h-[4rem] w-full gap-4">
           <LogoMark />
           <div className="flex flex-col items-center gap-1 flex-1 min-w-0 justify-center">
@@ -112,7 +126,10 @@ export default function HudHeader() {
               ))}
             </div>
           </div>
-          <EnrollCta />
+          <div className="flex items-center gap-2 shrink-0">
+            {/* <CustomerLoginCta className={loginActive ? 'border-[#fde68a] bg-[#fde68a]/20' : ''} /> */}
+            <EnrollCta />
+          </div>
         </div>
 
         {/* Mobile nav */}
@@ -135,6 +152,13 @@ export default function HudHeader() {
                   {link.label}
                 </Link>
               ))}
+              {/* <Link
+                href="/library/login"
+                onClick={() => setMobileOpen(false)}
+                className="text-sm font-mono text-[#fde68a]"
+              >
+                CUSTOMER LOGIN → Library
+              </Link> */}
               <a
                 href="https://wa.me/918296565587"
                 target="_blank"

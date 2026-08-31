@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+rzp-key-test.csv
+rzp-key*.csv
 
 # debug
 npm-debug.log*

@@ -15,7 +15,15 @@ export default function GlobalChatWidget() {
     "/trainer",
     "/contact",
   ];
-  if (p.startsWith("/hq") || p.startsWith("/proposal") || p.startsWith("/p/")) return null;
+  if (
+    p.startsWith("/hq") ||
+    p.startsWith("/proposal") ||
+    p.startsWith("/p/") ||
+    p.startsWith("/ebooks/download") ||
+    p.startsWith("/library") ||
+    p.startsWith("/ebooks/success")
+  )
+    return null;
   if (floatingActionsPages.some((route) => p === route || p.startsWith(`${route}/`))) return null;
   if (p === "/" || p.startsWith("/home")) return null;
   return <WebsiteChatWidget />;

@@ -21,6 +21,7 @@ const NAV = [
   { href: "/hq/expenses", label: "Expenses", match: (p: string) => p.startsWith("/hq/expenses") },
   { href: "/hq/attendance", label: "Attendance", match: (p: string) => p.startsWith("/hq/attendance") },
   { href: "/hq/employees", label: "Employees", match: (p: string) => p.startsWith("/hq/employees") },
+  { href: "/hq/ebooks", label: "Ebooks store", match: (p: string) => p.startsWith("/hq/ebooks") },
   { href: "/hq/reports", label: "Reports", match: (p: string) => p.startsWith("/hq/reports") },
   { href: "/hq/chat", label: "Chat inbox", match: (p: string) => p.startsWith("/hq/chat") },
   { href: "/hq/blog", label: "Blog", match: (p: string) => p.startsWith("/hq/blog") },
