@@ -21,7 +21,8 @@ export default function GlobalChatWidget() {
     p.startsWith("/p/") ||
     p.startsWith("/ebooks/download") ||
     p.startsWith("/library") ||
-    p.startsWith("/ebooks/success")
+    p.startsWith("/ebooks/success") ||
+    p.startsWith("/kidzzy")
   )
     return null;
   if (floatingActionsPages.some((route) => p === route || p.startsWith(`${route}/`))) return null;

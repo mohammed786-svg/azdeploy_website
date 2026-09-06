@@ -28,6 +28,12 @@ const NAV = [
     newTab: true,
   },
   { href: "/hq/ebooks", label: "Ebooks store", match: (p: string) => p.startsWith("/hq/ebooks") },
+  { href: "/hq/kidzzy", label: "Kidzzy kids", match: (p: string) => p === "/hq/kidzzy" || p.startsWith("/hq/kidzzy/new") || /^\/hq\/kidzzy\/\d+/.test(p) },
+  {
+    href: "/hq/kidzzy/customers",
+    label: "Kidzzy customers",
+    match: (p: string) => p.startsWith("/hq/kidzzy/customers") || p.startsWith("/hq/kidzzy/orders"),
+  },
   { href: "/hq/reports", label: "Reports", match: (p: string) => p.startsWith("/hq/reports") },
   { href: "/hq/chat", label: "Chat inbox", match: (p: string) => p.startsWith("/hq/chat") },
   { href: "/hq/blog", label: "Blog", match: (p: string) => p.startsWith("/hq/blog") },
