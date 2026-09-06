@@ -21,6 +21,12 @@ const NAV = [
   { href: "/hq/expenses", label: "Expenses", match: (p: string) => p.startsWith("/hq/expenses") },
   { href: "/hq/attendance", label: "Attendance", match: (p: string) => p.startsWith("/hq/attendance") },
   { href: "/hq/employees", label: "Employees", match: (p: string) => p.startsWith("/hq/employees") },
+  {
+    href: "/hq/workshop-certificates",
+    label: "Workshop certificates",
+    match: (p: string) => p.startsWith("/hq/workshop-certificates"),
+    newTab: true,
+  },
   { href: "/hq/ebooks", label: "Ebooks store", match: (p: string) => p.startsWith("/hq/ebooks") },
   { href: "/hq/reports", label: "Reports", match: (p: string) => p.startsWith("/hq/reports") },
   { href: "/hq/chat", label: "Chat inbox", match: (p: string) => p.startsWith("/hq/chat") },
@@ -107,6 +113,8 @@ export default function HqShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
+                target={item.newTab ? "_blank" : undefined}
+                rel={item.newTab ? "noopener noreferrer" : undefined}
                 className={`relative block rounded-xl px-4 py-3 pl-5 text-sm font-medium transition-colors ${
                   active
                     ? "bg-white/[0.06] text-white shadow-[inset_0_0_0_1px_rgba(0,212,255,0.15)]"
@@ -215,6 +223,8 @@ export default function HqShell({ children }: { children: React.ReactNode }) {
                     <Link
                       key={item.href}
                       href={item.href}
+                      target={item.newTab ? "_blank" : undefined}
+                      rel={item.newTab ? "noopener noreferrer" : undefined}
                       onClick={() => setOpen(false)}
                       className={`block rounded-xl px-4 py-3 text-sm ${
                         active ? "bg-white/10 text-white" : "text-[#94a3b8] hover:bg-white/5"
